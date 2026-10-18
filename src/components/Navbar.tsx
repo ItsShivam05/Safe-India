@@ -59,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Logo & Brand Identity */}
           <button
             onClick={() => handleNavClick('home')}
-            className="flex items-center space-x-2.5 sm:space-x-3 group focus:outline-none focus:ring-2 focus:ring-lavender rounded-xl p-1 text-left shrink-0"
+            className="flex items-center space-x-2.5 sm:space-x-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-lavender focus-visible:ring-offset-2 focus-visible:ring-offset-midnight rounded-xl p-1 text-left shrink-0"
             aria-label="SafeIndia — Know what to do when it matters"
           >
             <img
