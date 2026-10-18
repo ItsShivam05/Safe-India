@@ -52,38 +52,111 @@ out center tags;`;
 }
 
 /**
- * Formats a clean, readable address from OSM tags if available.
+ * Helper to remove duplicate address tokens case-insensitively.
+ */
+function deduplicateAddressParts(parts: (string | undefined | null)[]): string[] {
+  const result: string[] = [];
+  const seen = new Set<string>();
+
+  for (const part of parts) {
+    if (!part) continue;
+    const clean = part.trim();
+    if (!clean) continue;
+    const lower = clean.toLowerCase();
+    if (!seen.has(lower)) {
+      seen.add(lower);
+      result.push(clean);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Formats a clean, readable, and comprehensive address from OSM tags.
+ * Preserves street/landmark while ensuring village/locality, district, state, and PIN code
+ * are properly represented without confusing omissions.
  */
 function formatOsmAddress(tags?: Record<string, string>): string | undefined {
   if (!tags) return undefined;
 
+  const rawParts: string[] = [];
+
+  // Street / House / Landmark / Full
   if (tags['addr:full']) {
-    return tags['addr:full'];
+    rawParts.push(tags['addr:full']);
+  } else {
+    const streetSub: string[] = [];
+    if (tags['addr:housenumber'] || tags['addr:housename']) {
+      streetSub.push(tags['addr:housenumber'] || tags['addr:housename']);
+    }
+    if (tags['addr:street']) {
+      streetSub.push(tags['addr:street']);
+    }
+    if (streetSub.length > 0) {
+      rawParts.push(streetSub.join(' '));
+    }
   }
 
-  const parts: string[] = [];
-  if (tags['addr:housenumber'] || tags['addr:housename']) {
-    parts.push(tags['addr:housenumber'] || tags['addr:housename']);
+  // Locality / Village / Suburb
+  const locality =
+    tags['addr:village'] ||
+    tags['addr:place'] ||
+    tags['addr:suburb'] ||
+    tags['addr:neighbourhood'] ||
+    tags['addr:hamlet'];
+  if (locality) {
+    rawParts.push(locality);
   }
-  if (tags['addr:street']) {
-    parts.push(tags['addr:street']);
+
+  // Block / Tehsil / Sub-district
+  const subdistrict =
+    tags['addr:subdistrict'] ||
+    tags['addr:tehsil'] ||
+    tags['addr:block'];
+  if (subdistrict) {
+    rawParts.push(subdistrict);
   }
-  if (tags['addr:suburb'] || tags['addr:neighbourhood']) {
-    parts.push(tags['addr:suburb'] || tags['addr:neighbourhood']);
+
+  // City / District
+  const cityOrDistrict =
+    tags['addr:city'] ||
+    tags['addr:town'] ||
+    tags['addr:district'] ||
+    tags['addr:county'];
+  if (cityOrDistrict) {
+    rawParts.push(cityOrDistrict);
   }
-  if (tags['addr:city'] || tags['addr:district']) {
-    parts.push(tags['addr:city'] || tags['addr:district']);
+
+  // State
+  const state = tags['addr:state'] || tags['addr:province'];
+  if (state) {
+    rawParts.push(state);
   }
+
+  // PIN / Postcode
   if (tags['addr:postcode']) {
-    parts.push(tags['addr:postcode']);
+    rawParts.push(tags['addr:postcode']);
   }
 
-  if (parts.length > 0) {
-    return parts.join(', ');
+  // If addr:full was used as the base, avoid duplicating words already inside addr:full
+  let partsToProcess: string[] = [];
+  if (tags['addr:full']) {
+    partsToProcess.push(tags['addr:full']);
+    const remaining = rawParts.slice(1);
+    for (const r of remaining) {
+      if (!tags['addr:full'].toLowerCase().includes(r.toLowerCase())) {
+        partsToProcess.push(r);
+      }
+    }
+  } else {
+    partsToProcess = rawParts;
   }
 
-  return undefined;
+  const deduped = deduplicateAddressParts(partsToProcess);
+  return deduped.length > 0 ? deduped.join(', ') : undefined;
 }
+
 
 /**
  * Categorizes an OSM element based on tags.
@@ -145,7 +218,18 @@ async function findFacilitiesViaNominatim(
       for (const item of data) {
         const itemLat = parseFloat(item.lat);
         const itemLon = parseFloat(item.lon);
-        if (isNaN(itemLat) || isNaN(itemLon)) continue;
+        if (
+          isNaN(itemLat) ||
+          isNaN(itemLon) ||
+          !isFinite(itemLat) ||
+          !isFinite(itemLon) ||
+          itemLat < -90 ||
+          itemLat > 90 ||
+          itemLon < -180 ||
+          itemLon > 180
+        ) {
+          continue;
+        }
 
         const distanceKm = calculateDistance(userLat, userLon, itemLat, itemLon);
         // Ensure distance is within radius (+ 15% tolerance for bounding box edge)
@@ -162,18 +246,18 @@ async function findFacilitiesViaNominatim(
           tags.emergency_phone ||
           tags['contact:mobile'];
 
-        // Address formatting
+        // Address formatting with complete administrative hierarchy & deduplication
         let address: string | undefined;
         if (item.address) {
-          const parts: string[] = [];
-          if (item.address.road) parts.push(item.address.road);
-          if (item.address.neighbourhood || item.address.suburb) {
-            parts.push(item.address.neighbourhood || item.address.suburb);
-          }
-          if (item.address.city || item.address.town || item.address.state_district) {
-            parts.push(item.address.city || item.address.town || item.address.state_district);
-          }
-          if (item.address.postcode) parts.push(item.address.postcode);
+          const rawParts = [
+            item.address.road || item.address.pedestrian || item.address.path,
+            item.address.village || item.address.neighbourhood || item.address.suburb || item.address.hamlet,
+            item.address.subdistrict || item.address.county,
+            item.address.city || item.address.town || item.address.city_district || item.address.state_district || item.address.district,
+            item.address.state,
+            item.address.postcode,
+          ];
+          const parts = deduplicateAddressParts(rawParts);
           if (parts.length > 0) address = parts.join(', ');
         }
         if (!address && item.display_name) {
@@ -265,8 +349,14 @@ export async function findNearbyFacilities(
           elLon === undefined ||
           typeof elLat !== 'number' ||
           typeof elLon !== 'number' ||
+          !isFinite(elLat) ||
+          !isFinite(elLon) ||
           isNaN(elLat) ||
-          isNaN(elLon)
+          isNaN(elLon) ||
+          elLat < -90 ||
+          elLat > 90 ||
+          elLon < -180 ||
+          elLon > 180
         ) {
           continue;
         }

@@ -48,21 +48,28 @@ export const HelpNearMeView: React.FC = () => {
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   // Ref to scroll map into view on mobile
   const mapSectionRef = useRef<HTMLDivElement>(null);
+  // Ref to track ongoing search requests and prevent race conditions from rapid toggles
+  const searchRequestIdRef = useRef<number>(0);
 
   // Trigger search when coordinates or radius change
   const fetchFacilities = async (coords: LocationCoordinates, radius: number) => {
+    const requestId = ++searchRequestIdRef.current;
     setIsLoadingFacilities(true);
     setFacilitiesError(null);
     setSelectedFacilityId(null);
 
     try {
       const results = await findNearbyFacilities(coords.lat, coords.lon, radius);
+      if (requestId !== searchRequestIdRef.current) return;
       setFacilities(results);
     } catch (err) {
+      if (requestId !== searchRequestIdRef.current) return;
       console.error('Failed to discover facilities:', err);
       setFacilitiesError(t.nearMe.osmError);
     } finally {
-      setIsLoadingFacilities(false);
+      if (requestId === searchRequestIdRef.current) {
+        setIsLoadingFacilities(false);
+      }
     }
   };
 

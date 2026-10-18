@@ -13,11 +13,11 @@ export const AboutView: React.FC<AboutViewProps> = () => {
       
       {/* Brand Hero Box */}
       <div className="bg-midnight rounded-3xl p-8 sm:p-12 text-ivory text-center shadow-md mb-12 border border-lavender/30">
-        <div className="bg-white/95 inline-block p-3 rounded-2xl mb-6 shadow-sm">
+        <div className="inline-block mb-6">
           <img
-            src="/safeindia-logo.png"
-            alt="SafeIndia Official Logo"
-            className="h-16 sm:h-20 w-auto object-contain"
+            src="/images/safeindia-emblem.png"
+            alt="SafeIndia — Know what to do when it matters"
+            className="h-24 sm:h-32 w-auto object-contain mx-auto drop-shadow-md"
           />
         </div>
         <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-3">

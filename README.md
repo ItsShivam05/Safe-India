@@ -144,8 +144,12 @@ The application operates entirely client-side without user accounts, authenticat
 ```text
 SafeIndia/
 ├── public/
-│   ├── favicon.svg                # Application browser icon
-│   ├── safeindia-logo.png         # Brand logo asset
+│   ├── favicon.png                # High-resolution emblem browser icon (64x64)
+│   ├── favicon-32x32.png          # Browser favicon variant (32x32)
+│   ├── safeindia-logo.png         # Full official brand logo asset
+│   ├── images/
+│   │   ├── safeindia-logo.png     # Full official brand logo asset
+│   │   └── safeindia-emblem.png   # Transparent protective emblem icon
 │   └── illustrations/             # High-resolution editorial illustrations
 │       ├── hero_confident_commute.jpg
 │       ├── community_support.jpg

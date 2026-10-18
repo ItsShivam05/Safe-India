@@ -3,7 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { NearbyFacility, LocationCoordinates } from '../../types';
 import { translations } from '../../data/locales';
-import { formatDistance, getDirectionsUrl, normalizePhoneNumber } from '../../services/locationService';
+import { formatDistance, getDirectionsUrl, parseFacilityPhone } from '../../services/locationService';
 
 interface HelpMapProps {
   userLocation: LocationCoordinates | null;
@@ -212,7 +212,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
         zIndexOffset: isSelected ? 600 : 100,
       });
 
-      const dialablePhone = normalizePhoneNumber(facility.phone);
+      const phoneInfo = parseFacilityPhone(facility.phone);
       const directionsUrl = getDirectionsUrl(facility.lat, facility.lon);
 
       const categoryLabel = {
@@ -220,6 +220,27 @@ export const HelpMap: React.FC<HelpMapProps> = ({
         hospital: t.nearMe.filterHospital,
         fire_station: t.nearMe.filterFire,
       }[facility.category];
+
+      let phoneSectionHtml = '';
+      if (phoneInfo.state === 'valid') {
+        phoneSectionHtml = `
+          <div style="font-size: 11px; color: #433760; margin-bottom: 6px;">
+            📞 <strong>${phoneInfo.displayNumber}</strong> <span style="font-size: 9px; color: #65558F; font-weight: 600;">(unverified)</span>
+          </div>
+        `;
+      } else if (phoneInfo.state === 'invalid') {
+        phoneSectionHtml = `
+          <div style="font-size: 10px; color: #8E7CB5; font-style: italic; margin-bottom: 6px;">
+            ${t.nearMe.invalidPhone}
+          </div>
+        `;
+      } else {
+        phoneSectionHtml = `
+          <div style="font-size: 10px; color: #8E7CB5; font-style: italic; margin-bottom: 6px;">
+            ${t.nearMe.noPhoneListed}
+          </div>
+        `;
+      }
 
       const popupHtml = `
         <div style="font-family: inherit; min-width: 200px; max-width: 260px; padding: 2px;">
@@ -237,10 +258,11 @@ export const HelpMap: React.FC<HelpMapProps> = ({
               ? `<div style="font-size: 11px; color: #433760; margin-bottom: 8px;">📍 ${facility.address}</div>`
               : ''
           }
+          ${phoneSectionHtml}
           <div style="display: flex; gap: 6px; margin-top: 8px;">
             ${
-              dialablePhone
-                ? `<a href="tel:${dialablePhone}" style="flex: 1; text-align: center; background-color: #65558F; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; text-decoration: none;">📞 ${t.nearMe.call}</a>`
+              phoneInfo.state === 'valid' && phoneInfo.dialableNumber
+                ? `<a href="tel:${phoneInfo.dialableNumber}" style="flex: 1; text-align: center; background-color: #65558F; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; text-decoration: none;">📞 ${t.nearMe.call}</a>`
                 : ''
             }
             <a href="${directionsUrl}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-align: center; background-color: #211D35; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; text-decoration: none;">🧭 ${t.nearMe.directions}</a>

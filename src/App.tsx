@@ -105,7 +105,7 @@ export function App() {
 
       {/* Persistent Floating Emergency Button & Quick Help Modal */}
       <MobileQuickAccess
-        showFloatingButton={currentTab !== 'nearme'}
+        showFloatingButton={currentTab !== 'nearme' && currentTab !== 'home'}
         onSelectScenario={handleSelectScenario}
         onNavigate={handleNavigate}
         isOpenExternal={quickEmergencyOpen}

@@ -33,19 +33,23 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div className="md:col-span-2">
             <button
               onClick={() => onNavigate('home')}
-              className="flex items-center space-x-3 mb-3 focus:outline-none"
+              className="flex items-center space-x-3.5 mb-3 focus:outline-none group text-left"
+              aria-label="SafeIndia — Know what to do when it matters"
             >
-              <div className="bg-white/95 p-1 rounded-xl shadow-xs">
-                <img
-                  src="/safeindia-logo.png"
-                  alt="SafeIndia Logo"
-                  className="h-10 w-auto object-contain"
-                />
+              <img
+                src="/images/safeindia-emblem.png"
+                alt="SafeIndia — Know what to do when it matters"
+                className="h-12 w-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-200"
+              />
+              <div>
+                <span className="text-xl font-black text-ivory tracking-tight group-hover:text-lavender transition-colors block">
+                  SafeIndia
+                </span>
+                <span className="text-xs font-semibold text-lavender block">
+                  {t.tagline}
+                </span>
               </div>
             </button>
-            <p className="text-sm font-bold text-lavender mb-2">
-              {t.tagline}
-            </p>
             <p className="text-xs text-ivory/75 max-w-sm leading-relaxed">
               {t.heroSubtext}
             </p>

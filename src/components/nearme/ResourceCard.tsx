@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import type { NearbyFacility } from '../../types';
 import { translations } from '../../data/locales';
-import { formatDistance, getDirectionsUrl, normalizePhoneNumber } from '../../services/locationService';
+import { formatDistance, getDirectionsUrl, parseFacilityPhone } from '../../services/locationService';
 
 interface ResourceCardProps {
   facility: NearbyFacility;
@@ -48,7 +48,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
   }[facility.category];
 
   const Icon = categoryMeta.icon;
-  const dialablePhone = normalizePhoneNumber(facility.phone);
+  const phoneInfo = parseFacilityPhone(facility.phone);
   const directionsUrl = getDirectionsUrl(facility.lat, facility.lon);
 
   return (
@@ -95,17 +95,25 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
         </span>
       </div>
 
-      {/* Contact Telephone */}
+      {/* Contact Telephone States: A (Valid), B (Missing), C (Unverified Note), D (Invalid) */}
       <div className="mb-4 text-xs">
-        {dialablePhone ? (
-          <div className="flex items-center space-x-2 text-midnight/80">
+        {phoneInfo.state === 'valid' ? (
+          <div className="flex flex-wrap items-center gap-2 text-midnight/80">
             <span className="text-midnight/50 font-semibold">Phone:</span>
-            <span className="font-mono font-bold text-midnight">{facility.phone}</span>
+            <span className="font-mono font-bold text-midnight">{phoneInfo.displayNumber}</span>
+            <span className="text-[10px] bg-lavender/30 text-plum font-medium px-2 py-0.5 rounded-full border border-lavender/40">
+              {t.nearMe.unverifiedNotice}
+            </span>
           </div>
+        ) : phoneInfo.state === 'invalid' ? (
+          <p className="text-midnight/50 text-xs italic flex items-center space-x-1">
+            <Info className="w-3.5 h-3.5 text-midnight/40 shrink-0" />
+            <span>{t.nearMe.invalidPhone}: {phoneInfo.displayNumber}</span>
+          </p>
         ) : (
           <p className="text-midnight/40 text-xs italic flex items-center space-x-1">
             <Info className="w-3.5 h-3.5 shrink-0" />
-            <span>{t.nearMe.phoneUnavailable}</span>
+            <span>{t.nearMe.noPhoneListed}</span>
           </p>
         )}
       </div>
@@ -113,16 +121,16 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       {/* Action Buttons */}
       <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-lavender/30">
         
-        {/* Dial Button (Only when phone number is available) */}
-        {dialablePhone ? (
+        {/* Dial Button: Only rendered when a valid, dialable phone exists */}
+        {phoneInfo.state === 'valid' && phoneInfo.dialableNumber ? (
           <a
-            href={`tel:${dialablePhone}`}
+            href={`tel:${phoneInfo.dialableNumber}`}
             onClick={(e) => e.stopPropagation()}
             className="inline-flex items-center space-x-1.5 bg-plum hover:bg-plum-600 text-white font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-xs transition-all active:scale-95"
-            aria-label={`Call ${facility.name} at ${dialablePhone}`}
+            aria-label={`Call ${facility.name} at ${phoneInfo.dialableNumber}`}
           >
             <PhoneCall className="w-3.5 h-3.5 text-lavender" />
-            <span>{t.nearMe.call} ({dialablePhone})</span>
+            <span>{t.nearMe.call} ({phoneInfo.dialableNumber})</span>
           </a>
         ) : null}
 

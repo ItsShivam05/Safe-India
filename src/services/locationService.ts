@@ -148,23 +148,65 @@ export function getDirectionsUrl(lat: number, lon: number): string {
   return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
 }
 
-/**
- * Normalizes phone numbers found in OSM tags for safe 'tel:' links.
- * Returns null if no valid telephone number can be determined.
- */
-export function normalizePhoneNumber(rawPhone?: string): string | null {
-  if (!rawPhone) return null;
+export interface PhoneInfo {
+  state: 'valid' | 'missing' | 'invalid';
+  displayNumber?: string;
+  dialableNumber?: string;
+}
 
-  // Split on multiple numbers if separated by semicolon, comma, slash
-  const candidates = rawPhone.split(/[;,/]/).map((s) => s.trim()).filter(Boolean);
-  if (candidates.length === 0) return null;
+/**
+ * Normalizes and validates phone numbers found in OSM tags.
+ * Accurately determines:
+ * - valid: Has a dialable telephone number with valid digits
+ * - missing: Tag is absent or contains placeholder terms like 'none', 'n/a', '0'
+ * - invalid: Text is present but not dialable or malformed
+ */
+export function parseFacilityPhone(rawPhone?: string): PhoneInfo {
+  if (!rawPhone || !rawPhone.trim()) {
+    return { state: 'missing' };
+  }
+
+  const trimmed = rawPhone.trim();
+  const lower = trimmed.toLowerCase();
+  if (['none', 'no', 'n/a', 'na', 'nil', 'null', '0', 'not available', 'unknown', '-'].includes(lower)) {
+    return { state: 'missing' };
+  }
+
+  // Split on multiple numbers if separated by semicolon, comma, slash, or 'or'
+  const candidates = trimmed.split(/[;,/|]|\bor\b/i).map((s) => s.trim()).filter(Boolean);
+  if (candidates.length === 0) {
+    return { state: 'missing' };
+  }
 
   const primary = candidates[0];
-  // Strip non-dialable characters except '+'
-  const dialable = primary.replace(/[^\d+]/g, '');
+  // Extract dialable characters: digits and optional leading '+'
+  let dialable = primary.replace(/[^\d+]/g, '');
 
-  // Needs at least 3 digits (e.g. 100, 112) or standard phone digits
-  if (dialable.replace(/\D/g, '').length < 3) return null;
+  // Handle '+' correctly (only retain at the start if present)
+  if (dialable.includes('+')) {
+    dialable = (dialable.startsWith('+') ? '+' : '') + dialable.replace(/\+/g, '');
+  }
 
-  return dialable;
+  const digitCount = dialable.replace(/\D/g, '').length;
+
+  // Indian standard: emergency numbers (3-4 digits e.g. 112, 100, 108), local landlines / mobiles (7-15 digits)
+  if (digitCount < 3 || digitCount > 15) {
+    return { state: 'invalid', displayNumber: trimmed };
+  }
+
+  return {
+    state: 'valid',
+    displayNumber: primary,
+    dialableNumber: dialable,
+  };
 }
+
+/**
+ * Normalizes phone numbers found in OSM tags for safe 'tel:' links.
+ * Returns null if no valid telephone number can be dialed.
+ */
+export function normalizePhoneNumber(rawPhone?: string): string | null {
+  const parsed = parseFacilityPhone(rawPhone);
+  return parsed.state === 'valid' ? (parsed.dialableNumber ?? null) : null;
+}
+

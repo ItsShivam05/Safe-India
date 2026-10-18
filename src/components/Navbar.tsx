@@ -37,50 +37,51 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="sticky top-0 z-40 w-full bg-midnight text-ivory shadow-md transition-all duration-200">
       {/* Top Urgent Alert Bar: High-contrast red #B42318 */}
       <div className="bg-emergency text-white text-xs py-1.5 px-4 font-medium">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2 truncate">
-            <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse"></span>
-            <span className="font-bold tracking-wide uppercase">{t.emergencySection.criticalNotice}</span>
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+          <div className="flex items-center space-x-2 min-w-0">
+            <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse shrink-0"></span>
+            <span className="font-bold tracking-wide uppercase truncate">{t.emergencySection.criticalNotice}</span>
           </div>
           <a
             href="tel:112"
-            className="inline-flex items-center space-x-1.5 bg-white text-emergency hover:bg-ivory px-3 py-0.5 rounded-full font-extrabold transition-all active:scale-95 shadow-sm text-xs"
+            className="inline-flex items-center space-x-1.5 bg-white text-emergency hover:bg-ivory px-3 py-0.5 rounded-full font-extrabold transition-all active:scale-95 shadow-sm text-xs shrink-0 whitespace-nowrap"
             aria-label="Call 112 National Emergency"
           >
-            <PhoneCall className="w-3.5 h-3.5 text-emergency" />
+            <PhoneCall className="w-3.5 h-3.5 text-emergency shrink-0" />
             <span>{t.nav.quickCall112}</span>
           </a>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18">
+        <div className="flex items-center justify-between h-16 sm:h-18 gap-4">
 
           {/* Logo & Brand Identity */}
           <button
             onClick={() => handleNavClick('home')}
-            className="flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-lavender rounded-xl p-1 text-left"
-            aria-label="SafeIndia Home"
+            className="flex items-center space-x-2.5 sm:space-x-3 group focus:outline-none focus:ring-2 focus:ring-lavender rounded-xl p-1 text-left shrink-0"
+            aria-label="SafeIndia — Know what to do when it matters"
           >
-            <div className="bg-white/95 p-1 rounded-xl shadow-sm transition-transform group-hover:scale-105 duration-200">
-              <img
-                src="/safeindia-logo.png"
-                alt="SafeIndia Logo"
-                className="h-9 sm:h-10 w-auto object-contain"
-              />
-            </div>
-            <div className="hidden sm:block">
-              <span className="block text-sm font-extrabold tracking-tight text-white group-hover:text-lavender transition-colors">
-                SafeIndia
-              </span>
-              <span className="block text-[11px] text-sage font-medium -mt-0.5">
+            <img
+              src="/images/safeindia-emblem.png"
+              alt="SafeIndia — Know what to do when it matters"
+              className="h-10 sm:h-11 w-10 sm:w-11 object-contain shrink-0 group-hover:scale-105 transition-transform duration-200"
+            />
+            <div>
+              <div className="flex items-center space-x-1.5">
+                <span className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-lavender transition-colors whitespace-nowrap">
+                  SafeIndia
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-sage-400 shrink-0"></span>
+              </div>
+              <span className="hidden xl:block text-[10px] text-lavender/80 font-semibold tracking-wide uppercase -mt-0.5 whitespace-nowrap">
                 {t.tagline}
               </span>
             </div>
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-1.5" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2 shrink-0" aria-label="Main Navigation">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = currentTab === link.id;
@@ -88,48 +89,37 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
+                  className={`flex items-center space-x-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold whitespace-nowrap shrink-0 transition-all duration-200 ${
                     isActive
                       ? 'bg-plum text-white shadow-sm'
                       : 'text-ivory/85 hover:text-white hover:bg-midnight-800'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-lavender'}`} />
-                  <span>{link.label}</span>
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-lavender'}`} />
+                  <span className="whitespace-nowrap">{link.label}</span>
                 </button>
               );
             })}
           </nav>
 
-          {/* Right Action Controls: Search, Get Help Near Me */}
-          <div className="hidden sm:flex items-center space-x-2.5">
-            {/* Instant Search Trigger */}
+          {/* Right Action Controls: Search & Mobile Menu Toggle */}
+          <div className="flex items-center space-x-2 shrink-0">
+            {/* Search Trigger */}
             <button
               onClick={onOpenSearch}
-              className="px-2.5 py-1.5 text-ivory/80 hover:text-white hover:bg-midnight-800 rounded-xl transition-colors border border-lavender/20 flex items-center space-x-2 text-xs"
+              className="px-2.5 py-1.5 text-ivory/80 hover:text-white hover:bg-midnight-800 rounded-xl transition-colors border border-lavender/20 flex items-center space-x-2 text-xs whitespace-nowrap"
               title="Search protocols (Ctrl+K)"
               aria-label="Search emergency protocols"
             >
-              <Search className="w-3.5 h-3.5 text-lavender" />
-              <span className="hidden xl:inline text-ivory/70">Search...</span>
-              <kbd className="hidden xl:inline bg-midnight-950 text-lavender px-1.5 py-0.5 text-[10px] rounded border border-lavender/20">⌘K</kbd>
+              <Search className="w-3.5 h-3.5 text-lavender shrink-0" />
+              <span className="hidden sm:inline text-ivory/70">Search...</span>
+              <kbd className="hidden md:inline bg-midnight-950 text-lavender px-1.5 py-0.5 text-[10px] rounded border border-lavender/20">⌘K</kbd>
             </button>
 
-            {/* Prominent Help Near Me Action Button (Primary Plum) */}
-            <button
-              onClick={() => handleNavClick('nearme')}
-              className="flex items-center space-x-1.5 bg-plum hover:bg-plum-600 text-white font-bold px-3.5 py-1.5 rounded-xl text-xs sm:text-sm shadow-sm transition-all duration-200 active:scale-95 border border-lavender/30"
-            >
-              <MapPin className="w-4 h-4 text-white" />
-              <span>{t.nav.getHelpNearMe}</span>
-            </button>
-          </div>
-
-          {/* Mobile Right Controls & Hamburger Toggle */}
-          <div className="flex md:hidden items-center space-x-2">
+            {/* Mobile / Tablet Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-ivory hover:bg-midnight-800 focus:outline-none focus:ring-2 focus:ring-lavender"
+              className="lg:hidden p-2 rounded-lg text-ivory hover:bg-midnight-800 focus:outline-none focus:ring-2 focus:ring-lavender shrink-0"
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle Navigation Menu"
             >
@@ -139,9 +129,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Slide-down Drawer Menu */}
+      {/* Mobile / Tablet Slide-down Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-midnight-950 border-t border-midnight-800 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top duration-200">
+        <div className="lg:hidden bg-midnight-950 border-t border-midnight-800 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top duration-200">
           <div className="relative mb-2">
             <button
               onClick={() => {
@@ -151,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="w-full flex items-center justify-between bg-midnight-800 border border-lavender/20 text-ivory/80 px-4 py-2.5 rounded-xl text-sm"
             >
               <span className="flex items-center space-x-2">
-                <Search className="w-4 h-4 text-lavender" />
+                <Search className="w-4 h-4 text-lavender shrink-0" />
                 <span>Search emergency protocols...</span>
               </span>
               <kbd className="bg-midnight-950 text-lavender text-xs px-2 py-0.5 rounded border border-lavender/20">Search</kbd>
@@ -172,21 +162,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-ivory/80 hover:bg-midnight-800 hover:text-white'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-lavender'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-lavender'}`} />
                   <span>{link.label}</span>
                 </button>
               );
             })}
-          </div>
-
-          <div className="pt-2 border-t border-midnight-800 flex flex-col space-y-2">
-            <button
-              onClick={() => handleNavClick('nearme')}
-              className="w-full flex items-center justify-center space-x-2 bg-plum hover:bg-plum-600 text-white font-bold py-2.5 rounded-xl text-sm shadow-md"
-            >
-              <MapPin className="w-4 h-4 text-white" />
-              <span>{t.nav.getHelpNearMe}</span>
-            </button>
           </div>
         </div>
       )}
