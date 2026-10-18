@@ -1,463 +1,287 @@
-# SafeIndia
+<div align="center">
 
-> **Know what to do when it matters.**
+  <img src="public/images/safeindia-logo.png" alt="SafeIndia Logo" width="340" />
 
-SafeIndia is an India-focused public-safety and emergency-awareness web application. It provides practical, scenario-based emergency guidance, verified national helpline directories, and an interactive discovery tool to find nearby police stations, hospitals, clinics, and fire stations across India.
+  # SafeIndia
+  ### Public Safety & Emergency Companion for India
 
----
+  **Know what to do when it matters.**
 
-## Table of Contents
+  [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+  [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+  [![Leaflet](https://img.shields.io/badge/Leaflet-1.9-199900?style=flat-square&logo=leaflet&logoColor=white)](https://leafletjs.com/)
+  [![OpenStreetMap](https://img.shields.io/badge/OpenStreetMap-Live_Data-7EBC6F?style=flat-square&logo=openstreetmap&logoColor=white)](https://www.openstreetmap.org/)
+  [![Zero Tracking](https://img.shields.io/badge/Privacy-100%25_Client_Side-9333EA?style=flat-square)](#privacy--safety-principles)
 
-- [Overview](#overview)
-- [Screenshots & Demo](#screenshots--demo)
-- [Key Features](#key-features)
-- [Technology Stack](#technology-stack)
-- [Architecture & Project Structure](#architecture--project-structure)
-- [Prerequisites](#prerequisites)
-- [Installation & Local Development](#installation--local-development)
-- [Environment Configuration](#environment-configuration)
-- [Available Scripts](#available-scripts)
-- [How the Application Works](#how-the-application-works)
-- [External Services & Data Sources](#external-services--data-sources)
-- [Privacy & Safety Model](#privacy--safety-model)
-- [Deployment](#deployment)
-- [Testing & Quality Verification](#testing--quality-verification)
-- [Known Limitations](#known-limitations)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
+  <p align="center">
+    <a href="#the-mission">The Mission</a> •
+    <a href="#how-it-works">How It Works</a> •
+    <a href="#core-safety-pillars">Core Pillars</a> •
+    <a href="#interactive-facility-discovery">Live Map Discovery</a> •
+    <a href="#verified-helplines">Emergency Helplines</a> •
+    <a href="#quick-start">Quick Start</a> •
+    <a href="#privacy--safety-principles">Privacy & Safety</a>
+  </p>
 
----
-
-## Overview
-
-During emergencies, accidents, or cybercrime incidents, people need immediate, clear, and actionable steps rather than legal text or complex menus. SafeIndia is built around a single question:
-
-> *"Something has happened. What should I do right now?"*
-
-The application operates entirely client-side without user accounts, authentication walls, or tracking. It combines structured emergency protocols, prevention checklists, verified Indian national helplines, and an interactive Leaflet map that queries OpenStreetMap data to locate nearby emergency services in real time.
+</div>
 
 ---
 
-## Screenshots & Demo
+## The Mission
 
-<!--
-  To add application screenshots:
-  1. Capture screenshots of the Homepage and Get Help Near Me map view.
-  2. Save them to the repository (e.g. docs/screenshots/ or public/).
-  3. Replace the placeholder paths below with relative repository paths.
--->
+During accidents, cyber scams, medical emergencies, or unsafe transit situations, panic and hesitation cost valuable minutes. People do not need dense legal treatises or confusing menus — they need one immediate answer:
 
-| Homepage & Emergency Guidance | Get Help Near Me (Interactive Map) |
-|:---:|:---:|
-| ![SafeIndia Homepage](public/safeindia-logo.png) | *(Add screenshot: `docs/screenshots/nearme-map.png`)* |
+> **"Something has happened. What should I do right now?"**
 
-> **Live Demo:** *A production deployment URL is not yet configured for this repository. Follow the [Installation & Local Development](#installation--local-development) instructions below to run the application locally.*
+**SafeIndia** is an open-access public-safety companion built specifically for India. It operates entirely in your browser with **zero logins, zero background tracking, and zero data harvesting**. It pairs verified life-saving protocols with live spatial discovery of nearby police outposts, hospitals, and fire stations across the nation.
 
 ---
 
-## Key Features
+## How It Works
 
-### 1. Scenario-Based Emergency Protocols
-- Immediate, step-by-step guidance organized into **Do Now**, **Do Not Do**, and **After the Immediate Threat**:
-  - **Personal Safety**: Stalking, harassment, unsafe transit or ride situations.
-  - **Medical Emergencies**: Unconscious patient (CPR basics), severe bleeding, choking, seizures, burns.
-  - **Fire & Gas Safety**: Building fire evacuation, kitchen LPG cylinder leakage.
-  - **Road & Transport**: Road traffic collisions, bystander assistance under India's Good Samaritan guidelines.
-  - **Digital & Financial Fraud**: Unauthorized UPI transactions, OTP scams, stolen smartphone (CEIR IMEI block).
-  - **Animal Hazards**: Snakebites (anti-snake venom protocol), stray dog bites and rabies wound management.
+SafeIndia organizes public safety into an intuitive triage flow. Whether you are facing an active crisis, searching for the nearest emergency service, or learning preventive safety habits, the platform guides you with calm, distraction-free clarity.
 
-### 2. Get Help Near Me (Live Facility Discovery)
-- **On-Demand Geolocation**: Requests device GPS location strictly upon user interaction.
-- **Manual Indian Location Search**: Search by Indian city name, area, or 6-digit postal PIN code via OpenStreetMap Nominatim.
-- **Nearby Emergency Facilities**: Locates police stations, hospitals, clinics, and fire stations using the OpenStreetMap Overpass API.
-- **Interactive Leaflet Map**:
-  - Color-coded category markers (Police: Blue, Hospital: Emerald, Fire Station: Orange).
-  - Smooth camera pan and zoom on facility selection.
-  - Interactive popups with facility name, category, straight-line distance, address, dial button, and directions link.
-  - Floating map legend and attribution controls.
-- **Distance-Sorted Results**: Straight-line distance calculated using the Haversine formula.
-- **Direct Navigation Links**: One-click directions link opening coordinates directly in Google Maps.
-- **Category Filtering & Radius Selection**: Filter by facility category (`All`, `Police`, `Hospitals`, `Fire`) and expand search radius (`5 km`, `10 km`, `20 km`).
+```mermaid
+graph TD
+    User([👤 Citizen in Need]) --> Decision{What is your situation?}
 
-### 3. National Emergency Access (112 Integration)
-- Persistent top emergency bar with direct **Call 112 National Emergency** action.
-- Dedicated **112 Emergency Banner** on the "Get Help Near Me" page with verified information on the Emergency Response Support System (ERSS).
-- Floating **Quick Help** drawer on non-map pages for rapid dialing of key national numbers (112, 1930, 108, 1091).
+    Decision -->|Active Crisis| E[🚨 Emergency Protocols]
+    Decision -->|Find Nearest Help| M[📍 Get Help Near Me]
+    Decision -->|Prevention & Habit| A[🛡️ Safety Awareness Guides]
+    Decision -->|Official Contacts| R[📞 Verified Helplines Directory]
+    Decision -->|Uncertain / Search| S[🤖 Natural Language Matcher]
 
-### 4. Safety Awareness Guides
-- Practical checklists and preventive habits:
-  - Situational awareness and late-night commuting safety.
-  - Digital fraud awareness (UPI payment traps, fake job offers, phishing).
-  - Home fire, electrical, and LPG cylinder safety.
-  - Natural disaster preparedness (earthquake and flood go-bag checklists).
+    E -->|Step-by-Step Triage| E1["1. DO THIS NOW (Immediate Life-Saving Steps)<br/>2. DO NOT DO (Common Dangerous Mistakes)<br/>3. AFTER DANGER (Reporting & Legal Redressal)"]
+    E -->|Instant Call| E2["📞 112 National Emergency (1-Tap Dial)"]
 
-### 5. Verified Official Resources Directory
-- Structured directory of official Indian emergency helplines:
-  - **112**: National Emergency Response System (Police, Fire, Medical, Rescue)
-  - **1930**: National Cyber Crime Reporting Portal & Helpline (Financial Fraud)
-  - **108 / 102**: Emergency Medical Ambulance Service
-  - **1091 / 181**: Women Helpline (24/7 Distress Support)
+    M -->|GPS or Area Search| M1["Interactive Leaflet Map + Distance Ranking"]
+    M1 -->|Police • Hospitals • Fire Stations| M2["🧭 Google Maps Directions & Contact Info"]
+
+    S -->|Instant Matching| E
+```
+
+---
+
+## Core Safety Pillars
+
+SafeIndia is built on a structured **Before, During, and After** safety framework:
+
+```mermaid
+flowchart LR
+    subgraph P1["🛡️ 1. BEFORE (Awareness)"]
+        direction TB
+        A1["Transit & Commuting Safety"]
+        A2["Digital Scam Protection"]
+        A3["Home & Fire Preparedness"]
+    end
+
+    subgraph P2["🚨 2. DURING (Emergencies)"]
+        direction TB
+        B1["DO THIS NOW Actions"]
+        B2["DO NOT DO Pitfalls"]
+        B3["1-Tap 112 Helpline Calling"]
+    end
+
+    subgraph P3["📍 3. AFTER (Assistance)"]
+        direction TB
+        C1["Nearby Police & Hospitals"]
+        C2["Official Crime Portals"]
+        C3["Good Samaritan Protections"]
+    end
+
+    P1 ==> P2 ==> P3
+```
+
+### 1. Emergency Protocols
+Actionable, distraction-free steps designed for high-stress moments:
+- **Personal Safety**: Harassment, stalking, suspicious transport or cab rides.
+- **Medical Crises**: Unconscious patient (CPR basics), severe bleeding, choking, seizures, burns.
+- **Fire & Gas Safety**: High-rise fire evacuation, kitchen LPG cylinder leakage.
+- **Road & Transit**: Road traffic collisions, bystander assistance under India's Good Samaritan guidelines.
+- **Digital & Financial Emergencies**: Unauthorized UPI transfers, OTP scams, stolen smartphone (CEIR IMEI block).
+- **Animal Bites**: Snakebites (anti-venom protocol), street dog bites and rabies wound management.
+
+### 2. Live Nearby Help (`Get Help Near Me`)
+- **One-Touch GPS**: Discover emergency services within 5 km, 10 km, or 20 km of your current position.
+- **Manual Area Search**: Search by any Indian city, town, or 6-digit postal PIN code.
+- **Live OpenStreetMap Integration**: Queries verified public police stations, hospitals, clinics, and fire stations.
+- **Directions & Navigation**: One-tap directions trigger Google Maps with exact destination coordinates.
+
+### 3. Safety Awareness & Preparedness Guides
+- Checklists and preventive routines for daily Indian life:
+  - Situational awareness during late-night commutes and metro travel.
+  - Digital safety checklists against fraudulent QR codes, fake job offers, and SIM swap attacks.
+  - Home fire safety, electrical load safeguards, and gas leak checks.
+  - Natural hazard readiness (monsoon floods, earthquake drill, emergency go-bag).
+
+### 4. Verified Directory of National Helplines
+- Direct phone triggers and portal links for India’s official emergency networks:
+  - **112**: All-in-one National Emergency Response System (Police, Fire, Ambulance, Rescue)
+  - **1930**: National Cybercrime Reporting Helpline (Financial Fraud & UPI Scams)
+  - **108 / 102**: Free Emergency Medical Ambulance Service
+  - **1091 / 181**: Women in Distress 24/7 Helpline
   - **1098**: Childline India
   - **101**: Fire Emergency Services
+  - **1906**: LPG Gas Leakage Helpline
   - **14416**: Tele-MANAS Mental Health Support
-  - **1078 / 1070**: National Disaster Management Authority (NDMA)
-  - **139**: Indian Railways Rail Madad Helpline
-  - **1906**: LPG Cooking Gas Leak Emergency Helpline
-- Each entry includes service description, 1-tap phone dial trigger, copy-to-clipboard button, and official portal link.
 
-### 6. Client-Side AI Protocol Matcher & Global Search
-- Natural-language emergency query matcher (e.g. *"someone is following me near metro"*, *"money debited via UPI scam"*).
-- Matches queries to verified in-app emergency scenarios client-side without external API calls or hallucination risk.
-- Global instant search modal accessible via keyboard shortcut (`Ctrl+K` or `⌘K`).
+---
 
-### 7. Responsive, English-Only Interface
-- Built with a tailored Midnight Plum (`#211D35`), Primary Plum (`#65558F`), Soft Lavender (`#D9C8F0`), and Warm Ivory (`#F7F2EA`) design system.
-- Fully responsive across desktop, tablet, and mobile viewports.
-- Standardized entirely in English for consistent crisis comprehension.
+## Interactive Facility Discovery
+
+SafeIndia does not rely on a static, quickly outdated database of facilities. Instead, it queries live spatial data from **OpenStreetMap** with a multi-endpoint failover architecture.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 👤 Citizen
+    participant App as 🛡️ SafeIndia App
+    participant Geo as 🛰️ GPS / Nominatim Geocoder
+    participant OSM as 🗺️ Overpass API / Mirrors
+    participant UI as 📱 Map & Card UI
+
+    User->>App: Clicks "Use My Location" or enters PIN Code
+    App->>Geo: Requests coordinates on demand
+    Geo-->>App: { latitude, longitude }
+    App->>OSM: Spatial Overpass QL Query (5 km / 10 km / 20 km)
+    Note over App,OSM: Automatic failover across 3 global API mirrors
+    OSM-->>App: Raw OpenStreetMap Elements
+    App->>App: Calculate Haversine distance, normalize address & validate phone
+    App-->>UI: Render distance-sorted cards + Leaflet interactive map
+    User->>UI: Taps "View on Map" or "Get Directions"
+    UI-->>User: Smooth camera fly-to & opens Google Maps directions
+```
+
+### Data Integrity & Honest Contact Messaging
+
+To ensure users are never misled during a crisis, SafeIndia enforces strict data integrity rules:
+
+| State | What the User Sees | Action Available |
+|---|---|---|
+| **Valid Phone Available** | Formatted number + `(unverified)` tag | 📞 **1-Tap Call Link** (`tel:...`) |
+| **No Phone in Map Data** | *"No phone number listed in map data."* | No broken button; encourages dialing **112** |
+| **Malformed Format** | *"Phone number format in map data is uncallable"* | Displays raw text safely without broken links |
+| **Complete Address Hierarchy** | Street, Village, Block, District, State & PIN | 🧭 **Direct Navigation Link** to exact coordinates |
+
+> [!NOTE]
+> All contact details and facility records originate from OpenStreetMap contributors. SafeIndia clearly identifies crowdsourced records and reminds users to rely on **112 National Emergency** whenever immediate official assistance is required.
+
+---
+
+## Privacy & Safety Principles
+
+SafeIndia is built from the ground up to respect citizen privacy:
+
+```mermaid
+graph LR
+    subgraph ZeroTracking["🔒 Privacy by Design"]
+        A["🚫 No User Logins"]
+        B["🛰️ On-Demand GPS Only"]
+        C["🧠 Zero Cloud Storage"]
+        D["📞 Explicit Handset Dialing"]
+    end
+
+    A --> Z["Private, Untracked Crisis Guidance"]
+    B --> Z
+    C --> Z
+    D --> Z
+```
+
+- **No User Accounts**: No registration, email collection, or passwords required.
+- **On-Demand GPS Only**: Geolocation is requested strictly after an explicit user tap. SafeIndia never runs continuous background location watchers.
+- **Zero Coordinate Storage**: Coordinates exist only in browser memory for the active session. They are never transmitted to private servers or stored in cookies.
+- **No Third-Party Trackers**: No advertising trackers, behavior analytics, or invasive profiling scripts.
+- **Explicit Call Confirmation**: Every emergency call button uses standard `tel:` links that require manual confirmation on your phone. No unauthorized auto-dialing.
+
+---
+
+## Quick Start
+
+### Prerequisites
+- **Node.js**: `v18.x` or `v20.x`+ (LTS recommended)
+- **npm**: `v9.x`+ (bundled with Node.js)
+- **Modern Browser**: Chrome, Firefox, Edge, or Safari with JavaScript enabled
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/ItsShivam05/Safe-India.git
+cd Safe-India
+
+# 2. Install dependencies
+npm install
+
+# 3. Start local development server
+npm run dev
+```
+
+Open your browser and navigate to:
+```
+http://localhost:5173/
+```
+
+### Building for Production
+
+```bash
+# Type check and build optimized bundle
+npm run build
+
+# Preview production build locally
+npm run preview
+```
+
+> [!TIP]
+> SafeIndia does not require any environment variables or API keys. All map tiles, geocoding queries, and spatial discovery endpoints work out of the box using public OpenStreetMap services.
 
 ---
 
 ## Technology Stack
 
-| Layer | Technology | Version | Purpose |
-|---|---|---|---|
-| **UI Framework** | [React](https://react.dev/) | `^19.2.8` | Declarative component hierarchy and reactive state management |
-| **Language** | [TypeScript](https://www.typescriptlang.org/) | `~6.0.2` | Static typing, interface contracts, and compile-time validation |
-| **Bundler & Dev Server** | [Vite](https://vitejs.dev/) | `^8.3.0` | Hot module replacement (HMR) and optimized production bundle |
-| **CSS & Design System** | [Tailwind CSS](https://tailwindcss.com/) | `^3.4.19` | Utility-first styling with custom palette tokens |
-| **CSS Post-Processing** | [PostCSS](https://postcss.org/) & [Autoprefixer](https://github.com/postcss/autoprefixer) | `^8.5.28` | CSS vendor prefixing and transformations |
-| **Interactive Maps** | [Leaflet](https://leafletjs.com/) | `^1.9.4` | Interactive tile rendering, div-icon markers, bounds, and popups |
-| **Map Type Definitions** | `@types/leaflet` | `^1.9.22` | Type declarations for Leaflet map instances and layers |
-| **Iconography** | [Lucide React](https://lucide.dev/) | `^1.52.0` | Accessible SVG icon components |
-| **Transitions** | [Framer Motion](https://www.framer.com/motion/) | `^14.0.0` | Modal transitions and micro-animations |
-| **Linter** | [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) | `^1.81.0` | High-speed Rust-based JavaScript/TypeScript linter |
-| **Geocoding Service** | [OpenStreetMap Nominatim](https://nominatim.org/) | API v1 | Free-text search for Indian cities, areas, and PIN codes |
-| **Amenity Discovery** | [Overpass API](https://overpass-api.de/) | QL API | Spatial queries for nearby emergency facilities |
-| **Map Tile Provider** | [OpenStreetMap](https://www.openstreetmap.org/) | Standard Tiles | Base map visual tiles (`tile.openstreetmap.org`) |
+SafeIndia is powered by a fast, modern frontend stack designed for near-instant load times:
 
----
-
-## Architecture & Project Structure
-
-```text
-SafeIndia/
-├── public/
-│   ├── favicon.png                # High-resolution emblem browser icon (64x64)
-│   ├── favicon-32x32.png          # Browser favicon variant (32x32)
-│   ├── safeindia-logo.png         # Full official brand logo asset
-│   ├── images/
-│   │   ├── safeindia-logo.png     # Full official brand logo asset
-│   │   └── safeindia-emblem.png   # Transparent protective emblem icon
-│   └── illustrations/             # High-resolution editorial illustrations
-│       ├── hero_confident_commute.jpg
-│       ├── community_support.jpg
-│       ├── emergency_responders.jpg
-│       └── safety_preparedness.jpg
-├── src/
-│   ├── assets/                    # Bundled graphic assets
-│   ├── components/                # UI components
-│   │   ├── nearme/                # "Get Help Near Me" sub-application
-│   │   │   ├── HelpNearMeView.tsx # Main discovery container, state, and coordination
-│   │   │   ├── HelpMap.tsx        # Leaflet map instance, tile layers, and custom markers
-│   │   │   ├── EmergencyBanner.tsx# Prominent Call 112 emergency card
-│   │   │   ├── LocationSearch.tsx # Nominatim search input with dropdown suggestions
-│   │   │   ├── ResourceCard.tsx   # Facility list item card with dial and directions actions
-│   │   │   └── ResourceFilters.tsx# Category tabs and radius selector
-│   │   ├── AIProtocolMatcher.tsx  # Natural language scenario matcher
-│   │   ├── AboutView.tsx          # About SafeIndia and mission principles
-│   │   ├── AwarenessView.tsx      # Prevention guides and preparedness checklists
-│   │   ├── EmergenciesView.tsx    # Emergency scenarios catalog with category filters
-│   │   ├── Footer.tsx             # Footer with disclaimers and navigation links
-│   │   ├── Hero.tsx               # Homepage hero section with quick action buttons
-│   │   ├── MobileQuickAccess.tsx  # Persistent emergency quick-dial drawer
-│   │   ├── Navbar.tsx             # Top navigation bar and 112 emergency trigger
-│   │   ├── Philosophy.tsx         # Before / During / After safety philosophy cards
-│   │   ├── ResourcesView.tsx      # Directory of verified national helplines
-│   │   ├── ScenarioDetailView.tsx # Step-by-step emergency protocol detail screen
-│   │   └── SearchModal.tsx        # Global instant search modal (Cmd+K / Ctrl+K)
-│   ├── data/                      # Structured static emergency content
-│   │   ├── awareness.ts           # Preparedness guides data
-│   │   ├── emergencies.ts         # Emergency scenarios and step-by-step instructions
-│   │   ├── locales.ts             # English translation strings and UI dictionary
-│   │   └── resources.ts           # National official helplines directory
-│   ├── services/                  # External API integration and utility logic
-│   │   ├── locationService.ts     # Geolocation wrapper, Nominatim geocoder, Haversine distance
-│   │   └── overpassService.ts     # Overpass QL generator, multi-endpoint failover, OSM parser
-│   ├── types/                     # Shared TypeScript contracts
-│   │   └── index.ts               # Coordinates, facilities, scenarios, and filter types
-│   ├── App.tsx                    # Top-level view orchestrator and navigation state
-│   ├── index.css                  # Tailwind directives and custom animation classes
-│   └── main.tsx                   # React 19 entry point and DOM mounting
-├── .oxlintrc.json                 # Oxlint configuration
-├── index.html                     # HTML5 entry template (English document language)
-├── package.json                   # Dependencies, scripts, and project metadata
-├── postcss.config.js              # PostCSS plugin pipeline
-├── tailwind.config.js             # Design tokens and custom theme extension
-├── tsconfig.json                  # TypeScript workspace configuration
-└── vite.config.ts                 # Vite bundler and React plugin configuration
-```
-
-### Facility Discovery Flow
-
-```
-[ User Action ]
-      │
-      ├──> "Use My Location" ──> locationService.getCurrentLocation() ──> Browser GPS
-      │
-      └──> Manual Search ────> locationService.searchLocation() ────────> Nominatim API
-                                                                                │
-                                                                     [ Lat, Lon Coordinates ]
-                                                                                │
-                                                                                ▼
-                                                                overpassService.findNearbyFacilities()
-                                                                                │
-                                                                 Overpass API (with server failover)
-                                                                                │
-                                                                     [ Raw OSM Amenity Nodes ]
-                                                                                │
-                                                                                ▼
-                                                                  Parse tags, phone, address
-                                                                  Calculate Haversine distance
-                                                                  Sort nearest-first
-                                                                                │
-                                                  ┌─────────────────────────────┴────────────────────────────┐
-                                                  ▼                                                          ▼
-                                        [ Distance-Sorted List ]                                    [ Leaflet Map View ]
-                                        • Straight-line distance                                    • Color-coded markers
-                                        • Formatted address                                         • User location ping
-                                        • One-tap phone dial                                        • Dynamic popups
-                                        • Google Maps directions                                    • Auto-fit bounds
-```
-
----
-
-## Prerequisites
-
-Before setting up SafeIndia locally, ensure your environment has:
-
-1. **Node.js**: `v18.x`, `v20.x`, or higher (LTS recommended).
-2. **npm**: `v9.x` or higher (bundled with Node.js).
-3. **Git**: Installed and available in your terminal path.
-4. **Internet Connection**: Required during development to fetch OpenStreetMap tiles, Nominatim geocoding results, and Overpass facility data.
-
----
-
-## Installation & Local Development
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/ItsShivam05/Safe-India.git
-cd Safe-India
-```
-
-### 2. Install Dependencies
-
-```bash
-npm install
-```
-
-### 3. Start the Development Server
-
-```bash
-npm run dev
-```
-
-The Vite dev server will start instantly. Open your browser and navigate to:
-
-```
-http://localhost:5173/
-```
-
----
-
-## Environment Configuration
-
-SafeIndia **does not require any environment variables or API keys**.
-
-- All map visual tiles are requested directly from public OpenStreetMap tile servers.
-- Geocoding queries use the public OpenStreetMap Nominatim endpoint.
-- Facility discovery uses public OpenStreetMap Overpass API mirrors.
-- No `.env` file is required to develop, build, or deploy the application.
-
----
-
-## Available Scripts
-
-The following scripts are defined in `package.json`:
-
-| Command | Action | Description |
+| Category | Tools & Libraries | Purpose |
 |---|---|---|
-| `npm run dev` | `vite` | Starts the local development server with Hot Module Replacement (HMR) at `http://localhost:5173/`. |
-| `npm run build` | `tsc -b && vite build` | Runs full TypeScript compiler checks across all project references, then bundles optimized production assets into `dist/`. |
-| `npm run lint` | `oxlint` | Runs fast static code analysis across all `.ts` and `.tsx` files using Oxlint. |
-| `npm run preview` | `vite preview` | Boots a local static server to preview the production build generated in `dist/`. |
+| **Core Framework** | [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) | Declarative components, strict types, and robust state management |
+| **Build & Tooling** | [Vite](https://vitejs.dev/) + [Oxlint](https://oxc.rs/) | Sub-second HMR, high-speed linting, and optimized production chunking |
+| **Styling & Theme** | [Tailwind CSS](https://tailwindcss.com/) | Midnight Plum, Soft Lavender, Sage, and Emergency-Red color system |
+| **Interactive Maps** | [Leaflet](https://leafletjs.com/) | Hardware-accelerated maps, custom category markers, and dynamic popups |
+| **Spatial Services** | [Overpass API](https://overpass-api.de/) + [Nominatim](https://nominatim.org/) | Real-time queries for nearby amenities and Indian postal code search |
+| **Iconography & Motion** | [Lucide React](https://lucide.dev/) + [Framer Motion](https://www.framer.com/motion/) | Accessible SVG icons and smooth micro-interactions |
 
 ---
 
-## How the Application Works
+## Emergency Disclaimer
 
-1. **Landing & Guidance**:
-   The user opens SafeIndia and can immediately browse common Indian emergency scenarios (e.g. accidents, gas leak, UPI fraud, animal bites) or describe their situation in plain words into the AI Protocol Matcher.
-2. **Selecting a Scenario**:
-   Selecting an emergency opens a focused, distraction-free screen outlining immediate life-saving actions, critical things to avoid, and recovery steps.
-3. **Triggering Live Assistance Discovery**:
-   Clicking **Get Help Near Me** opens the spatial discovery tool. The user can either:
-   - Click **Use My Location**: SafeIndia prompts the browser for one-time GPS coordinates.
-   - Enter an Indian city name, area, or 6-digit postal PIN code in the search bar: SafeIndia queries Nominatim and returns matching Indian locations.
-4. **Facility Querying & Failover**:
-   The application builds an Overpass QL query searching for `amenity=police`, `amenity=hospital`, `amenity=clinic`, and `amenity=fire_station` within the selected radius (`5 km` by default, expandable to `10 km` or `20 km`). If the primary Overpass server times out, the service automatically fails over to backup mirrors.
-5. **Rendering & Actions**:
-   Facilities are displayed in a distance-sorted list alongside an interactive Leaflet map. Users can click **Call** (if an emergency phone number is listed in OSM data), **Get Directions** (opens Google Maps with destination coordinates), or **View on Map** to pan the map camera directly to that facility's pin.
-
----
-
-## External Services & Data Sources
-
-SafeIndia interacts with the following external services directly from the user's browser:
-
-| Service | Endpoint | Usage |
-|---|---|---|
-| **OpenStreetMap Tiles** | `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png` | Visual base map layer rendered in Leaflet |
-| **OSM Nominatim** | `https://nominatim.openstreetmap.org/search` | Geocoding Indian place names and PIN codes |
-| **Overpass API** | `https://overpass-api.de/api/interpreter`<br>`https://lz4.overpass-api.de/api/interpreter`<br>`https://overpass.kumi.systems/api/interpreter` | Dynamic spatial query for nearby emergency facilities |
-| **Official Emergency Portals** | `https://112.gov.in`<br>`https://cybercrime.gov.in`<br>`https://ceir.gov.in` | Direct links to verified Indian Government emergency platforms |
-
-### Important Data Disclaimers
-- **Public & Crowdsourced Data**: Map tiles, coordinates, and facility attributes are sourced from OpenStreetMap contributors. Facility names, operational hours, or telephone numbers may occasionally be incomplete or outdated.
-- **Straight-Line Distance**: Distance values displayed in facility cards represent straight-line (Euclidean/Haversine) distance and do not account for road traffic, terrain, or driving routes.
-- **Third-Party Availability**: Public Overpass API mirrors may experience temporary latency, rate-limiting, or downtime during high-traffic periods. SafeIndia implements multi-mirror failover and error banners with retry triggers.
-- **Non-Governmental Independence**: SafeIndia is an independent, open-access public initiative. It does not represent or claim official government affiliation.
-
----
-
-## Privacy & Safety Model
-
-SafeIndia is built with a strict privacy-first architecture:
-
-- **No User Accounts**: No registration, email addresses, passwords, or login tokens.
-- **On-Demand Geolocation Only**: Device GPS coordinates are requested strictly after the user clicks the "Use My Location" button. The application never runs background tracking or continuous watch-position listeners.
-- **Zero Coordinate Storage**: Location coordinates exist only in browser memory for the active session. They are never saved to `localStorage`, cookies, or remote databases.
-- **No Third-Party Analytics**: SafeIndia includes no tracking pixels, ad networks, or user profiling scripts.
-- **Explicit Call Confirmation**: Telephone numbers (`tel:112`, `tel:...`) use standard mobile URI schemes that require explicit confirmation on the user's handset before placing a call.
-
----
-
-## Deployment
-
-SafeIndia can be deployed to any modern static hosting platform (e.g. [Vercel](https://vercel.com/), [Netlify](https://www.netlify.com/), or [Cloudflare Pages](https://pages.cloudflare.com/)).
-
-### Deploying to Vercel
-
-1. Push your repository to GitHub.
-2. Log in to [Vercel](https://vercel.com/) and click **Add New Project**.
-3. Import the `Safe-India` repository.
-4. Configure the build settings:
-   - **Framework Preset**: `Vite`
-   - **Root Directory**: `./`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-   - **Install Command**: `npm install`
-5. Click **Deploy**.
-
-### Single-Page Application (SPA) Routing Note
-
-If hosting on Apache or custom Nginx servers, configure rewrites so all routes serve `dist/index.html`. For Vercel, Vite's standard single-page configuration handles this automatically.
-
----
-
-## Testing & Quality Verification
-
-Before committing changes, run the repository's verification toolchain:
-
-### 1. Static Analysis & Linting
-
-```bash
-npm run lint
-```
-*Runs `oxlint` across all source files. Ensures zero unused variables, clean imports, and consistent code quality.*
-
-### 2. TypeScript Compilation & Production Build
-
-```bash
-npm run build
-```
-*Executes `tsc -b` to validate TypeScript contracts across all modules, followed by Vite production bundling.*
-
-### 3. Manual Testing Checklist
-
-When testing changes locally, verify the following workflows:
-- [ ] **Navbar Navigation**: Switch between Home, Emergencies, Get Help Near Me, Awareness, Resources, and About.
-- [ ] **Global Search**: Press `Ctrl+K` or `⌘K` to open the search modal. Type an emergency keyword and verify navigation to that protocol.
-- [ ] **AI Protocol Matcher**: Type natural phrases (e.g. *"someone followed my car"*) and verify scenario matching.
-- [ ] **112 Emergency Actions**: Verify the persistent top emergency bar and the Get Help Near Me emergency card trigger `tel:112`.
-- [ ] **Geolocation Discovery**: Click "Use My Location", grant browser permission, and verify facility markers appear on the Leaflet map.
-- [ ] **Manual Location Search**: Search an Indian city (e.g. *"Connaught Place, New Delhi"* or PIN *"110001"*) and select a suggestion from the dropdown.
-- [ ] **Map Interactions**: Click markers to verify popup details; click "View on Map" from a card to test camera fly-to; click directions to verify Google Maps link.
-- [ ] **Category Filters**: Toggle between All, Police, Hospitals, and Fire Stations; verify category count badges update accurately.
-- [ ] **Radius Selector**: Change radius from 5 km to 10 km or 20 km to test re-querying.
-- [ ] **Responsive Layout**: Test on mobile viewports (e.g. 375px width) to confirm smooth layout without overflow.
-
----
-
-## Known Limitations
-
-- **Internet Dependency**: Live facility discovery and map tiles require an active internet connection. (Static emergency protocols and checklists load into memory and remain readable if the tab stays open).
-- **Crowdsourced Contact Information**: Emergency telephone numbers for specific local police outposts or clinics are dependent on OpenStreetMap tag completeness (`phone` or `contact:phone`).
-- **Overpass Query Timeout**: In areas with very dense spatial data, public Overpass servers may take several seconds to return results during peak hours.
-- **Straight-Line Distance**: Distance figures do not represent road driving distance or transit route time.
-
----
-
-## Roadmap
-
-Planned future enhancements (subject to community feedback):
-
-- [ ] **Offline Protocol Caching (PWA)**: Service Worker integration to make all static emergency guides fully accessible without internet connectivity.
-- [ ] **Road Network Routing**: Integration of open-source routing APIs (such as OSRM) for real turn-by-turn driving distances.
-- [ ] **Offline Emergency PDF Exports**: Printable, pocket-sized emergency action cheat-sheets for homes, schools, and offices.
-- [ ] **Additional Emergency Categories**: Specialized protocols for extreme weather, industrial chemical hazards, and railway emergencies.
+> [!IMPORTANT]
+> **SafeIndia is an independent public-safety initiative.** It provides curated guidance based on official Indian guidelines (NDMA, MoRTH, Cyber Crime Portal) and OpenStreetMap spatial data.
+>
+> In any life-threatening situation, active crime, severe medical crisis, or structural fire, **always dial 112 immediately** on your mobile phone or landline. SafeIndia is a preparation and reference companion, not a substitute for official emergency response services.
 
 ---
 
 ## Contributing
 
-Contributions to improve emergency guidance clarity, verify helpline records, or enhance map performance are welcome.
+Contributions to improve protocol accuracy, add regional helplines, or enhance map performance are warmly welcomed!
 
-1. **Fork the repository** on GitHub.
-2. **Create a descriptive feature branch**:
-   ```bash
-   git checkout -b feature/improved-guidance
-   ```
-3. **Make your changes** while adhering to existing formatting and architectural patterns.
-4. **Run verification checks**:
+1. **Fork** the repository on GitHub.
+2. **Create a branch**: `git checkout -b feature/clearer-protocol`
+3. **Make your changes** and verify code quality:
    ```bash
    npm run lint
    npm run build
    ```
-5. **Commit your changes**:
-   ```bash
-   git commit -m "docs: clarify Good Samaritan legal protections"
-   ```
-6. **Push to your branch and open a Pull Request**.
+4. **Commit**: `git commit -m "docs: clarify Good Samaritan protections"`
+5. **Push & Open a Pull Request**.
 
 ---
 
-## License
+<div align="center">
 
-No explicit license file is currently provided in this repository. All rights are reserved by the original project author.
+  **SafeIndia — Know what to do when it matters.**
 
-If you are the repository owner, please consider adding an open-source license (such as the [MIT License](https://opensource.org/licenses/MIT) or [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)) to clarify reuse permissions for the public community.
+  Made with dedication to public safety, digital resilience, and citizen empowerment across India.
 
----
-
-## Acknowledgements
-
-- **[OpenStreetMap Contributors](https://www.openstreetmap.org/)** for the global geographic database, base map tiles, and spatial amenity records.
-- **[Overpass API](https://overpass-api.de/)** for the high-performance read-only spatial query API.
-- **[Leaflet](https://leafletjs.com/)** for the lightweight open-source mobile-friendly interactive mapping library.
-- **[Lucide](https://lucide.dev/)** for clean, consistent UI iconography.
-- **[Vite](https://vitejs.dev/) & [React](https://react.dev/)** teams for the modern frontend development toolchain.
-- **Government of India Emergency Initiatives** (112 ERSS, National Cyber Crime Portal, NDMA, MoRTH) for public emergency protocols and life-saving guidelines.
+</div>
