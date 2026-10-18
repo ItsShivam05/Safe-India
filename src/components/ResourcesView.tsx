@@ -62,7 +62,7 @@ export const ResourcesView: React.FC<ResourcesViewProps> = () => {
       <div className="mb-8 text-center max-w-3xl mx-auto">
         <span className="inline-flex items-center space-x-2 bg-sage/30 text-midnight text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border border-sage mb-3">
           <MapPin className="w-4 h-4 text-sage-700" />
-          <span>Government & Official Directory</span>
+          <span>Official Helplines & Numbers</span>
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
           {t.resourcesSection.title}
@@ -239,7 +239,7 @@ export const ResourcesView: React.FC<ResourcesViewProps> = () => {
                   <ShieldCheck className="w-3.5 h-3.5 text-sage-600 shrink-0" />
                   <span className="truncate">Source: {res.source}</span>
                 </span>
-                <span className="shrink-0">Verified: {res.verifiedDate}</span>
+                <span className="shrink-0">Updated: {res.verifiedDate}</span>
               </div>
             </div>
 

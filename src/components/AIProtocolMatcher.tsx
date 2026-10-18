@@ -121,7 +121,7 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
           className="absolute right-2 top-1/2 -translate-y-1/2 bg-plum hover:bg-plum-600 disabled:opacity-50 text-white font-extrabold text-xs sm:text-sm px-4 py-2 rounded-xl transition-all shadow-sm flex items-center space-x-1.5"
         >
           {isSearching ? (
-            <span>Matching...</span>
+            <span>Finding steps...</span>
           ) : (
             <>
               <span>{t.aiHelper.button}</span>
@@ -149,18 +149,18 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
         ))}
       </div>
 
-      {/* Output Protocol Match Preview */}
+      {/* Output Match Preview */}
       {hasSearched && matchedScenario && (
         <div className="bg-midnight-900 border-2 border-lavender/40 rounded-2xl p-5 sm:p-6 animate-in fade-in duration-200">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-2">
               <ShieldCheck className="w-5 h-5 text-sage" />
               <span className="text-xs font-bold text-lavender uppercase tracking-wider">
-                Matched Official Protocol
+                Recommended Safety Guide
               </span>
             </div>
             <span className="text-[10px] bg-midnight-950 text-ivory/70 px-2 py-0.5 rounded border border-lavender/20">
-              Verified Source: {matchedScenario.source.name}
+              Source: {matchedScenario.source.name}
             </span>
           </div>
 
@@ -176,7 +176,7 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
             onClick={() => onSelectScenario(matchedScenario)}
             className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-emergency hover:bg-emergency-600 text-white font-extrabold px-6 py-3 rounded-xl text-sm shadow-md transition-all active:scale-95"
           >
-            <span>Open Full Protocol ({matchedScenario.title.en})</span>
+            <span>Open Full Guide ({matchedScenario.title.en})</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

@@ -194,7 +194,7 @@ export const AwarenessView: React.FC<AwarenessViewProps> = () => {
                   {/* Footer Source */}
                   <div className="md:col-span-2 text-xs text-midnight/60 flex items-center space-x-2 pt-2">
                     <ShieldCheck className="w-4 h-4 text-sage-600" />
-                    <span>Verified Source: <strong>{guide.source.name}</strong> (Reviewed {guide.source.lastReviewed})</span>
+                    <span>Official Source: <strong>{guide.source.name}</strong> (Reviewed {guide.source.lastReviewed})</span>
                   </div>
 
                 </div>

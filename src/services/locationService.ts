@@ -34,7 +34,7 @@ export function getCurrentLocation(): Promise<LocationCoordinates> {
             reject(
               new GeolocationError(
                 'PERMISSION_DENIED',
-                'Location permission was denied. Please allow location access or search manually.'
+                'Location access is turned off. You can search by city, area, or PIN code instead.'
               )
             );
             break;
@@ -42,7 +42,7 @@ export function getCurrentLocation(): Promise<LocationCoordinates> {
             reject(
               new GeolocationError(
                 'POSITION_UNAVAILABLE',
-                'Location information is unavailable. Check your device GPS or search manually.'
+                "We couldn't detect your location. Please check your device location settings or search by area."
               )
             );
             break;
@@ -50,7 +50,7 @@ export function getCurrentLocation(): Promise<LocationCoordinates> {
             reject(
               new GeolocationError(
                 'TIMEOUT',
-                'Location request timed out. Please try again or use manual search.'
+                'Finding your location took too long. Please try again or search by area.'
               )
             );
             break;
@@ -58,7 +58,7 @@ export function getCurrentLocation(): Promise<LocationCoordinates> {
             reject(
               new GeolocationError(
                 'POSITION_UNAVAILABLE',
-                'An unknown error occurred while requesting your location.'
+                "We couldn't detect your location right now. Please try again or search by area."
               )
             );
             break;

@@ -160,7 +160,7 @@ export const HelpNearMeView: React.FC = () => {
       <div className="mb-8 max-w-3xl">
         <div className="inline-flex items-center space-x-2 bg-lavender/30 text-plum text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border border-lavender mb-3">
           <Navigation className="w-4 h-4 text-plum" />
-          <span>Interactive Emergency Discovery</span>
+          <span>Find Nearby Emergency Services</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
           {t.nearMe.title}
@@ -229,7 +229,7 @@ export const HelpNearMeView: React.FC = () => {
           <div className="mt-4 p-3.5 bg-emergency-50 border border-emergency-200 rounded-2xl flex items-start space-x-3 text-xs sm:text-sm text-emergency animate-in fade-in">
             <AlertTriangle className="w-4 h-4 text-emergency shrink-0 mt-0.5" />
             <div className="grow">
-              <span className="font-bold block">Location Access Issue</span>
+              <span className="font-bold block">Notice</span>
               <span>{locationError}</span>
             </div>
           </div>
@@ -245,26 +245,26 @@ export const HelpNearMeView: React.FC = () => {
                 <span className="text-midnight font-bold">
                   {userLocation.name || `${userLocation.lat.toFixed(4)}, ${userLocation.lon.toFixed(4)}`}
                 </span>{' '}
-                ({userLocation.sourceType === 'gps' ? 'Device GPS' : 'Manual Search'})
+                ({userLocation.sourceType === 'gps' ? 'Your Current Location' : 'Searched Area'})
               </span>
             </div>
 
             <span className="text-[11px] text-midnight/50">
-              Radius: {(radiusMeters / 1000)} km
+              Area: Within {(radiusMeters / 1000)} km
             </span>
           </div>
         )}
       </div>
 
-      {/* 4. Loading Facilities State */}
+      {/* 4. Loading Facilities State: Heading: Finding help near you… */}
       {isLoadingFacilities && (
         <div className="bg-white rounded-3xl p-12 text-center border border-lavender/60 shadow-xs my-8">
           <Loader2 className="w-10 h-10 animate-spin text-plum mx-auto mb-4" />
-          <h2 className="text-lg font-bold text-midnight">
-            {t.nearMe.searchingOsm}
+          <h2 className="text-xl font-bold text-midnight">
+            {t.nearMe.loadingTitle}
           </h2>
-          <p className="mt-1 text-xs text-midnight/60">
-            Connecting to OpenStreetMap Overpass API for verified nearby police, hospitals, and fire stations...
+          <p className="mt-1.5 text-xs sm:text-sm text-midnight/70 max-w-md mx-auto leading-relaxed">
+            {t.nearMe.loadingSubtitle}
           </p>
         </div>
       )}
@@ -274,7 +274,7 @@ export const HelpNearMeView: React.FC = () => {
         <div className="bg-emergency-50 border border-emergency-200 rounded-3xl p-6 sm:p-8 text-center my-8">
           <AlertTriangle className="w-10 h-10 text-emergency mx-auto mb-3" />
           <h2 className="text-lg font-bold text-emergency">
-            Discovery Service Notice
+            Unable to load nearby places
           </h2>
           <p className="mt-1 text-sm text-emergency/90 max-w-xl mx-auto">
             {facilitiesError}
@@ -350,7 +350,7 @@ export const HelpNearMeView: React.FC = () => {
                     {t.nearMe.noResults}
                   </p>
                   <p className="text-xs text-midnight/50 mt-1">
-                    Try switching filters or expanding the search radius.
+                    Try switching categories or searching a wider area.
                   </p>
                   {radiusMeters < 20000 && (
                     <button
@@ -391,7 +391,7 @@ export const HelpNearMeView: React.FC = () => {
                 onSelectFacility={handleSelectFacility}
               />
               <p className="mt-2 text-[11px] text-midnight/50 text-center">
-                Map markers and data powered by OpenStreetMap. Straight-line distance shown.
+                Map data from OpenStreetMap. Approximate direct distance shown.
               </p>
             </div>
 
@@ -412,10 +412,10 @@ export const HelpNearMeView: React.FC = () => {
             <Navigation className="w-8 h-8 animate-pulse text-lavender" />
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-midnight">
-            Find Nearest Assistance in Seconds
+            Find Help Nearby in Seconds
           </h2>
           <p className="mt-2 text-xs sm:text-sm text-midnight/70 max-w-lg mx-auto leading-relaxed">
-            SafeIndia scans OpenStreetMap data to locate the closest Police Stations, Hospitals, and Fire Stations to your location. Click <strong>Use My Location</strong> above or enter your city or PIN code to begin.
+            Locate the nearest police stations, hospitals, and fire stations around you. Tap <strong>Use My Location</strong> above or enter your city, area, or PIN code to begin.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-midnight/80">
             <span className="flex items-center space-x-1.5 bg-ivory px-3 py-1.5 rounded-xl border border-lavender">

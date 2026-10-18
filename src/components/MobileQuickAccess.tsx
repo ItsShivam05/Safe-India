@@ -72,9 +72,9 @@ export const MobileQuickAccess: React.FC<MobileQuickAccessProps> = ({
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-midnight">
-                    Emergency Direct Help
+                    Emergency Assistance
                   </h2>
-                  <p className="text-xs text-midnight/60 font-medium">Select official helpline or scenario protocol</p>
+                  <p className="text-xs text-midnight/60 font-medium">Choose a helpline or select what happened</p>
                 </div>
               </div>
 
@@ -107,7 +107,7 @@ export const MobileQuickAccess: React.FC<MobileQuickAccessProps> = ({
                         {t.nav.getHelpNearMe}
                       </span>
                       <span className="text-xs text-lavender">
-                        Find closest Police, Hospitals & Fire Stations on live map
+                        Find nearby police stations, hospitals, and fire stations on a map
                       </span>
                     </div>
                   </div>
@@ -119,7 +119,7 @@ export const MobileQuickAccess: React.FC<MobileQuickAccessProps> = ({
             {/* Direct Official Call Grid */}
             <div className="mb-6">
               <span className="text-xs font-bold uppercase tracking-wider text-midnight/50 block mb-3">
-                Official National Helplines (1-Tap Dial)
+                Official National Helplines (1-Tap Call)
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {quickDialNumbers.map((num, idx) => (
@@ -144,7 +144,7 @@ export const MobileQuickAccess: React.FC<MobileQuickAccessProps> = ({
             {/* Quick Emergency Scenario Picker */}
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-midnight/50 block mb-3">
-                Quick Scenario Protocols
+                Quick Emergency Guides
               </span>
               <div className="space-y-2">
                 {emergencyScenarios.slice(0, 4).map((sc) => (
@@ -165,7 +165,7 @@ export const MobileQuickAccess: React.FC<MobileQuickAccessProps> = ({
 
             {/* Safety confirmation note */}
             <p className="mt-6 text-[11px] text-center text-midnight/50 font-medium">
-              Calls are initiated only after explicit user confirmation on phone. No auto-dialing.
+              Calls connect only when you confirm on your phone. No automatic dialing.
             </p>
 
           </div>

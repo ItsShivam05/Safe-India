@@ -33,7 +33,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
 
             {/* Supporting Copy */}
             <p className="text-base sm:text-lg text-midnight/80 font-normal leading-relaxed max-w-2xl">
-              {t.heroSubtext} Actionable emergency steps, offline-ready prevention protocols, and live discovery of nearby police, medical facilities, and verified national helplines.
+              {t.heroSubtext} Step-by-step actions for emergencies, practical daily safety checklists, and fast ways to find nearby police stations, hospitals, and national helplines.
             </p>
 
             {/* Primary & Secondary Actions */}
@@ -80,15 +80,15 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
             <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-midnight/70 pt-1">
               <span className="flex items-center space-x-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-sage-600" />
-                <span>Verified official protocols</span>
+                <span>Clear, official guidance</span>
               </span>
               <span className="flex items-center space-x-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-sage-600" />
-                <span>Zero login or tracking</span>
+                <span>No login, 100% private</span>
               </span>
               <span className="flex items-center space-x-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-sage-600" />
-                <span>Direct 112 access</span>
+                <span>Direct 112 emergency calling</span>
               </span>
             </div>
 
@@ -120,7 +120,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
 
         </div>
 
-        {/* Core Pillars: Three Distinct Visual Treatments (Not Identical Cards) */}
+        {/* Core Pillars: Three Distinct Visual Treatments */}
         <div>
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -128,7 +128,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
                 Core Safety Pillars
               </h2>
               <p className="text-xs sm:text-sm text-midnight/70">
-                Three targeted systems to protect, prepare, and connect you.
+                Three simple ways to protect yourself, stay prepared, and find immediate help.
               </p>
             </div>
           </div>
@@ -155,9 +155,9 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
                   {t.heroCards.emergenciesSubtitle}
                 </p>
                 <div className="mt-3 text-xs text-midnight/60 space-y-1">
-                  <p>• Step-by-step DO THIS NOW protocols</p>
-                  <p>• Clear warnings on what NOT to do</p>
-                  <p>• Rapid dial links for immediate safety</p>
+                  <p>• Step-by-step immediate actions</p>
+                  <p>• Clear warnings on what to avoid</p>
+                  <p>• 1-tap emergency calling</p>
                 </div>
               </div>
 
@@ -176,7 +176,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
                 <div className="flex items-center justify-between mb-3">
                   <span className="inline-flex items-center space-x-1.5 bg-white text-plum text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full border border-lavender">
                     <BookOpen className="w-3.5 h-3.5 text-plum" />
-                    <span>Prevention & Knowledge</span>
+                    <span>Prevention & Daily Safety</span>
                   </span>
                   <div className="w-7 h-7 rounded-lg bg-plum text-white flex items-center justify-center font-bold text-xs group-hover:scale-110 transition-transform">
                     📖
@@ -189,9 +189,9 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
                   {t.heroCards.awarenessSubtitle}
                 </p>
                 <div className="mt-3 text-xs text-midnight/60 space-y-1">
-                  <p>• Interactive checklists for travel & home</p>
-                  <p>• Digital fraud & UPI protection methods</p>
-                  <p>• Natural hazard readiness guides</p>
+                  <p>• Practical checklists for commuting & home</p>
+                  <p>• Easy ways to spot UPI & phone scams</p>
+                  <p>• Readiness guides for flood & earthquake</p>
                 </div>
               </div>
 
@@ -210,7 +210,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
                 <div className="flex items-center justify-between mb-3">
                   <span className="inline-flex items-center space-x-1.5 bg-white text-midnight text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full border border-sage">
                     <MapPin className="w-3.5 h-3.5 text-sage-600" />
-                    <span>Verified Directory</span>
+                    <span>Emergency Helplines</span>
                   </span>
                   <PhoneCall className="w-5 h-5 text-midnight group-hover:scale-110 transition-transform" />
                 </div>
@@ -222,8 +222,8 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
                 </p>
                 <div className="mt-3 text-xs text-midnight/60 space-y-1">
                   <p>• 112 National Emergency (Police, Fire, Ambulance)</p>
-                  <p>• 1930 Cyber Helpline & RBI protections</p>
-                  <p>• 1091 Women in Distress 24/7 assistance</p>
+                  <p>• 1930 Cyber Fraud Helpline</p>
+                  <p>• 1091 Women Helpline (24/7)</p>
                 </div>
               </div>
 

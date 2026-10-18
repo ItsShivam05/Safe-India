@@ -14,7 +14,7 @@ export const Philosophy: React.FC<PhilosophyProps> = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
           <span className="text-xs font-black uppercase tracking-widest text-plum bg-lavender/30 px-3.5 py-1 rounded-full border border-lavender">
-            Community & Action Narrative
+            Our Safety Approach
           </span>
           <h2 className="mt-3 text-2xl sm:text-4xl font-black text-midnight tracking-tight">
             {t.philosophy.title}
@@ -100,7 +100,7 @@ export const Philosophy: React.FC<PhilosophyProps> = () => {
             <ul className="mt-5 pt-4 border-t border-sage/40 space-y-2 text-xs text-midnight/80 font-medium">
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-sage-600 shrink-0" />
-                <span>Verified official helpline links & contacts</span>
+                <span>Official government emergency helplines</span>
               </li>
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-sage-600 shrink-0" />
@@ -185,7 +185,7 @@ export const Philosophy: React.FC<PhilosophyProps> = () => {
                 Direct connections to India’s dedicated public emergency services.
               </h3>
               <p className="text-sm text-midnight/80 leading-relaxed font-normal">
-                SafeIndia provides direct access to 112 ERSS (Police, Fire, Ambulance), 1930 Cyber Helpline, 108 Medical Response, and 1091 Women in Distress. When you know who to call and what information to provide, rescue teams can reach you faster.
+                SafeIndia connects you directly to 112 National Emergency (Police, Fire, Ambulance), 1930 Cyber Helpline, 108 Medical Ambulance, and 1091 Women Helpline. Knowing who to call and what details to give helps responders reach you quickly.
               </p>
               <div className="pt-2 flex flex-wrap gap-2 text-xs font-semibold text-midnight/70">
                 <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">112 Single Emergency</span>

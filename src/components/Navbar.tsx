@@ -108,8 +108,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onOpenSearch}
               className="px-2.5 py-1.5 text-ivory/80 hover:text-white hover:bg-midnight-800 rounded-xl transition-colors border border-lavender/20 flex items-center space-x-2 text-xs whitespace-nowrap"
-              title="Search protocols (Ctrl+K)"
-              aria-label="Search emergency protocols"
+              title="Search guides & helplines (Ctrl+K)"
+              aria-label="Search emergency guides & helplines"
             >
               <Search className="w-3.5 h-3.5 text-lavender shrink-0" />
               <span className="hidden sm:inline text-ivory/70">Search...</span>
@@ -142,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <span className="flex items-center space-x-2">
                 <Search className="w-4 h-4 text-lavender shrink-0" />
-                <span>Search emergency protocols...</span>
+                <span>Search emergency guides & helplines...</span>
               </span>
               <kbd className="bg-midnight-950 text-lavender text-xs px-2 py-0.5 rounded border border-lavender/20">Search</kbd>
             </button>

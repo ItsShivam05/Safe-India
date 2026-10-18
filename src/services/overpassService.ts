@@ -418,5 +418,5 @@ export async function findNearbyFacilities(
     console.error('Nominatim fallback also encountered an error:', fallbackErr);
   }
 
-  throw new Error('Unable to discover nearby facilities from OpenStreetMap servers at this moment. Please try again.');
+  throw new Error("We couldn't find nearby places right now. Please try again or call 112 directly if you need immediate help.");
 }

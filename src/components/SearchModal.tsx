@@ -158,7 +158,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               <div>
                 <div className="flex items-center space-x-2 text-xs font-extrabold text-emergency uppercase tracking-wider mb-2">
                   <ShieldAlert className="w-4 h-4" />
-                  <span>Emergency Protocols ({matchedScenarios.length})</span>
+                  <span>Emergency Guides ({matchedScenarios.length})</span>
                 </div>
                 <div className="space-y-2">
                   {matchedScenarios.map((sc) => (
@@ -222,7 +222,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               <div>
                 <div className="flex items-center space-x-2 text-xs font-extrabold text-sage-700 uppercase tracking-wider mb-2">
                   <MapPin className="w-4 h-4" />
-                  <span>Verified Helplines ({matchedResources.length})</span>
+                  <span>Emergency Numbers ({matchedResources.length})</span>
                 </div>
                 <div className="space-y-2">
                   {matchedResources.map((res) => (

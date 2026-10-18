@@ -75,7 +75,7 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
       <div className="mb-8 text-center max-w-3xl mx-auto">
         <span className="inline-flex items-center space-x-2 bg-emergency-50 text-emergency text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border border-emergency-200 mb-3">
           <ShieldAlert className="w-4 h-4 text-emergency animate-pulse" />
-          <span>Immediate Response Protocols</span>
+          <span>Immediate Action Guides</span>
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
           {t.emergencySection.title}
@@ -168,7 +168,7 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
                     <span>Call {sc.immediateCallNumber}</span>
                   </span>
                 ) : (
-                  <span className="text-plum">View Protocol</span>
+                  <span className="text-plum">View Action Steps</span>
                 )}
 
                 <span className="inline-flex items-center text-midnight/50 group-hover:text-plum group-hover:translate-x-1 transition-all">
@@ -183,8 +183,8 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
 
       {filteredScenarios.length === 0 && (
         <div className="text-center py-12 bg-white rounded-3xl border border-lavender p-8 max-w-md mx-auto">
-          <p className="text-midnight/80 font-bold mb-2">No matching emergency protocols found.</p>
-          <p className="text-xs text-midnight/60 mb-4">Try searching for keywords like &quot;scam&quot;, &quot;fire&quot;, &quot;accident&quot;, or &quot;snake&quot;.</p>
+          <p className="text-midnight/80 font-bold mb-2">No matching emergency guides found.</p>
+          <p className="text-xs text-midnight/60 mb-4">Try searching for words like &quot;scam&quot;, &quot;fire&quot;, &quot;accident&quot;, or &quot;snake&quot;.</p>
           <button
             onClick={() => {
               setSearchQuery('');

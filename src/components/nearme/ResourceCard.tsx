@@ -69,12 +69,12 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
           <span>{categoryMeta.label}</span>
         </span>
 
-        {/* Straight-line distance tag */}
+        {/* Distance tag */}
         <span
           className="text-xs font-extrabold text-midnight bg-ivory px-2.5 py-0.5 rounded-lg border border-lavender/60"
           title={t.nearMe.straightLineNote}
         >
-          {formatDistance(facility.distanceKm)} {t.nearMe.distance.toLowerCase()}
+          Approx. {formatDistance(facility.distanceKm)}
         </span>
       </div>
 
@@ -165,7 +165,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       {/* Attribution footer */}
       <div className="mt-3 pt-2 border-t border-lavender/25 flex items-center justify-between text-[10px] text-midnight/50">
         <span>{t.nearMe.sourceAttribution}</span>
-        <span className="font-mono">OSM #{facility.osmId}</span>
+        <span className="text-[10px] text-midnight/40">Map ID #{facility.osmId}</span>
       </div>
 
     </div>

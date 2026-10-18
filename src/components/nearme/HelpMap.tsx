@@ -168,7 +168,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
       <div style="font-family: inherit; font-size: 13px; font-weight: bold; padding: 4px 2px;">
         <span style="color: #2563EB;">📍 ${userLabel}</span>
         <div style="font-size: 11px; font-weight: normal; color: #64748B; margin-top: 2px;">
-          ${userLocation.sourceType === 'gps' ? 'Device GPS Location' : 'Selected Search Area'}
+          ${userLocation.sourceType === 'gps' ? 'Your current location' : 'Selected search area'}
         </div>
       </div>
     `);
@@ -251,7 +251,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
             ${facility.name}
           </div>
           <div style="font-size: 11px; font-weight: 700; color: #65558F; margin-bottom: 6px;">
-            ${formatDistance(facility.distanceKm)} ${t.nearMe.distance.toLowerCase()}
+            Approx. ${formatDistance(facility.distanceKm)} away
           </div>
           ${
             facility.address

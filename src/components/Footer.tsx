@@ -117,7 +117,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-ivory/60 gap-2">
           <p>© {CURRENT_YEAR} SafeIndia. {t.footer.rights}</p>
           <div className="flex items-center space-x-4 text-ivory/60">
-            <span>No Auth • No Tracking • Completely Public</span>
+            <span>No Login Needed • No Tracking • Free & Open to All</span>
           </div>
         </div>
 
