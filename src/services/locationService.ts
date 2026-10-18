@@ -1,0 +1,170 @@
+import type { LocationCoordinates, GeocodedLocation } from '../types';
+
+export class GeolocationError extends Error {
+  code: 'PERMISSION_DENIED' | 'POSITION_UNAVAILABLE' | 'TIMEOUT' | 'NOT_SUPPORTED';
+  constructor(code: 'PERMISSION_DENIED' | 'POSITION_UNAVAILABLE' | 'TIMEOUT' | 'NOT_SUPPORTED', message: string) {
+    super(message);
+    this.name = 'GeolocationError';
+    this.code = code;
+  }
+}
+
+/**
+ * Requests the user's current GPS location strictly on demand.
+ * Never tracks continuously or stores coordinates.
+ */
+export function getCurrentLocation(): Promise<LocationCoordinates> {
+  return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined' || !navigator.geolocation) {
+      reject(new GeolocationError('NOT_SUPPORTED', 'Geolocation is not supported by your browser.'));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        resolve({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+          sourceType: 'gps',
+        });
+      },
+      (error) => {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            reject(
+              new GeolocationError(
+                'PERMISSION_DENIED',
+                'Location permission was denied. Please allow location access or search manually.'
+              )
+            );
+            break;
+          case error.POSITION_UNAVAILABLE:
+            reject(
+              new GeolocationError(
+                'POSITION_UNAVAILABLE',
+                'Location information is unavailable. Check your device GPS or search manually.'
+              )
+            );
+            break;
+          case error.TIMEOUT:
+            reject(
+              new GeolocationError(
+                'TIMEOUT',
+                'Location request timed out. Please try again or use manual search.'
+              )
+            );
+            break;
+          default:
+            reject(
+              new GeolocationError(
+                'POSITION_UNAVAILABLE',
+                'An unknown error occurred while requesting your location.'
+              )
+            );
+            break;
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 12000,
+        maximumAge: 0,
+      }
+    );
+  });
+}
+
+/**
+ * Searches a city, area, or PIN code using OpenStreetMap Nominatim.
+ * Strictly respects usage limits and prioritizes Indian regions.
+ */
+export async function searchLocation(query: string): Promise<GeocodedLocation[]> {
+  const cleanQuery = query.trim();
+  if (!cleanQuery) return [];
+
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+    cleanQuery
+  )}&countrycodes=in&limit=6&addressdetails=1`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Geocoding failed with status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (!Array.isArray(data)) return [];
+
+    return data.map((item: { display_name: string; lat: string; lon: string; type?: string }) => ({
+      displayName: item.display_name,
+      lat: parseFloat(item.lat),
+      lon: parseFloat(item.lon),
+      type: item.type,
+    }));
+  } catch (err) {
+    console.error('Error during Nominatim geocoding:', err);
+    throw err;
+  }
+}
+
+/**
+ * Calculates straight-line distance in kilometers between two coordinates using the Haversine formula.
+ */
+export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Earth radius in km
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c;
+  return Math.round(d * 100) / 100; // 2 decimal places
+}
+
+function deg2rad(deg: number): number {
+  return deg * (Math.PI / 180);
+}
+
+/**
+ * Formats straight-line distance into human-friendly string (e.g. "850 m" or "2.4 km").
+ */
+export function formatDistance(distanceKm: number): string {
+  if (distanceKm < 1) {
+    const meters = Math.round(distanceKm * 1000);
+    return `${meters} m`;
+  }
+  return `${distanceKm.toFixed(1)} km`;
+}
+
+/**
+ * Builds an external directions URL using the facility coordinates.
+ */
+export function getDirectionsUrl(lat: number, lon: number): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+}
+
+/**
+ * Normalizes phone numbers found in OSM tags for safe 'tel:' links.
+ * Returns null if no valid telephone number can be determined.
+ */
+export function normalizePhoneNumber(rawPhone?: string): string | null {
+  if (!rawPhone) return null;
+
+  // Split on multiple numbers if separated by semicolon, comma, slash
+  const candidates = rawPhone.split(/[;,/]/).map((s) => s.trim()).filter(Boolean);
+  if (candidates.length === 0) return null;
+
+  const primary = candidates[0];
+  // Strip non-dialable characters except '+'
+  const dialable = primary.replace(/[^\d+]/g, '');
+
+  // Needs at least 3 digits (e.g. 100, 112) or standard phone digits
+  if (dialable.replace(/\D/g, '').length < 3) return null;
+
+  return dialable;
+}

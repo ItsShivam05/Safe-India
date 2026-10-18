@@ -131,6 +131,21 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 </button>
               ))}
             </div>
+
+            {/* Direct Get Help Near Me Action Button */}
+            <button
+              onClick={() => {
+                onClose();
+                onSelectCategory('nearme');
+              }}
+              className="mt-4 w-full p-3.5 bg-gradient-to-r from-navy-900 to-navy-800 hover:from-navy-800 hover:to-navy-700 text-white rounded-2xl flex items-center justify-between text-xs sm:text-sm font-bold border border-amber-400/40 shadow-sm transition-all"
+            >
+              <span className="flex items-center space-x-2.5">
+                <MapPin className="w-4 h-4 text-amber-400" />
+                <span>📍 {t.nav.getHelpNearMe} — Police, Hospitals, Fire Stations</span>
+              </span>
+              <span className="text-amber-400 font-extrabold text-xs">Open Map →</span>
+            </button>
           </div>
         )}
 

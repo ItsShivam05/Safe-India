@@ -19,15 +19,16 @@ export const Navbar: React.FC<NavbarProps> = ({
   lang,
   setLang,
   onOpenSearch,
-  onQuickEmergency,
+  onQuickEmergency: _onQuickEmergency,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[lang];
 
   const navLinks = [
     { id: 'emergencies', label: t.nav.emergencies, icon: ShieldAlert },
+    { id: 'nearme', label: t.nav.getHelpNearMe, icon: MapPin },
     { id: 'awareness', label: t.nav.awareness, icon: BookOpen },
-    { id: 'resources', label: t.nav.resources, icon: MapPin },
+    { id: 'resources', label: t.nav.resources, icon: Info },
     { id: 'about', label: t.nav.about, icon: Info },
   ];
 
@@ -125,11 +126,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Prominent Emergency Action Button */}
             <button
-              onClick={onQuickEmergency}
+              onClick={() => handleNavClick('nearme')}
               className="flex items-center space-x-2 bg-gradient-to-r from-emergency-600 to-emergency-700 hover:from-emergency-500 hover:to-emergency-600 text-white font-bold px-4 py-2 rounded-lg text-sm shadow-md transition-all duration-200 hover:shadow-emergency-600/30 active:scale-95"
             >
               <ShieldAlert className="w-4 h-4 animate-pulse" />
-              <span>{t.nav.emergencyHelp}</span>
+              <span>{t.nav.getHelpNearMe}</span>
             </button>
           </div>
 
@@ -196,14 +197,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <div className="pt-2 border-t border-navy-800 flex flex-col space-y-2">
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onQuickEmergency();
-              }}
+              onClick={() => handleNavClick('nearme')}
               className="w-full flex items-center justify-center space-x-2 bg-emergency-600 hover:bg-emergency-500 text-white font-bold py-3 rounded-lg text-base shadow-md"
             >
               <ShieldAlert className="w-5 h-5" />
-              <span>{t.nav.emergencyHelp}</span>
+              <span>{t.nav.getHelpNearMe}</span>
             </button>
           </div>
         </div>

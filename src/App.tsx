@@ -8,6 +8,7 @@ import { AwarenessView } from './components/AwarenessView';
 import { ResourcesView } from './components/ResourcesView';
 import { AIProtocolMatcher } from './components/AIProtocolMatcher';
 import { AboutView } from './components/AboutView';
+import { HelpNearMeView } from './components/nearme/HelpNearMeView';
 import { SearchModal } from './components/SearchModal';
 import { MobileQuickAccess } from './components/MobileQuickAccess';
 import { Footer } from './components/Footer';
@@ -88,6 +89,11 @@ export function App() {
               />
             )}
 
+            {/* Get Help Near Me Tab */}
+            {currentTab === 'nearme' && (
+              <HelpNearMeView lang={lang} />
+            )}
+
             {/* Awareness Tab */}
             {currentTab === 'awareness' && (
               <AwarenessView lang={lang} />
@@ -110,6 +116,7 @@ export function App() {
       <MobileQuickAccess
         lang={lang}
         onSelectScenario={handleSelectScenario}
+        onNavigate={handleNavigate}
         isOpenExternal={quickEmergencyOpen}
         onCloseExternal={() => setQuickEmergencyOpen(false)}
       />

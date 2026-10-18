@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldAlert, X, PhoneCall, ArrowRight } from 'lucide-react';
+import { ShieldAlert, X, PhoneCall, ArrowRight, MapPin } from 'lucide-react';
 import type { Language, EmergencyScenario } from '../types';
 import { emergencyScenarios } from '../data/emergencies';
 import { translations } from '../data/locales';
@@ -7,6 +7,7 @@ import { translations } from '../data/locales';
 interface MobileQuickAccessProps {
   lang: Language;
   onSelectScenario: (scenario: EmergencyScenario) => void;
+  onNavigate?: (tab: string) => void;
   isOpenExternal?: boolean;
   onCloseExternal?: () => void;
 }
@@ -14,6 +15,7 @@ interface MobileQuickAccessProps {
 export const MobileQuickAccess: React.FC<MobileQuickAccessProps> = ({
   lang,
   onSelectScenario,
+  onNavigate,
   isOpenExternal,
   onCloseExternal,
 }) => {
@@ -82,6 +84,35 @@ export const MobileQuickAccess: React.FC<MobileQuickAccessProps> = ({
                 <X className="w-6 h-6" />
               </button>
             </div>
+
+            {/* Direct Get Help Near Me action */}
+            {onNavigate && (
+              <div className="mb-5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    onNavigate('nearme');
+                  }}
+                  className="w-full p-4 bg-gradient-to-r from-navy-900 to-navy-800 hover:from-navy-800 hover:to-navy-700 text-white rounded-2xl flex items-center justify-between border-2 border-amber-400/50 shadow-lg transition-transform active:scale-95 group text-left"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2.5 bg-amber-400 text-navy-950 rounded-xl group-hover:scale-110 transition-transform shrink-0">
+                      <MapPin className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-extrabold text-white block">
+                        🗺️ {t.nav.getHelpNearMe}
+                      </span>
+                      <span className="text-xs text-slate-300">
+                        Find closest Police, Hospitals & Fire Stations on live map
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-amber-400 group-hover:translate-x-1 transition-transform shrink-0 ml-2" />
+                </button>
+              </div>
+            )}
 
             {/* Direct Official Call Grid */}
             <div className="mb-6">

@@ -9,6 +9,8 @@ interface FooterProps {
   lang: Language;
 }
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export const Footer: React.FC<FooterProps> = ({ onNavigate, lang }) => {
   const t = translations[lang];
 
@@ -61,6 +63,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, lang }) => {
                 </button>
               </li>
               <li>
+                <button onClick={() => onNavigate('nearme')} className="hover:text-amber-400 transition-colors">
+                  📍 {t.nav.getHelpNearMe}
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onNavigate('awareness')} className="hover:text-amber-400 transition-colors">
                   🛡️ {t.nav.awareness}
                 </button>
@@ -104,7 +111,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, lang }) => {
 
         {/* Bottom Copyright & Rights */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
-          <p>© {new Date().getFullYear()} SafeIndia. {t.footer.rights}</p>
+          <p>© {CURRENT_YEAR} SafeIndia. {t.footer.rights}</p>
           <div className="flex items-center space-x-4 text-slate-400">
             <span>No Auth • No Tracking • Completely Public</span>
           </div>

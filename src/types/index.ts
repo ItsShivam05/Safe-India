@@ -61,3 +61,33 @@ export interface OfficialResource {
 }
 
 export type Language = 'en' | 'hi';
+
+export type FacilityCategory = 'police' | 'hospital' | 'fire_station';
+
+export interface LocationCoordinates {
+  lat: number;
+  lon: number;
+  name?: string;
+  sourceType: 'gps' | 'manual';
+}
+
+export interface NearbyFacility {
+  id: string;
+  name: string;
+  category: FacilityCategory;
+  lat: number;
+  lon: number;
+  distanceKm: number;
+  address?: string;
+  phone?: string;
+  dataSource: string; // e.g. "OpenStreetMap contributors"
+  osmType: 'node' | 'way';
+  osmId: number;
+}
+
+export interface GeocodedLocation {
+  displayName: string;
+  lat: number;
+  lon: number;
+  type?: string;
+}
