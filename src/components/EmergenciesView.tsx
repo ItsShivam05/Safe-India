@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { EmergencyScenario, Language } from '../types';
+import type { EmergencyScenario } from '../types';
 
 import { emergencyScenarios } from '../data/emergencies';
 import { translations } from '../data/locales';
@@ -22,33 +22,32 @@ import {
 
 interface EmergenciesViewProps {
   onSelectScenario: (scenario: EmergencyScenario) => void;
-  lang: Language;
 }
 
 export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
   onSelectScenario,
-  lang,
 }) => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const t = translations[lang];
+  const t = translations.en;
 
   const categories = [
     { id: 'all', label: t.emergencySection.allCategories },
-    { id: 'personal-safety', label: lang === 'en' ? 'Personal Safety' : 'व्यक्तिगत सुरक्षा' },
-    { id: 'medical', label: lang === 'en' ? 'Medical Emergency' : 'चिकित्सा आपात स्थिति' },
-    { id: 'fire-disaster', label: lang === 'en' ? 'Fire & Disaster' : 'आग एवं आपदा' },
-    { id: 'road-transport', label: lang === 'en' ? 'Road & Transport' : 'सड़क एवं परिवहन' },
-    { id: 'digital-emergency', label: lang === 'en' ? 'Digital Emergency' : 'डिजिटल आपात स्थिति' },
-    { id: 'animal', label: lang === 'en' ? 'Animal Emergency' : 'पशु आपात स्थिति' },
+    { id: 'personal-safety', label: 'Personal Safety' },
+    { id: 'medical', label: 'Medical Emergency' },
+    { id: 'fire-disaster', label: 'Fire & Disaster' },
+    { id: 'road-transport', label: 'Road & Transport' },
+    { id: 'digital-emergency', label: 'Digital Emergency' },
+    { id: 'animal', label: 'Animal Emergency' },
   ];
 
   const filteredScenarios = emergencyScenarios.filter((sc) => {
     const matchesCategory = activeCategory === 'all' || sc.category === activeCategory;
     const q = searchQuery.toLowerCase().trim();
+    const titleText = sc.title.en || '';
     const matchesSearch =
       !q ||
-      sc.title[lang].toLowerCase().includes(q) ||
+      titleText.toLowerCase().includes(q) ||
       sc.searchKeywords.some((k) => k.toLowerCase().includes(q));
     return matchesCategory && matchesSearch;
   });
@@ -70,18 +69,18 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-ivory text-midnight">
       
       {/* Header */}
       <div className="mb-8 text-center max-w-3xl mx-auto">
-        <span className="inline-flex items-center space-x-2 bg-emergency-100 text-emergency-700 text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full border border-emergency-200 mb-3">
-          <ShieldAlert className="w-4 h-4 text-emergency-600 animate-pulse" />
-          <span>Immediate Response</span>
+        <span className="inline-flex items-center space-x-2 bg-emergency-50 text-emergency text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border border-emergency-200 mb-3">
+          <ShieldAlert className="w-4 h-4 text-emergency animate-pulse" />
+          <span>Immediate Response Protocols</span>
         </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          🚨 {t.emergencySection.title}
+        <h1 className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
+          {t.emergencySection.title}
         </h1>
-        <p className="mt-2 text-slate-600 text-base sm:text-lg">
+        <p className="mt-2 text-midnight/75 text-base sm:text-lg">
           {t.emergencySection.subheading}
         </p>
       </div>
@@ -89,13 +88,13 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
       {/* Quick Search & Category Filter Pills */}
       <div className="mb-8 space-y-4">
         <div className="max-w-xl mx-auto relative">
-          <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          <Search className="w-5 h-5 text-midnight/40 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t.emergencySection.searchPlaceholder}
-            className="w-full bg-white border border-slate-300 focus:border-navy-800 rounded-2xl pl-11 pr-4 py-3 text-sm sm:text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-navy-800/20 text-slate-900 placeholder-slate-400"
+            className="w-full bg-white border border-lavender focus:border-plum rounded-2xl pl-11 pr-4 py-3.5 text-sm sm:text-base shadow-xs focus:outline-none focus:ring-2 focus:ring-plum text-midnight placeholder-midnight/40 font-medium"
           />
         </div>
 
@@ -107,8 +106,8 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
               onClick={() => setActiveCategory(cat.id)}
               className={`shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 ${
                 activeCategory === cat.id
-                  ? 'bg-navy-800 text-white shadow-md'
-                  : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+                  ? 'bg-plum text-white shadow-sm'
+                  : 'bg-white border border-lavender/60 text-midnight/80 hover:bg-lavender/30 hover:border-lavender'
               }`}
             >
               {cat.label}
@@ -125,20 +124,20 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
             <div
               key={sc.id}
               onClick={() => onSelectScenario(sc)}
-              className={`group cursor-pointer bg-white rounded-2xl p-6 border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between ${
+              className={`group cursor-pointer bg-white rounded-3xl p-6 sm:p-7 border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between ${
                 isCritical
-                  ? 'border-emergency-500/30 hover:border-emergency-500 shadow-sm'
-                  : 'border-slate-200 hover:border-navy-600 shadow-sm'
+                  ? 'border-emergency/40 hover:border-emergency'
+                  : 'border-lavender/60 hover:border-plum'
               }`}
             >
               <div>
                 {/* Urgency Badge & Icon */}
                 <div className="flex items-center justify-between mb-4">
                   <div
-                    className={`p-3 rounded-xl ${
+                    className={`p-3 rounded-2xl ${
                       isCritical
-                        ? 'bg-emergency-100 text-emergency-700'
-                        : 'bg-navy-50 text-navy-800'
+                        ? 'bg-emergency-50 text-emergency border border-emergency-200'
+                        : 'bg-lavender/30 text-plum border border-lavender'
                     }`}
                   >
                     {renderIcon(sc.iconName)}
@@ -147,8 +146,8 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
                   <span
                     className={`text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full border ${
                       isCritical
-                        ? 'bg-emergency-600 text-white border-emergency-700 animate-pulse'
-                        : 'bg-amber-100 text-amber-800 border-amber-300'
+                        ? 'bg-emergency text-white border-emergency-700 animate-pulse'
+                        : 'bg-lavender/40 text-midnight border-lavender'
                     }`}
                   >
                     {isCritical ? 'Critical Action' : 'High Priority'}
@@ -156,23 +155,23 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
                 </div>
 
                 {/* Scenario Title */}
-                <h3 className="text-xl font-bold text-slate-900 group-hover:text-navy-900 transition-colors leading-snug">
-                  {sc.title[lang]}
+                <h3 className="text-xl font-bold text-midnight group-hover:text-plum transition-colors leading-snug">
+                  {sc.title.en}
                 </h3>
               </div>
 
               {/* Action Footer preview */}
-              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm font-bold">
+              <div className="mt-6 pt-4 border-t border-lavender/40 flex items-center justify-between text-xs sm:text-sm font-bold">
                 {sc.immediateCallNumber ? (
-                  <span className="inline-flex items-center space-x-1 text-emergency-600 font-extrabold">
+                  <span className="inline-flex items-center space-x-1 text-emergency font-extrabold">
                     <PhoneCall className="w-3.5 h-3.5" />
                     <span>Call {sc.immediateCallNumber}</span>
                   </span>
                 ) : (
-                  <span className="text-navy-800">View Protocol</span>
+                  <span className="text-plum">View Protocol</span>
                 )}
 
-                <span className="inline-flex items-center text-slate-400 group-hover:text-navy-900 group-hover:translate-x-1 transition-all">
+                <span className="inline-flex items-center text-midnight/50 group-hover:text-plum group-hover:translate-x-1 transition-all">
                   <span>View Steps</span>
                   <ChevronRight className="w-4 h-4 ml-0.5" />
                 </span>
@@ -183,15 +182,15 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
       </div>
 
       {filteredScenarios.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 max-w-md mx-auto">
-          <p className="text-slate-600 font-semibold mb-2">No matching emergency protocols found.</p>
-          <p className="text-xs text-slate-400 mb-4">Try searching for keywords like &quot;scam&quot;, &quot;fire&quot;, &quot;accident&quot;, or &quot;snake&quot;.</p>
+        <div className="text-center py-12 bg-white rounded-3xl border border-lavender p-8 max-w-md mx-auto">
+          <p className="text-midnight/80 font-bold mb-2">No matching emergency protocols found.</p>
+          <p className="text-xs text-midnight/60 mb-4">Try searching for keywords like &quot;scam&quot;, &quot;fire&quot;, &quot;accident&quot;, or &quot;snake&quot;.</p>
           <button
             onClick={() => {
               setSearchQuery('');
               setActiveCategory('all');
             }}
-            className="px-4 py-2 bg-navy-800 text-white text-xs font-bold rounded-lg"
+            className="px-4 py-2 bg-plum text-white text-xs font-bold rounded-xl hover:bg-plum-600 transition-colors"
           >
             Clear Filters
           </button>

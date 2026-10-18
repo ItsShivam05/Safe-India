@@ -12,13 +12,11 @@ import { HelpNearMeView } from './components/nearme/HelpNearMeView';
 import { SearchModal } from './components/SearchModal';
 import { MobileQuickAccess } from './components/MobileQuickAccess';
 import { Footer } from './components/Footer';
-import type { Language, EmergencyScenario } from './types';
-
+import type { EmergencyScenario } from './types';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [selectedScenario, setSelectedScenario] = useState<EmergencyScenario | null>(null);
-  const [lang, setLang] = useState<Language>('en');
   const [searchModalOpen, setSearchModalOpen] = useState<boolean>(false);
   const [quickEmergencyOpen, setQuickEmergencyOpen] = useState<boolean>(false);
 
@@ -37,14 +35,12 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col selection:bg-navy-800 selection:text-white">
+    <div className="min-h-screen bg-ivory text-midnight font-sans flex flex-col selection:bg-plum selection:text-white">
       
       {/* Sticky Header / Navbar */}
       <Navbar
         currentTab={currentTab}
         setCurrentTab={handleNavigate}
-        lang={lang}
-        setLang={setLang}
         onOpenSearch={() => setSearchModalOpen(true)}
         onQuickEmergency={() => setQuickEmergencyOpen(true)}
       />
@@ -57,7 +53,6 @@ export function App() {
           <ScenarioDetailView
             scenario={selectedScenario}
             onBack={() => setSelectedScenario(null)}
-            lang={lang}
           />
         ) : (
           <>
@@ -66,17 +61,14 @@ export function App() {
               <>
                 <Hero
                   onNavigate={handleNavigate}
-                  lang={lang}
                   onOpenSearch={() => setSearchModalOpen(true)}
                 />
                 <AIProtocolMatcher
                   onSelectScenario={handleSelectScenario}
-                  lang={lang}
                 />
-                <Philosophy lang={lang} />
+                <Philosophy />
                 <EmergenciesView
                   onSelectScenario={handleSelectScenario}
-                  lang={lang}
                 />
               </>
             )}
@@ -85,28 +77,27 @@ export function App() {
             {currentTab === 'emergencies' && (
               <EmergenciesView
                 onSelectScenario={handleSelectScenario}
-                lang={lang}
               />
             )}
 
             {/* Get Help Near Me Tab */}
             {currentTab === 'nearme' && (
-              <HelpNearMeView lang={lang} />
+              <HelpNearMeView />
             )}
 
             {/* Awareness Tab */}
             {currentTab === 'awareness' && (
-              <AwarenessView lang={lang} />
+              <AwarenessView />
             )}
 
             {/* Resources Tab */}
             {currentTab === 'resources' && (
-              <ResourcesView lang={lang} />
+              <ResourcesView />
             )}
 
             {/* About Tab */}
             {currentTab === 'about' && (
-              <AboutView lang={lang} />
+              <AboutView />
             )}
           </>
         )}
@@ -114,7 +105,7 @@ export function App() {
 
       {/* Persistent Floating Emergency Button & Quick Help Modal */}
       <MobileQuickAccess
-        lang={lang}
+        showFloatingButton={currentTab !== 'nearme'}
         onSelectScenario={handleSelectScenario}
         onNavigate={handleNavigate}
         isOpenExternal={quickEmergencyOpen}
@@ -127,11 +118,10 @@ export function App() {
         onClose={() => setSearchModalOpen(false)}
         onSelectScenario={handleSelectScenario}
         onSelectCategory={handleNavigate}
-        lang={lang}
       />
 
       {/* Footer */}
-      <Footer onNavigate={handleNavigate} lang={lang} />
+      <Footer onNavigate={handleNavigate} />
 
     </div>
   );

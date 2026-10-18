@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Loader2, X } from 'lucide-react';
-import type { Language, GeocodedLocation } from '../../types';
+import type { GeocodedLocation } from '../../types';
 import { translations } from '../../data/locales';
 import { searchLocation } from '../../services/locationService';
 
 interface LocationSearchProps {
-  lang: Language;
   onSelectLocation: (loc: GeocodedLocation) => void;
   disabled?: boolean;
 }
 
 export const LocationSearch: React.FC<LocationSearchProps> = ({
-  lang,
   onSelectLocation,
   disabled = false,
 }) => {
@@ -21,7 +19,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
   const [hasSearched, setHasSearched] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const t = translations[lang];
+  const t = translations.en;
 
   const handleSearch = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -65,7 +63,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
     <div className="w-full relative">
       <form onSubmit={handleSearch} className="relative flex items-center">
         <div className="relative w-full">
-          <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-5 h-5 text-midnight/40 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={query}
@@ -75,13 +73,13 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
               if (errorMsg) setErrorMsg(null);
             }}
             placeholder={t.nearMe.searchPlaceholder}
-            className="w-full bg-white border border-slate-300 focus:border-navy-700 rounded-2xl pl-11 pr-24 py-3.5 text-sm sm:text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-navy-700/20 shadow-sm transition-all"
+            className="w-full bg-white border border-lavender focus:border-plum rounded-2xl pl-11 pr-24 py-3.5 text-sm sm:text-base text-midnight placeholder-midnight/40 focus:outline-none focus:ring-2 focus:ring-plum shadow-xs transition-all font-medium"
           />
           {query && (
             <button
               type="button"
               onClick={handleClear}
-              className="absolute right-20 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-full"
+              className="absolute right-20 top-1/2 -translate-y-1/2 p-1 text-midnight/40 hover:text-midnight rounded-full"
               aria-label="Clear location search"
             >
               <X className="w-4 h-4" />
@@ -92,11 +90,11 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
         <button
           type="submit"
           disabled={disabled || isSearching || !query.trim()}
-          className="absolute right-2 bg-navy-800 hover:bg-navy-900 disabled:opacity-50 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5"
+          className="absolute right-2 bg-plum hover:bg-plum-600 disabled:opacity-50 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl transition-all shadow-xs flex items-center space-x-1.5"
         >
           {isSearching ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
+              <Loader2 className="w-4 h-4 animate-spin text-lavender" />
               <span>{t.nearMe.searchBtn}</span>
             </>
           ) : (
@@ -107,8 +105,8 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
 
       {/* Geocoding Results Dropdown */}
       {results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-slate-200 shadow-2xl z-30 overflow-hidden divide-y divide-slate-100 max-h-72 overflow-y-auto">
-          <div className="px-4 py-2 bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-lavender/60 shadow-xl z-30 overflow-hidden divide-y divide-lavender/30 max-h-72 overflow-y-auto">
+          <div className="px-4 py-2 bg-ivory text-[11px] font-bold text-midnight/60 uppercase tracking-wider">
             Matching Locations in India
           </div>
           {results.map((loc, idx) => (
@@ -116,14 +114,14 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
               key={`${loc.lat}-${loc.lon}-${idx}`}
               type="button"
               onClick={() => handleSelect(loc)}
-              className="w-full text-left px-4 py-3 hover:bg-slate-50 transition-colors flex items-start space-x-3 text-xs sm:text-sm text-slate-800 group"
+              className="w-full text-left px-4 py-3 hover:bg-ivory transition-colors flex items-start space-x-3 text-xs sm:text-sm text-midnight group"
             >
-              <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+              <MapPin className="w-4 h-4 text-plum shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
               <div className="grow">
-                <span className="font-semibold block text-slate-900 group-hover:text-navy-900">
+                <span className="font-semibold block text-midnight group-hover:text-plum">
                   {loc.displayName.split(',').slice(0, 2).join(',')}
                 </span>
-                <span className="text-slate-500 text-[11px] line-clamp-1">
+                <span className="text-midnight/60 text-[11px] line-clamp-1">
                   {loc.displayName}
                 </span>
               </div>
@@ -134,7 +132,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
 
       {/* Error message */}
       {hasSearched && !isSearching && errorMsg && (
-        <p className="mt-2 text-xs text-rose-600 font-medium px-2">
+        <p className="mt-2 text-xs text-emergency font-medium px-2">
           {errorMsg}
         </p>
       )}

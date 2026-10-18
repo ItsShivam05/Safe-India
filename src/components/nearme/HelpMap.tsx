@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import type { NearbyFacility, LocationCoordinates, Language } from '../../types';
+import type { NearbyFacility, LocationCoordinates } from '../../types';
 import { translations } from '../../data/locales';
 import { formatDistance, getDirectionsUrl, normalizePhoneNumber } from '../../services/locationService';
 
@@ -10,7 +10,6 @@ interface HelpMapProps {
   facilities: NearbyFacility[];
   selectedFacility: NearbyFacility | null;
   onSelectFacility: (facility: NearbyFacility) => void;
-  lang: Language;
 }
 
 export const HelpMap: React.FC<HelpMapProps> = ({
@@ -18,7 +17,6 @@ export const HelpMap: React.FC<HelpMapProps> = ({
   facilities,
   selectedFacility,
   onSelectFacility,
-  lang,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -26,7 +24,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
   const userMarkerRef = useRef<L.Marker | null>(null);
   const facilityMarkersRef = useRef<Map<string, L.Marker>>(new Map());
 
-  const t = translations[lang];
+  const t = translations.en;
 
   // Helper to create category icons
   const createCategoryIcon = (category: string, isSelected: boolean) => {
@@ -225,29 +223,29 @@ export const HelpMap: React.FC<HelpMapProps> = ({
 
       const popupHtml = `
         <div style="font-family: inherit; min-width: 200px; max-width: 260px; padding: 2px;">
-          <div style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 2px;">
+          <div style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: #65558F; margin-bottom: 2px;">
             ${categoryLabel}
           </div>
-          <div style="font-size: 14px; font-weight: 800; color: #0F172A; line-height: 1.3; margin-bottom: 6px;">
+          <div style="font-size: 14px; font-weight: 800; color: #211D35; line-height: 1.3; margin-bottom: 6px;">
             ${facility.name}
           </div>
-          <div style="font-size: 11px; font-weight: 700; color: #1D3565; margin-bottom: 6px;">
+          <div style="font-size: 11px; font-weight: 700; color: #65558F; margin-bottom: 6px;">
             ${formatDistance(facility.distanceKm)} ${t.nearMe.distance.toLowerCase()}
           </div>
           ${
             facility.address
-              ? `<div style="font-size: 11px; color: #475569; margin-bottom: 8px;">📍 ${facility.address}</div>`
+              ? `<div style="font-size: 11px; color: #433760; margin-bottom: 8px;">📍 ${facility.address}</div>`
               : ''
           }
           <div style="display: flex; gap: 6px; margin-top: 8px;">
             ${
               dialablePhone
-                ? `<a href="tel:${dialablePhone}" style="flex: 1; text-align: center; background-color: #059669; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; text-decoration: none;">📞 ${t.nearMe.call}</a>`
+                ? `<a href="tel:${dialablePhone}" style="flex: 1; text-align: center; background-color: #65558F; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; text-decoration: none;">📞 ${t.nearMe.call}</a>`
                 : ''
             }
-            <a href="${directionsUrl}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-align: center; background-color: #0D2344; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; text-decoration: none;">🧭 ${t.nearMe.directions}</a>
+            <a href="${directionsUrl}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-align: center; background-color: #211D35; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; text-decoration: none;">🧭 ${t.nearMe.directions}</a>
           </div>
-          <div style="font-size: 9px; color: #94A3B8; margin-top: 8px; text-align: right;">
+          <div style="font-size: 9px; color: #8E7CB5; margin-top: 8px; text-align: right;">
             ${t.nearMe.sourceAttribution}
           </div>
         </div>
@@ -319,14 +317,14 @@ export const HelpMap: React.FC<HelpMapProps> = ({
   }, [selectedFacility]);
 
   return (
-    <div className="relative w-full h-[380px] sm:h-[460px] md:h-[580px] rounded-3xl overflow-hidden shadow-lg border border-slate-200 bg-slate-100">
+    <div className="relative w-full h-[380px] sm:h-[460px] md:h-[580px] rounded-3xl overflow-hidden shadow-md border border-lavender/60 bg-ivory-100">
       <div
         ref={mapContainerRef}
         className="absolute inset-0 w-full h-full z-10"
       />
 
       {/* Floating Map Legend */}
-      <div className="absolute top-3 right-3 z-20 bg-white/95 backdrop-blur-md px-3 py-2 rounded-2xl shadow-md border border-slate-200 text-[11px] font-bold text-slate-700 flex items-center space-x-3 pointer-events-none">
+      <div className="absolute top-3 right-3 z-20 bg-white/95 backdrop-blur-xs px-3.5 py-2 rounded-2xl shadow-sm border border-lavender/60 text-[11px] font-bold text-midnight flex items-center space-x-3 pointer-events-none">
         <span className="flex items-center space-x-1">
           <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
           <span>Police</span>

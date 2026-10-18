@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { EmergencyScenario, Language } from '../types';
+import type { EmergencyScenario } from '../types';
 
 import { emergencyScenarios } from '../data/emergencies';
 import { awarenessGuides } from '../data/awareness';
@@ -12,7 +12,6 @@ interface SearchModalProps {
   onClose: () => void;
   onSelectScenario: (scenario: EmergencyScenario) => void;
   onSelectCategory: (tab: string) => void;
-  lang: Language;
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
@@ -20,19 +19,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onClose,
   onSelectScenario,
   onSelectCategory,
-  lang,
 }) => {
   const [query, setQuery] = useState('');
-  const t = translations[lang];
+  const t = translations.en;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         if (isOpen) onClose();
-        else {
-          // Open handled by parent, toggle
-        }
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -49,26 +44,31 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   // Search results prioritizing Emergency Scenarios first!
   const matchedScenarios = emergencyScenarios.filter((sc) => {
     if (!q) return false;
+    const titleText = sc.title.en || '';
     return (
-      sc.title[lang].toLowerCase().includes(q) ||
+      titleText.toLowerCase().includes(q) ||
       sc.searchKeywords.some((k) => k.toLowerCase().includes(q))
     );
   });
 
   const matchedAwareness = awarenessGuides.filter((ag) => {
     if (!q) return false;
+    const titleText = ag.title.en || '';
+    const summaryText = ag.summary.en || '';
     return (
-      ag.title[lang].toLowerCase().includes(q) ||
-      ag.summary[lang].toLowerCase().includes(q)
+      titleText.toLowerCase().includes(q) ||
+      summaryText.toLowerCase().includes(q)
     );
   });
 
   const matchedResources = officialResources.filter((res) => {
     if (!q) return false;
+    const nameText = res.name.en || '';
+    const purposeText = res.purpose.en || '';
     return (
-      res.name[lang].toLowerCase().includes(q) ||
+      nameText.toLowerCase().includes(q) ||
       res.phone.includes(q) ||
-      res.purpose[lang].toLowerCase().includes(q)
+      purposeText.toLowerCase().includes(q)
     );
   });
 
@@ -76,37 +76,37 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     matchedScenarios.length > 0 || matchedAwareness.length > 0 || matchedResources.length > 0;
 
   const quickChips = [
-    { label: lang === 'en' ? 'Someone following me' : 'पीछा करना', q: 'following' },
-    { label: lang === 'en' ? 'UPI / Bank Scam' : 'UPI फ्रॉड', q: 'upi' },
-    { label: lang === 'en' ? 'Someone fainted / CPR' : 'बेहोशी', q: 'unconscious' },
-    { label: lang === 'en' ? 'Road Accident' : 'एक्सीडेंट', q: 'accident' },
-    { label: lang === 'en' ? 'Fire' : 'आग', q: 'fire' },
-    { label: lang === 'en' ? 'Dog Bite / Rabies' : 'कुत्ते का काटना', q: 'dog' },
+    { label: 'Someone following me', q: 'following' },
+    { label: 'UPI / Bank Scam', q: 'upi' },
+    { label: 'Someone fainted / CPR', q: 'unconscious' },
+    { label: 'Road Accident', q: 'accident' },
+    { label: 'Fire', q: 'fire' },
+    { label: 'Dog Bite / Rabies', q: 'dog' },
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-navy-950/80 backdrop-blur-sm animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-midnight-950/80 backdrop-blur-xs animate-in fade-in duration-150">
       
       {/* Backdrop click to close */}
       <div className="fixed inset-0" onClick={onClose} />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200 z-10 flex flex-col max-h-[85vh]">
+      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-lavender/60 z-10 flex flex-col max-h-[85vh]">
         
         {/* Search Input Bar */}
-        <div className="p-4 border-b border-slate-200 flex items-center space-x-3 bg-slate-50">
-          <Search className="w-5 h-5 text-slate-400 shrink-0" />
+        <div className="p-4 border-b border-lavender/40 flex items-center space-x-3 bg-ivory-50">
+          <Search className="w-5 h-5 text-midnight/40 shrink-0" />
           <input
             type="text"
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.searchModal.placeholder}
-            className="w-full bg-transparent border-none text-slate-900 placeholder-slate-400 text-base sm:text-lg focus:outline-none focus:ring-0 font-medium"
+            className="w-full bg-transparent border-none text-midnight placeholder-midnight/40 text-base sm:text-lg focus:outline-none focus:ring-0 font-medium"
           />
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200"
+            className="p-1.5 rounded-lg text-midnight/40 hover:text-midnight hover:bg-lavender/30"
             aria-label="Close search"
           >
             <X className="w-5 h-5" />
@@ -116,7 +116,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         {/* Quick Filter Chips (When query is empty) */}
         {!query && (
           <div className="p-6 overflow-y-auto">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">
+            <span className="text-xs font-bold text-midnight/50 uppercase tracking-wider block mb-3">
               {t.searchModal.quickFilter}
             </span>
             <div className="flex flex-wrap gap-2">
@@ -124,9 +124,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 <button
                   key={idx}
                   onClick={() => setQuery(chip.q)}
-                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-navy-800 hover:text-white text-slate-700 text-xs sm:text-sm font-semibold transition-colors border border-slate-200 flex items-center space-x-1"
+                  className="px-3.5 py-2 rounded-xl bg-ivory hover:bg-plum hover:text-white text-midnight text-xs sm:text-sm font-semibold transition-colors border border-lavender/60 flex items-center space-x-1.5"
                 >
-                  <ShieldAlert className="w-3.5 h-3.5 text-emergency-500" />
+                  <ShieldAlert className="w-3.5 h-3.5 text-emergency" />
                   <span>{chip.label}</span>
                 </button>
               ))}
@@ -138,13 +138,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 onClose();
                 onSelectCategory('nearme');
               }}
-              className="mt-4 w-full p-3.5 bg-gradient-to-r from-navy-900 to-navy-800 hover:from-navy-800 hover:to-navy-700 text-white rounded-2xl flex items-center justify-between text-xs sm:text-sm font-bold border border-amber-400/40 shadow-sm transition-all"
+              className="mt-5 w-full p-3.5 bg-plum hover:bg-plum-600 text-white rounded-2xl flex items-center justify-between text-xs sm:text-sm font-bold border border-lavender/30 shadow-xs transition-all"
             >
               <span className="flex items-center space-x-2.5">
-                <MapPin className="w-4 h-4 text-amber-400" />
-                <span>📍 {t.nav.getHelpNearMe} — Police, Hospitals, Fire Stations</span>
+                <MapPin className="w-4 h-4 text-lavender" />
+                <span>{t.nav.getHelpNearMe} — Police, Hospitals, Fire Stations</span>
               </span>
-              <span className="text-amber-400 font-extrabold text-xs">Open Map →</span>
+              <span className="text-lavender font-extrabold text-xs">Open Map →</span>
             </button>
           </div>
         )}
@@ -156,7 +156,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             {/* 1. Emergency Scenarios (Prioritized!) */}
             {matchedScenarios.length > 0 && (
               <div>
-                <div className="flex items-center space-x-2 text-xs font-extrabold text-emergency-600 uppercase tracking-wider mb-2">
+                <div className="flex items-center space-x-2 text-xs font-extrabold text-emergency uppercase tracking-wider mb-2">
                   <ShieldAlert className="w-4 h-4" />
                   <span>Emergency Protocols ({matchedScenarios.length})</span>
                 </div>
@@ -168,17 +168,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                         onClose();
                         onSelectScenario(sc);
                       }}
-                      className="p-3.5 rounded-2xl bg-amber-50/60 hover:bg-amber-100/80 border border-amber-200/80 cursor-pointer transition-colors flex items-center justify-between group"
+                      className="p-3.5 rounded-2xl bg-emergency-50/40 hover:bg-emergency-50 border border-emergency-200 cursor-pointer transition-colors flex items-center justify-between group"
                     >
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-navy-800 bg-white px-2 py-0.5 rounded border border-amber-300">
-                          Emergency → {sc.categoryLabel[lang]}
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-emergency bg-white px-2 py-0.5 rounded border border-emergency-200">
+                          Emergency → {sc.categoryLabel.en}
                         </span>
-                        <h4 className="font-extrabold text-slate-900 text-sm sm:text-base mt-1">
-                          {sc.title[lang]}
+                        <h4 className="font-bold text-midnight text-sm sm:text-base mt-1">
+                          {sc.title.en}
                         </h4>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-navy-900 group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="w-5 h-5 text-midnight/40 group-hover:text-emergency group-hover:translate-x-1 transition-all" />
                     </div>
                   ))}
                 </div>
@@ -188,7 +188,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             {/* 2. Awareness Guides */}
             {matchedAwareness.length > 0 && (
               <div>
-                <div className="flex items-center space-x-2 text-xs font-extrabold text-amber-600 uppercase tracking-wider mb-2">
+                <div className="flex items-center space-x-2 text-xs font-extrabold text-plum uppercase tracking-wider mb-2">
                   <BookOpen className="w-4 h-4" />
                   <span>Awareness Guides ({matchedAwareness.length})</span>
                 </div>
@@ -200,17 +200,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                         onClose();
                         onSelectCategory('awareness');
                       }}
-                      className="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 cursor-pointer transition-colors flex items-center justify-between group"
+                      className="p-3.5 rounded-2xl bg-lavender/25 hover:bg-lavender/40 border border-lavender/60 cursor-pointer transition-colors flex items-center justify-between group"
                     >
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-navy-800 bg-navy-100 px-2 py-0.5 rounded">
-                          Awareness → {ag.categoryLabel[lang]}
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-plum bg-white px-2 py-0.5 rounded border border-lavender">
+                          Awareness → {ag.categoryLabel.en}
                         </span>
-                        <h4 className="font-bold text-slate-900 text-sm mt-1">
-                          {ag.title[lang]}
+                        <h4 className="font-bold text-midnight text-sm mt-1">
+                          {ag.title.en}
                         </h4>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-navy-900 group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="w-5 h-5 text-midnight/40 group-hover:text-plum group-hover:translate-x-1 transition-all" />
                     </div>
                   ))}
                 </div>
@@ -220,7 +220,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             {/* 3. Official Resources */}
             {matchedResources.length > 0 && (
               <div>
-                <div className="flex items-center space-x-2 text-xs font-extrabold text-emerald-600 uppercase tracking-wider mb-2">
+                <div className="flex items-center space-x-2 text-xs font-extrabold text-sage-700 uppercase tracking-wider mb-2">
                   <MapPin className="w-4 h-4" />
                   <span>Verified Helplines ({matchedResources.length})</span>
                 </div>
@@ -232,17 +232,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                         onClose();
                         onSelectCategory('resources');
                       }}
-                      className="p-3.5 rounded-2xl bg-emerald-50/50 hover:bg-emerald-100/70 border border-emerald-200/80 cursor-pointer transition-colors flex items-center justify-between group"
+                      className="p-3.5 rounded-2xl bg-sage/20 hover:bg-sage/35 border border-sage/50 cursor-pointer transition-colors flex items-center justify-between group"
                     >
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-white px-2 py-0.5 rounded border border-emerald-300">
-                          Directory → {res.categoryLabel[lang]}
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-midnight bg-white px-2 py-0.5 rounded border border-sage">
+                          Directory → {res.categoryLabel.en}
                         </span>
-                        <h4 className="font-bold text-slate-900 text-sm mt-1">
-                          {res.name[lang]} ({res.phone})
+                        <h4 className="font-bold text-midnight text-sm mt-1">
+                          {res.name.en} ({res.phone})
                         </h4>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-emerald-900 group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="w-5 h-5 text-midnight/40 group-hover:text-midnight group-hover:translate-x-1 transition-all" />
                     </div>
                   ))}
                 </div>
@@ -251,7 +251,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
             {/* No Results state */}
             {!hasAnyResults && (
-              <div className="py-12 text-center text-slate-500 text-sm">
+              <div className="py-12 text-center text-midnight/60 text-sm">
                 {t.searchModal.noResults}
               </div>
             )}
@@ -260,8 +260,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         )}
 
         {/* Footer info */}
-        <div className="p-3 bg-slate-100 border-t border-slate-200 text-right text-[11px] text-slate-400 font-medium">
-          Press <kbd className="bg-white border text-slate-600 px-1 rounded">ESC</kbd> to close
+        <div className="p-3 bg-ivory border-t border-lavender/40 text-right text-[11px] text-midnight/50 font-medium">
+          Press <kbd className="bg-white border border-lavender text-midnight px-1.5 py-0.5 rounded">ESC</kbd> to close
         </div>
       </div>
     </div>

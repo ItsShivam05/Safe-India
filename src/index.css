@@ -4,38 +4,51 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col;
+    background-color: #F7F2EA;
+    color: #211D35;
+    font-family: 'Plus Jakarta Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Custom Glassmorphism & Micro-animations */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+@layer utilities {
+  .bg-ivory { background-color: #F7F2EA; }
+  .text-ivory { color: #F7F2EA; }
+  .bg-midnight { background-color: #211D35; }
+  .text-midnight { color: #211D35; }
+  .bg-plum { background-color: #65558F; }
+  .text-plum { color: #65558F; }
+  .bg-lavender { background-color: #D9C8F0; }
+  .text-lavender { color: #D9C8F0; }
+  .bg-sage { background-color: #C6D7C0; }
+  .text-sage { color: #C6D7C0; }
+  .bg-emergency { background-color: #B42318; }
+  .text-emergency { color: #B42318; }
 }
 
-.glass-panel-dark {
-  background: rgba(13, 35, 68, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-/* Subtle Network / Map Background Pattern */
-.bg-subtle-pattern {
-  background-color: #f8fafc;
-  background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px), radial-gradient(#cbd5e1 0.75px, #f8fafc 0.75px);
-  background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
+/* Accessible focus visible indicators */
+:focus-visible {
+  outline: 2px solid #65558F;
+  outline-offset: 2px;
 }
 
-.bg-hero-gradient {
-  background: radial-gradient(circle at 50% 0%, rgba(13, 35, 68, 0.08) 0%, rgba(248, 250, 252, 0) 70%);
-}
-
-/* Pulse animation for active emergency status */
+/* Emergency indicator pulse */
 .pulse-ring {
   position: relative;
 }
@@ -47,7 +60,7 @@
   right: -4px;
   bottom: -4px;
   border-radius: 9999px;
-  background-color: rgba(239, 68, 68, 0.4);
+  background-color: rgba(180, 35, 24, 0.35);
   animation: pulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -55,12 +68,6 @@
   0% { transform: scale(0.95); opacity: 0.8; }
   50% { transform: scale(1.15); opacity: 0; }
   100% { transform: scale(0.95); opacity: 0; }
-}
-
-/* Smooth Focus states */
-:focus-visible {
-  outline: 2px solid #0D2344;
-  outline-offset: 2px;
 }
 
 /* Leaflet map styling & z-index scoping */
@@ -77,11 +84,15 @@
 }
 .leaflet-popup-content-wrapper {
   border-radius: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 25px -5px rgba(33, 29, 53, 0.12), 0 8px 10px -6px rgba(33, 29, 53, 0.08);
   padding: 0.25rem;
+  background: #FFFFFF;
+  color: #211D35;
+  border: 1px solid #D9C8F0;
 }
 .leaflet-popup-content {
   margin: 0.75rem 0.85rem;
   line-height: 1.4;
 }
+
 
