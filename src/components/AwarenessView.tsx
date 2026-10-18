@@ -17,9 +17,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 
-interface AwarenessViewProps {}
-
-export const AwarenessView: React.FC<AwarenessViewProps> = () => {
+export const AwarenessView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   const [expandedGuideId, setExpandedGuideId] = useState<string | null>(null);

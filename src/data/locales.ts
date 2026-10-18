@@ -1,6 +1,5 @@
 export const translations = {
   en: {
-    brandName: "SafeIndia",
     tagline: "Know what to do when it matters.",
     heroSubtext: "Clear emergency steps, easy safety guides, and quick ways to find nearby help across India.",
     nav: {
@@ -62,14 +61,10 @@ export const translations = {
     resourcesSection: {
       title: "Emergency Numbers & Helplines",
       subheading: "Official 24/7 helplines and portals across India. Tap any number to call.",
-      filterCategory: "Filter by Category",
       callService: "Call Now",
-      visitWebsite: "Official Website",
       availability: "Hours",
-      verifiedBadge: "Official Helpline",
       whoCanUse: "Who can call",
       forWhat: "What it's for",
-      copyNumber: "Copy Number",
     },
     aiHelper: {
       badge: "Quick Help Finder",
@@ -114,7 +109,6 @@ export const translations = {
       privacyNotice: "SafeIndia only looks for your location when you tap 'Use My Location'. Your location stays on your device and is never saved, tracked, or shared.",
       useMyLocation: "Use My Location",
       requestingLocation: "Searching for your location…",
-      orSearchManually: "Or search by city, area, or PIN code",
       searchPlaceholder: "Enter city, area, or PIN code (e.g. Connaught Place, Mumbai, 560001)...",
       searchBtn: "Search",
       radiusLabel: "Search Area",
@@ -128,11 +122,9 @@ export const translations = {
       filterPolice: "Police Stations",
       filterHospital: "Hospitals",
       filterFire: "Fire Stations",
-      distance: "Distance",
       straightLineNote: "Approximate direct distance. Actual road travel distance may vary.",
       directions: "Get directions",
       call: "Call",
-      phoneUnavailable: "Phone number not listed.",
       noPhoneListed: "Phone number not listed.",
       invalidPhone: "Phone number cannot be dialed directly",
       unverifiedNotice: "Community listed (unverified)",
@@ -141,7 +133,6 @@ export const translations = {
       permissionDenied: "Location access is turned off. You can search by city, area, or PIN code instead.",
       locationUnavailable: "We couldn't detect your location. Please check your device location settings or search by area.",
       locationTimeout: "Finding your location took too long. Please try again or search by area.",
-      searchingOsm: "Finding help near you…",
       noResults: "No nearby facilities found. Try a wider search.",
       osmError: "We couldn't find nearby places right now. Please try again or call 112 directly if you need immediate help.",
       retry: "Try Again",

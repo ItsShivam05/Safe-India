@@ -7,26 +7,16 @@ import { translations } from '../data/locales';
 interface MobileQuickAccessProps {
   onSelectScenario: (scenario: EmergencyScenario) => void;
   onNavigate?: (tab: string) => void;
-  isOpenExternal?: boolean;
-  onCloseExternal?: () => void;
   showFloatingButton?: boolean;
 }
 
 export const MobileQuickAccess: React.FC<MobileQuickAccessProps> = ({
   onSelectScenario,
   onNavigate,
-  isOpenExternal,
-  onCloseExternal,
   showFloatingButton = true,
 }) => {
-  const [internalOpen, setInternalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const t = translations.en;
-
-  const isOpen = isOpenExternal !== undefined ? isOpenExternal : internalOpen;
-  const setIsOpen = (val: boolean) => {
-    if (onCloseExternal && !val) onCloseExternal();
-    setInternalOpen(val);
-  };
 
   const quickDialNumbers = [
     { label: "112 National Emergency", phone: "112", desc: "Police, Fire, Rescue" },

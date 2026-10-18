@@ -2,9 +2,7 @@ import React from 'react';
 import { ShieldCheck, Zap, RefreshCw, CheckCircle2, HeartHandshake, BookOpenCheck, ShieldAlert } from 'lucide-react';
 import { translations } from '../data/locales';
 
-interface PhilosophyProps {}
-
-export const Philosophy: React.FC<PhilosophyProps> = () => {
+export const Philosophy: React.FC = () => {
   const t = translations.en;
 
   return (

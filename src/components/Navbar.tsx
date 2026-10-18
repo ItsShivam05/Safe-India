@@ -7,14 +7,12 @@ interface NavbarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
   onOpenSearch: () => void;
-  onQuickEmergency: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentTab,
   setCurrentTab,
   onOpenSearch,
-  onQuickEmergency: _onQuickEmergency,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations.en;

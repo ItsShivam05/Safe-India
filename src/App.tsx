@@ -18,7 +18,6 @@ export function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [selectedScenario, setSelectedScenario] = useState<EmergencyScenario | null>(null);
   const [searchModalOpen, setSearchModalOpen] = useState<boolean>(false);
-  const [quickEmergencyOpen, setQuickEmergencyOpen] = useState<boolean>(false);
 
   // Scroll to top on view state change
   useEffect(() => {
@@ -42,7 +41,6 @@ export function App() {
         currentTab={currentTab}
         setCurrentTab={handleNavigate}
         onOpenSearch={() => setSearchModalOpen(true)}
-        onQuickEmergency={() => setQuickEmergencyOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -108,8 +106,6 @@ export function App() {
         showFloatingButton={currentTab !== 'nearme' && currentTab !== 'home'}
         onSelectScenario={handleSelectScenario}
         onNavigate={handleNavigate}
-        isOpenExternal={quickEmergencyOpen}
-        onCloseExternal={() => setQuickEmergencyOpen(false)}
       />
 
       {/* Global Search Modal */}

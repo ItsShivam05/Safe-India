@@ -60,8 +60,6 @@ export interface OfficialResource {
   isNationalEmergency?: boolean;
 }
 
-export type Language = 'en';
-
 export type FacilityCategory = 'police' | 'hospital' | 'fire_station';
 
 export interface LocationCoordinates {

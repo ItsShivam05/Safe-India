@@ -14,9 +14,7 @@ import {
   Sparkles
 } from 'lucide-react';
 
-interface ResourcesViewProps {}
-
-export const ResourcesView: React.FC<ResourcesViewProps> = () => {
+export const ResourcesView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);

@@ -2,10 +2,7 @@ import React from 'react';
 import { translations } from '../data/locales';
 import { Zap, Lock, HeartHandshake, Award } from 'lucide-react';
 
-
-interface AboutViewProps {}
-
-export const AboutView: React.FC<AboutViewProps> = () => {
+export const AboutView: React.FC = () => {
   const t = translations.en;
 
   return (
