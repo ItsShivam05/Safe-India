@@ -97,7 +97,7 @@ flowchart LR
 ### 1. Emergency Protocols
 Actionable, distraction-free steps designed for high-stress moments:
 - **Personal Safety**: Harassment, stalking, suspicious transport or cab rides.
-- **Medical Crises**: Unconscious patient (CPR basics), severe bleeding, choking, seizures, burns.
+- **Medical Crises**: Unconscious patient (CPR basics), severe bleeding.
 - **Fire & Gas Safety**: High-rise fire evacuation, kitchen LPG cylinder leakage.
 - **Road & Transit**: Road traffic collisions, bystander assistance under India's Good Samaritan guidelines.
 - **Digital & Financial Emergencies**: Unauthorized UPI transfers, OTP scams, stolen smartphone (CEIR IMEI block).
@@ -106,7 +106,7 @@ Actionable, distraction-free steps designed for high-stress moments:
 ### 2. Live Nearby Help (`Get Help Near Me`)
 - **One-Touch GPS**: Discover emergency services within 5 km, 10 km, or 20 km of your current position.
 - **Manual Area Search**: Search by any Indian city, town, or 6-digit postal PIN code.
-- **Live OpenStreetMap Integration**: Queries verified public police stations, hospitals, clinics, and fire stations.
+- **Live OpenStreetMap Integration**: Queries community-mapped police stations, hospitals, clinics, and fire stations.
 - **Directions & Navigation**: One-tap directions trigger Google Maps with exact destination coordinates.
 
 ### 3. Safety Awareness & Preparedness Guides
@@ -191,7 +191,7 @@ graph LR
 
 - **No User Accounts**: No registration, email collection, or passwords required.
 - **On-Demand GPS Only**: Geolocation is requested strictly after an explicit user tap. SafeIndia never runs continuous background location watchers.
-- **Zero Coordinate Storage**: Coordinates exist only in browser memory for the active session. They are never transmitted to private servers or stored in cookies.
+- **Zero Coordinate Storage**: Coordinates exist only in browser memory for the active session and are not stored in cookies. To find nearby places they are sent to public OpenStreetMap services (Overpass and Nominatim); SafeIndia runs no server of its own that receives them.
 - **No Third-Party Trackers**: No advertising trackers, behavior analytics, or invasive profiling scripts.
 - **Explicit Call Confirmation**: Every emergency call button uses standard `tel:` links that require manual confirmation on your phone. No unauthorized auto-dialing.
 
@@ -249,7 +249,7 @@ SafeIndia is powered by a fast, modern frontend stack designed for near-instant 
 | **Styling & Theme** | [Tailwind CSS](https://tailwindcss.com/) | Midnight Plum, Soft Lavender, Sage, and Emergency-Red color system |
 | **Interactive Maps** | [Leaflet](https://leafletjs.com/) | Hardware-accelerated maps, custom category markers, and dynamic popups |
 | **Spatial Services** | [Overpass API](https://overpass-api.de/) + [Nominatim](https://nominatim.org/) | Real-time queries for nearby amenities and Indian postal code search |
-| **Iconography & Motion** | [Lucide React](https://lucide.dev/) + [Framer Motion](https://www.framer.com/motion/) | Accessible SVG icons and smooth micro-interactions |
+| **Iconography** | [Lucide React](https://lucide.dev/) | Accessible SVG icons |
 
 ---
 

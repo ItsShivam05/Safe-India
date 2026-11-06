@@ -162,7 +162,7 @@ export const Philosophy: React.FC = () => {
                 Knowledge turns emergency panic into focused, calm action.
               </h3>
               <p className="text-sm text-midnight/80 leading-relaxed font-normal">
-                From stopping severe bleeding and heat exhaustion to recognizing cyber fraud and gas leaks, practical preparation gives you the confidence to protect your home, workplace, and family without hesitation.
+                From stopping severe bleeding to recognizing cyber fraud and gas leaks, practical preparation gives you the confidence to protect your home, workplace, and family without hesitation.
               </p>
               <div className="pt-2 flex flex-wrap gap-2 text-xs font-semibold text-midnight/70">
                 <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">CPR & Bleeding Control</span>

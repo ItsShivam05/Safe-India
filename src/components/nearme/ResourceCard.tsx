@@ -28,19 +28,19 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 
   const categoryMeta = {
     police: {
-      label: t.nearMe.filterPolice,
+      label: t.nearMe.labelPolice,
       icon: Shield,
       badgeClass: 'bg-blue-100 text-blue-900 border-blue-200',
       iconClass: 'text-blue-700',
     },
     hospital: {
-      label: t.nearMe.filterHospital,
+      label: facility.isClinic ? t.nearMe.labelClinic : t.nearMe.labelHospital,
       icon: Cross,
       badgeClass: 'bg-emerald-100 text-emerald-900 border-emerald-200',
       iconClass: 'text-emerald-700',
     },
     fire_station: {
-      label: t.nearMe.filterFire,
+      label: t.nearMe.labelFire,
       icon: Flame,
       badgeClass: 'bg-orange-100 text-orange-900 border-orange-200',
       iconClass: 'text-orange-700',

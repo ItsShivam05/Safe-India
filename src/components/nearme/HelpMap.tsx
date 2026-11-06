@@ -5,6 +5,16 @@ import type { NearbyFacility, LocationCoordinates } from '../../types';
 import { translations } from '../../data/locales';
 import { formatDistance, getDirectionsUrl, parseFacilityPhone } from '../../services/locationService';
 
+// Popups are built as HTML strings, and place names and addresses come from public
+// OpenStreetMap data that anyone can edit, so they must never be treated as markup.
+const escapeHtml = (text: string) =>
+  text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 interface HelpMapProps {
   userLocation: LocationCoordinates | null;
   facilities: NearbyFacility[];
@@ -166,7 +176,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
     const userLabel = userLocation.name || 'Your Location';
     userMarker.bindPopup(`
       <div style="font-family: inherit; font-size: 13px; font-weight: bold; padding: 4px 2px;">
-        <span style="color: #2563EB;">📍 ${userLabel}</span>
+        <span style="color: #2563EB;">📍 ${escapeHtml(userLabel)}</span>
         <div style="font-size: 11px; font-weight: normal; color: #64748B; margin-top: 2px;">
           ${userLocation.sourceType === 'gps' ? 'Your current location' : 'Selected search area'}
         </div>
@@ -216,16 +226,16 @@ export const HelpMap: React.FC<HelpMapProps> = ({
       const directionsUrl = getDirectionsUrl(facility.lat, facility.lon);
 
       const categoryLabel = {
-        police: t.nearMe.filterPolice,
-        hospital: t.nearMe.filterHospital,
-        fire_station: t.nearMe.filterFire,
+        police: t.nearMe.labelPolice,
+        hospital: facility.isClinic ? t.nearMe.labelClinic : t.nearMe.labelHospital,
+        fire_station: t.nearMe.labelFire,
       }[facility.category];
 
       let phoneSectionHtml = '';
       if (phoneInfo.state === 'valid') {
         phoneSectionHtml = `
           <div style="font-size: 11px; color: #433760; margin-bottom: 6px;">
-            📞 <strong>${phoneInfo.displayNumber}</strong> <span style="font-size: 9px; color: #65558F; font-weight: 600;">(unverified)</span>
+            📞 <strong>${escapeHtml(phoneInfo.displayNumber ?? '')}</strong> <span style="font-size: 9px; color: #65558F; font-weight: 600;">(unverified)</span>
           </div>
         `;
       } else if (phoneInfo.state === 'invalid') {
@@ -248,14 +258,14 @@ export const HelpMap: React.FC<HelpMapProps> = ({
             ${categoryLabel}
           </div>
           <div style="font-size: 14px; font-weight: 800; color: #211D35; line-height: 1.3; margin-bottom: 6px;">
-            ${facility.name}
+            ${escapeHtml(facility.name)}
           </div>
           <div style="font-size: 11px; font-weight: 700; color: #65558F; margin-bottom: 6px;">
             Approx. ${formatDistance(facility.distanceKm)} away
           </div>
           ${
             facility.address
-              ? `<div style="font-size: 11px; color: #433760; margin-bottom: 8px;">📍 ${facility.address}</div>`
+              ? `<div style="font-size: 11px; color: #433760; margin-bottom: 8px;">📍 ${escapeHtml(facility.address)}</div>`
               : ''
           }
           ${phoneSectionHtml}

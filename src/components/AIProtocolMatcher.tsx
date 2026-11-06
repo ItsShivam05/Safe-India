@@ -2,11 +2,74 @@ import React, { useState } from 'react';
 import type { EmergencyScenario } from '../types';
 import { emergencyScenarios } from '../data/emergencies';
 import { translations } from '../data/locales';
-import { Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, PhoneCall, AlertTriangle } from 'lucide-react';
 
 interface AIProtocolMatcherProps {
   onSelectScenario: (scenario: EmergencyScenario) => void;
 }
+
+// Everyday words that say nothing about which emergency this is.
+const IGNORED_WORDS = new Set([
+  'the', 'and', 'for', 'has', 'have', 'having', 'had', 'was', 'were', 'are', 'not', 'with', 'this', 'that',
+  'there', 'from', 'near', 'you', 'your', 'her', 'his', 'him', 'she', 'they', 'them', 'our', 'what', 'who',
+  'why', 'how', 'when', 'where', 'someone', 'somebody', 'person', 'people', 'man', 'woman', 'situation',
+]);
+
+// Used when the keywords find nothing, so everyday wording and Hindi still reach the right guide.
+const WORD_STEMS: Array<{ scenarioId: string; stems: string[] }> = [
+  { scenarioId: 'someone-following', stems: ['follow', 'stalk', 'chase', 'पीछा'] },
+  { scenarioId: 'upi-bank-fraud', stems: ['upi', 'bank', 'money', 'otp', 'पैसे'] },
+  { scenarioId: 'unconscious-person', stems: ['faint', 'unconscious', 'बेहोश'] },
+  { scenarioId: 'lpg-gas-leak', stems: ['gas', 'cylinder', 'गैस'] },
+];
+
+const isSameWord = (word: string, keywordWord: string) =>
+  word === keywordWord ||
+  (word.length >= 4 && keywordWord.startsWith(word)) ||
+  new RegExp(`^${keywordWord}(s|es|ed|ing)$`).test(word);
+
+/**
+ * Finds the guide that fits the description. Returns null rather than guessing,
+ * because a wrong guide is more dangerous than sending the person to call 112.
+ */
+const findMatchingScenario = (searchStr: string): EmergencyScenario | null => {
+  const words = searchStr.split(/[^\p{L}\p{N}\p{M}]+/u).filter(Boolean);
+  const paddedText = ` ${words.join(' ')} `;
+
+  let bestMatch: EmergencyScenario | null = null;
+  let highestScore = 0;
+
+  emergencyScenarios.forEach((sc) => {
+    let score = 0;
+    const keywords = [...sc.searchKeywords, sc.title.en].map((kw) => kw.toLowerCase());
+    const keywordWords = keywords.flatMap((kw) => kw.split(/[^\p{L}\p{N}\p{M}]+/u)).filter(Boolean);
+
+    keywords.forEach((kw) => {
+      if (paddedText.includes(` ${kw} `)) {
+        score += 3;
+      }
+    });
+
+    words.forEach((w) => {
+      if (w.length > 2 && !IGNORED_WORDS.has(w) && keywordWords.some((k) => isSameWord(w, k))) {
+        score += 1;
+      }
+    });
+
+    if (score > highestScore) {
+      highestScore = score;
+      bestMatch = sc;
+    }
+  });
+
+  // One loose word alone ("road", "phone") is not enough to recommend a guide.
+  if (highestScore >= 2) return bestMatch;
+
+  const stemMatch = WORD_STEMS.find(({ stems }) =>
+    words.some((w) => stems.some((stem) => w.startsWith(stem)))
+  );
+  return emergencyScenarios.find((s) => s.id === stemMatch?.scenarioId) ?? null;
+};
 
 export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
   onSelectScenario,
@@ -33,47 +96,7 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
     setHasSearched(true);
 
     setTimeout(() => {
-      let bestMatch: EmergencyScenario | null = null;
-      let highestScore = 0;
-
-      emergencyScenarios.forEach((sc) => {
-        let score = 0;
-        const keywords = [...sc.searchKeywords, (sc.title.en || '').toLowerCase()];
-
-        keywords.forEach((kw) => {
-          if (q.includes(kw.toLowerCase())) {
-            score += 3;
-          }
-        });
-
-        const words = q.split(/\s+/);
-        words.forEach((w) => {
-          if (w.length > 2 && keywords.some((k) => k.toLowerCase().includes(w))) {
-            score += 1;
-          }
-        });
-
-        if (score > highestScore) {
-          highestScore = score;
-          bestMatch = sc;
-        }
-      });
-
-      if (!bestMatch || highestScore < 1) {
-        if (q.includes('follow') || q.includes('stalk') || q.includes('chase') || q.includes('पीछा')) {
-          bestMatch = emergencyScenarios.find((s) => s.id === 'someone-following') || null;
-        } else if (q.includes('upi') || q.includes('bank') || q.includes('money') || q.includes('otp') || q.includes('पैसे')) {
-          bestMatch = emergencyScenarios.find((s) => s.id === 'upi-bank-fraud') || null;
-        } else if (q.includes('faint') || q.includes('unconscious') || q.includes('heart') || q.includes('बेहोश')) {
-          bestMatch = emergencyScenarios.find((s) => s.id === 'unconscious-person') || null;
-        } else if (q.includes('gas') || q.includes('cylinder') || q.includes('leak') || q.includes('गैस')) {
-          bestMatch = emergencyScenarios.find((s) => s.id === 'lpg-gas-leak') || null;
-        } else {
-          bestMatch = emergencyScenarios[0];
-        }
-      }
-
-      setMatchedScenario(bestMatch);
+      setMatchedScenario(findMatchingScenario(q));
       setIsSearching(false);
     }, 300);
   };
@@ -179,6 +202,44 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
             <span>Open Full Guide ({matchedScenario.title.en})</span>
             <ArrowRight className="w-4 h-4" />
           </button>
+        </div>
+      )}
+
+      {/* No Match: send the person to 112 and the guide list instead of guessing */}
+      {hasSearched && !isSearching && !matchedScenario && (
+        <div className="bg-midnight-900 border-2 border-lavender/40 rounded-2xl p-5 sm:p-6" role="status">
+          <div className="flex items-center space-x-2 mb-2">
+            <AlertTriangle className="w-5 h-5 text-lavender" />
+            <h3 className="text-lg font-bold text-white">{t.aiHelper.noMatchTitle}</h3>
+          </div>
+
+          <p className="text-xs sm:text-sm text-ivory/80 mb-4">
+            {t.aiHelper.noMatchBody}
+          </p>
+
+          <a
+            href="tel:112"
+            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-emergency hover:bg-emergency-600 text-white font-extrabold px-6 py-3 rounded-xl text-sm shadow-md transition-all active:scale-95 mb-5"
+          >
+            <PhoneCall className="w-4 h-4" />
+            <span>{t.aiHelper.noMatchCall}</span>
+          </a>
+
+          <span className="text-xs font-bold text-lavender uppercase tracking-wider block mb-2">
+            {t.aiHelper.noMatchGuides}
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {emergencyScenarios.map((sc) => (
+              <button
+                key={sc.id}
+                type="button"
+                onClick={() => onSelectScenario(sc)}
+                className="text-xs bg-midnight-800 hover:bg-midnight-700 text-ivory/90 border border-lavender/20 px-3 py-1.5 rounded-xl transition-colors text-left"
+              >
+                {sc.title.en}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 

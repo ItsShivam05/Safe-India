@@ -163,10 +163,15 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
               {/* Action Footer preview */}
               <div className="mt-6 pt-4 border-t border-lavender/40 flex items-center justify-between text-xs sm:text-sm font-bold">
                 {sc.immediateCallNumber ? (
-                  <span className="inline-flex items-center space-x-1 text-emergency font-extrabold">
+                  <a
+                    href={`tel:${sc.immediateCallNumber}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center space-x-1 text-emergency font-extrabold hover:underline"
+                    aria-label={`Call ${sc.immediateCallNumber}`}
+                  >
                     <PhoneCall className="w-3.5 h-3.5" />
                     <span>Call {sc.immediateCallNumber}</span>
-                  </span>
+                  </a>
                 ) : (
                   <span className="text-plum">View Action Steps</span>
                 )}

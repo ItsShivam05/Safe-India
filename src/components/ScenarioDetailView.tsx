@@ -191,13 +191,25 @@ export const ScenarioDetailView: React.FC<ScenarioDetailViewProps> = ({
                 <h3 className="font-bold text-white text-sm">{res.name}</h3>
                 <p className="text-xs text-lavender mt-0.5">{res.purpose}</p>
               </div>
-              <a
-                href={`tel:${res.phone}`}
-                className="shrink-0 bg-plum hover:bg-plum-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-colors shadow-xs"
-              >
-                <PhoneCall className="w-3.5 h-3.5 text-lavender" />
-                <span>{res.phone}</span>
-              </a>
+              {res.phone ? (
+                <a
+                  href={`tel:${res.phone}`}
+                  className="shrink-0 bg-plum hover:bg-plum-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-colors shadow-xs"
+                >
+                  <PhoneCall className="w-3.5 h-3.5 text-lavender" />
+                  <span>{res.phone}</span>
+                </a>
+              ) : res.url ? (
+                <a
+                  href={res.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 bg-plum hover:bg-plum-600 text-white font-bold px-3.5 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-colors shadow-xs"
+                >
+                  <ExternalLink className="w-3.5 h-3.5 text-lavender" />
+                  <span>{t.scenarioView.openWebsite}</span>
+                </a>
+              ) : null}
             </div>
           ))}
         </div>

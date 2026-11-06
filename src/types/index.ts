@@ -9,7 +9,7 @@ export interface VerifiedSource {
 
 export interface EmergencyResourceRef {
   name: string;
-  phone: string;
+  phone?: string;
   purpose: string;
   url?: string;
 }
@@ -79,7 +79,8 @@ export interface NearbyFacility {
   address?: string;
   phone?: string;
   dataSource: string; // e.g. "OpenStreetMap contributors"
-  osmType: 'node' | 'way';
+  isClinic?: boolean; // Clinics are grouped with hospitals but labelled separately
+  osmType: 'node' | 'way' | 'relation';
   osmId: number;
 }
 

@@ -513,7 +513,7 @@ export const emergencyScenarios: EmergencyScenario[] = [
     },
     resources: [
       { name: "National Cyber Crime Helpline", phone: "1930", purpose: "Financial Cyber Fraud Reporting & Fund Freeze" },
-      { name: "Official Cyber Crime Portal", phone: "cybercrime.gov.in", purpose: "Ministry of Home Affairs Cyber Portal" }
+      { name: "Official Cyber Crime Portal", url: "https://cybercrime.gov.in", purpose: "Ministry of Home Affairs Cyber Portal" }
     ],
     source: {
       name: "Indian Cyber Crime Coordination Centre (I4C), MHA",
@@ -573,7 +573,7 @@ export const emergencyScenarios: EmergencyScenario[] = [
       ]
     },
     resources: [
-      { name: "CEIR Portal DoT", phone: "ceir.gov.in", purpose: "Central Equipment Identity Register (Block Lost Mobile)" },
+      { name: "CEIR Portal DoT", url: "https://ceir.gov.in", purpose: "Central Equipment Identity Register (Block Lost Mobile)" },
       { name: "National Cyber Helpline", phone: "1930", purpose: "Cyber Security Assistance" }
     ],
     source: {

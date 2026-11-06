@@ -2,7 +2,7 @@ import type { FacilityCategory, NearbyFacility } from '../types';
 import { calculateDistance } from './locationService';
 
 interface OverpassElement {
-  type: 'node' | 'way';
+  type: 'node' | 'way' | 'relation';
   id: number;
   lat?: number;
   lon?: number;
@@ -33,6 +33,11 @@ const OVERPASS_ENDPOINTS = [
   'https://overpass.kumi.systems/api/interpreter',
 ];
 
+// A mirror gets this long before the next one is also tried, so one slow server can't hold up the search.
+const MIRROR_STAGGER_MS = 2500;
+// After this long, give up on all mirrors and use the backup search.
+const OVERPASS_DEADLINE_MS = 12000;
+
 /**
  * Builds the Overpass QL query string for a given center coordinate and radius in meters.
  */
@@ -41,12 +46,16 @@ function buildOverpassQuery(lat: number, lon: number, radiusMeters: number): str
 (
   node["amenity"="police"](around:${radiusMeters},${lat},${lon});
   way["amenity"="police"](around:${radiusMeters},${lat},${lon});
+  relation["amenity"="police"](around:${radiusMeters},${lat},${lon});
   node["amenity"="hospital"](around:${radiusMeters},${lat},${lon});
   way["amenity"="hospital"](around:${radiusMeters},${lat},${lon});
+  relation["amenity"="hospital"](around:${radiusMeters},${lat},${lon});
   node["amenity"="clinic"](around:${radiusMeters},${lat},${lon});
   way["amenity"="clinic"](around:${radiusMeters},${lat},${lon});
+  relation["amenity"="clinic"](around:${radiusMeters},${lat},${lon});
   node["amenity"="fire_station"](around:${radiusMeters},${lat},${lon});
   way["amenity"="fire_station"](around:${radiusMeters},${lat},${lon});
+  relation["amenity"="fire_station"](around:${radiusMeters},${lat},${lon});
 );
 out center tags;`;
 }
@@ -194,16 +203,12 @@ async function findFacilitiesViaNominatim(
   const maxLat = userLat + delta;
   const viewbox = `${minLon.toFixed(5)},${maxLat.toFixed(5)},${maxLon.toFixed(5)},${minLat.toFixed(5)}`;
 
-  const categoriesToSearch: Array<{ q: string; cat: FacilityCategory }> = [
-    { q: 'police', cat: 'police' },
-    { q: 'hospital', cat: 'hospital' },
-    { q: 'fire station', cat: 'fire_station' },
-  ];
+  const searchTerms = ['police', 'hospital', 'fire station'];
 
   const facilities: NearbyFacility[] = [];
   const seenIds = new Set<string>();
 
-  for (const { q, cat } of categoriesToSearch) {
+  for (const q of searchTerms) {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       q
     )}&viewbox=${viewbox}&bounded=1&limit=10&addressdetails=1&extratags=1&countrycodes=in`;
@@ -216,6 +221,11 @@ async function findFacilitiesViaNominatim(
       if (!Array.isArray(data)) continue;
 
       for (const item of data) {
+        // This is a text search, so a road or shop with "police" in its name can come back too.
+        // Trust what OpenStreetMap says the place is, not the word we searched for.
+        const cat = determineCategory({ [item.class]: item.type });
+        if (!cat) continue;
+
         const itemLat = parseFloat(item.lat);
         const itemLon = parseFloat(item.lon);
         if (
@@ -265,10 +275,8 @@ async function findFacilitiesViaNominatim(
           if (parts.length > 2) address = parts.slice(1, 4).join(', ');
         }
 
+        // Don't fall back to display_name: for an unnamed place it starts with the road name.
         let name = item.name;
-        if (!name && item.display_name) {
-          name = item.display_name.split(',')[0].trim();
-        }
         if (!name) {
           if (cat === 'police') name = 'Police Station (Unnamed)';
           else if (cat === 'hospital') name = 'Hospital / Medical Facility (Unnamed)';
@@ -285,7 +293,8 @@ async function findFacilitiesViaNominatim(
           address,
           phone,
           dataSource: 'OpenStreetMap contributors',
-          osmType: item.osm_type === 'way' ? 'way' : 'node',
+          isClinic: item.class === 'amenity' && item.type === 'clinic',
+          osmType: item.osm_type,
           osmId: item.osm_id,
         });
       }
@@ -295,6 +304,125 @@ async function findFacilitiesViaNominatim(
   }
 
   return facilities;
+}
+
+/**
+ * Converts raw Overpass elements into distance-sorted facilities.
+ */
+function parseOverpassElements(
+  elements: OverpassElement[],
+  userLat: number,
+  userLon: number
+): NearbyFacility[] {
+  const facilities: NearbyFacility[] = [];
+  const seenIds = new Set<string>();
+
+  for (const el of elements) {
+    const category = determineCategory(el.tags);
+    if (!category) continue;
+
+    const elLat = el.lat ?? el.center?.lat;
+    const elLon = el.lon ?? el.center?.lon;
+    if (
+      elLat === undefined ||
+      elLon === undefined ||
+      typeof elLat !== 'number' ||
+      typeof elLon !== 'number' ||
+      !isFinite(elLat) ||
+      !isFinite(elLon) ||
+      isNaN(elLat) ||
+      isNaN(elLon) ||
+      elLat < -90 ||
+      elLat > 90 ||
+      elLon < -180 ||
+      elLon > 180
+    ) {
+      continue;
+    }
+
+    const uniqueKey = `${el.type.toLowerCase()}-${el.id}`;
+    if (seenIds.has(uniqueKey)) continue;
+    seenIds.add(uniqueKey);
+
+    const tags = el.tags || {};
+
+    let name = tags.name || tags['name:en'] || tags['name:hi'];
+    if (!name) {
+      if (category === 'police') name = 'Police Station (Unnamed)';
+      else if (category === 'hospital') name = 'Hospital / Medical Facility (Unnamed)';
+      else if (category === 'fire_station') name = 'Fire Station (Unnamed)';
+      else name = 'Emergency Facility';
+    }
+
+    const phone =
+      tags.phone ||
+      tags['contact:phone'] ||
+      tags.emergency_phone ||
+      tags['contact:mobile'];
+    const address = formatOsmAddress(tags);
+    const distanceKm = calculateDistance(userLat, userLon, elLat, elLon);
+
+    facilities.push({
+      id: uniqueKey,
+      name,
+      category,
+      lat: elLat,
+      lon: elLon,
+      distanceKm,
+      address,
+      phone,
+      dataSource: 'OpenStreetMap contributors',
+      isClinic: tags.amenity === 'clinic',
+      osmType: el.type,
+      osmId: el.id,
+    });
+  }
+
+  facilities.sort((a, b) => a.distanceKm - b.distanceKm);
+  return facilities;
+}
+
+/**
+ * Runs the query on one Overpass mirror after waiting for its turn.
+ * Rejects if the mirror fails or the race ends (deadline reached or another mirror answered).
+ */
+async function queryOverpassMirror(
+  endpoint: string,
+  query: string,
+  startDelayMs: number,
+  raceSignal: AbortSignal
+): Promise<OverpassResponse> {
+  await new Promise<void>((resolve, reject) => {
+    const delayId = setTimeout(resolve, startDelayMs);
+    raceSignal.addEventListener(
+      'abort',
+      () => {
+        clearTimeout(delayId);
+        reject(new Error(`Overpass mirror ${endpoint} no longer needed`));
+      },
+      { once: true }
+    );
+  });
+
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `data=${encodeURIComponent(query)}`,
+    signal: raceSignal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Overpass mirror ${endpoint} returned status ${response.status}`);
+  }
+
+  const data: OverpassResponse = await response.json();
+  if (!data || !Array.isArray(data.elements)) {
+    throw new Error(`Overpass mirror ${endpoint} returned an unexpected response`);
+  }
+
+  return data;
 }
 
 /**
@@ -309,101 +437,21 @@ export async function findNearbyFacilities(
 ): Promise<NearbyFacility[]> {
   const query = buildOverpassQuery(userLat, userLon, radiusMeters);
 
-  // 1. Try Overpass API mirrors
-  for (const endpoint of OVERPASS_ENDPOINTS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 12000);
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `data=${encodeURIComponent(query)}`,
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        continue;
-      }
-
-      const data: OverpassResponse = await response.json();
-      if (!data || !Array.isArray(data.elements)) {
-        continue;
-      }
-
-      const facilities: NearbyFacility[] = [];
-      const seenIds = new Set<string>();
-
-      for (const el of data.elements) {
-        const category = determineCategory(el.tags);
-        if (!category) continue;
-
-        const elLat = el.lat ?? el.center?.lat;
-        const elLon = el.lon ?? el.center?.lon;
-        if (
-          elLat === undefined ||
-          elLon === undefined ||
-          typeof elLat !== 'number' ||
-          typeof elLon !== 'number' ||
-          !isFinite(elLat) ||
-          !isFinite(elLon) ||
-          isNaN(elLat) ||
-          isNaN(elLon) ||
-          elLat < -90 ||
-          elLat > 90 ||
-          elLon < -180 ||
-          elLon > 180
-        ) {
-          continue;
-        }
-
-        const uniqueKey = `${el.type.toLowerCase()}-${el.id}`;
-        if (seenIds.has(uniqueKey)) continue;
-        seenIds.add(uniqueKey);
-
-        const tags = el.tags || {};
-
-        let name = tags.name || tags['name:en'] || tags['name:hi'];
-        if (!name) {
-          if (category === 'police') name = 'Police Station (Unnamed)';
-          else if (category === 'hospital') name = 'Hospital / Medical Facility (Unnamed)';
-          else if (category === 'fire_station') name = 'Fire Station (Unnamed)';
-          else name = 'Emergency Facility';
-        }
-
-        const phone =
-          tags.phone ||
-          tags['contact:phone'] ||
-          tags.emergency_phone ||
-          tags['contact:mobile'];
-        const address = formatOsmAddress(tags);
-        const distanceKm = calculateDistance(userLat, userLon, elLat, elLon);
-
-        facilities.push({
-          id: uniqueKey,
-          name,
-          category,
-          lat: elLat,
-          lon: elLon,
-          distanceKm,
-          address,
-          phone,
-          dataSource: 'OpenStreetMap contributors',
-          osmType: el.type,
-          osmId: el.id,
-        });
-      }
-
-      facilities.sort((a, b) => a.distanceKm - b.distanceKm);
-      return facilities;
-    } catch (err: unknown) {
-      clearTimeout(timeoutId);
-      console.warn(`Overpass mirror ${endpoint} failed, checking next mirror:`, err);
-    }
+  // 1. Try Overpass API mirrors, a few seconds apart, and use the first good answer
+  const race = new AbortController();
+  const deadlineId = setTimeout(() => race.abort(), OVERPASS_DEADLINE_MS);
+  try {
+    const data = await Promise.any(
+      OVERPASS_ENDPOINTS.map((endpoint, index) =>
+        queryOverpassMirror(endpoint, query, index * MIRROR_STAGGER_MS, race.signal)
+      )
+    );
+    return parseOverpassElements(data.elements, userLat, userLon);
+  } catch (err: unknown) {
+    console.warn('All Overpass mirrors failed:', err);
+  } finally {
+    clearTimeout(deadlineId);
+    race.abort();
   }
 
   // 2. Fallback to OpenStreetMap Nominatim amenity index

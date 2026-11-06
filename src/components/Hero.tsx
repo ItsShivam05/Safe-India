@@ -84,7 +84,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch }) => {
               </span>
               <span className="flex items-center space-x-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-sage-600" />
-                <span>No login, 100% private</span>
+                <span>No login, no tracking</span>
               </span>
               <span className="flex items-center space-x-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-sage-600" />
