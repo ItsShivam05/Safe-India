@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { officialResources } from '../data/resources';
 import { translations } from '../data/locales';
+import { buildHelplineShareMessage, getWhatsAppShareUrl } from '../services/shareService';
+import { WhatsAppIcon } from './WhatsAppIcon';
 import {
   MapPin,
   PhoneCall,
@@ -216,6 +218,18 @@ export const ResourcesView: React.FC = () => {
                     <Copy className="w-5 h-5 text-midnight/70" />
                   )}
                 </button>
+
+                {/* Share on WhatsApp */}
+                <a
+                  href={getWhatsAppShareUrl(buildHelplineShareMessage(res))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 bg-ivory hover:bg-ivory-100 text-[#0F7A6C] rounded-xl transition-colors border border-lavender"
+                  title={t.scenarioView.shareWhatsApp}
+                  aria-label={`${t.scenarioView.shareWhatsApp}: ${res.name.en}`}
+                >
+                  <WhatsAppIcon className="w-5 h-5" />
+                </a>
 
                 {/* Official Website */}
                 {res.website && (

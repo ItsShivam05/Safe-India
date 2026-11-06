@@ -67,6 +67,12 @@ export const translations = {
       backToEmergencies: "Back",
       shareProtocol: "Share Guide",
       copied: "Copied!",
+      copyLink: "Copy link",
+      copyFailed: "Could not copy",
+      shareWhatsApp: "Share on WhatsApp",
+      shareWhatsAppShort: "WhatsApp",
+      shareSectionTitle: "Know someone who should see this?",
+      shareSectionBody: "Send this guide to your family and friends so they know what to do too.",
       openWebsite: "Open website",
     },
     awarenessSection: {
@@ -182,6 +188,12 @@ export const translations = {
       unverifiedPhoneDisclaimer: "Facility details come from public OpenStreetMap community data and have not been independently verified. In an emergency, always call 112 directly.",
       focusOnMap: "View on map",
       showingResults: "Showing places near",
+    },
+    notFound: {
+      title: "Page not found",
+      body: "We could not find that page. If you need help right now, call 112 or open the emergency guides.",
+      guides: "Emergency Guides",
+      home: "Go to Home",
     },
     searchModal: {
       placeholder: "Search by emergency, problem, or helpline...",

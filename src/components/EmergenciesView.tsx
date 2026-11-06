@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import type { EmergencyScenario } from '../types';
+import { Link } from 'react-router';
 
 import { emergencyScenarios } from '../data/emergencies';
 import { translations } from '../data/locales';
+import { scenarioPath } from '../data/site';
 import {
   ShieldAlert,
   Search,
@@ -20,13 +21,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
-interface EmergenciesViewProps {
-  onSelectScenario: (scenario: EmergencyScenario) => void;
-}
-
-export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
-  onSelectScenario,
-}) => {
+export const EmergenciesView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const t = translations.en;
@@ -155,13 +150,12 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
 
                 {/* Scenario Title */}
                 <h3 className="text-xl font-bold text-midnight group-hover:text-plum transition-colors leading-snug">
-                  <button
-                    type="button"
-                    onClick={() => onSelectScenario(sc)}
-                    className="text-left font-bold after:absolute after:inset-0 after:rounded-3xl"
+                  <Link
+                    to={scenarioPath(sc.id)}
+                    className="font-bold after:absolute after:inset-0 after:rounded-3xl"
                   >
                     {sc.title.en}
-                  </button>
+                  </Link>
                 </h3>
               </div>
 

@@ -1,4 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
+import { Routes, Route, useLocation, useNavigate, useNavigationType, useParams } from 'react-router';
 import { Loader2 } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -13,7 +14,11 @@ import { SearchModal } from './components/SearchModal';
 import { MobileQuickAccess } from './components/MobileQuickAccess';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
+import { NotFoundView } from './components/NotFoundView';
 import { translations } from './data/locales';
+import { emergencyScenarios } from './data/emergencies';
+import { awarenessGuides } from './data/awareness';
+import { awarenessPath, getPageMeta, scenarioPath, TAB_PATHS } from './data/site';
 import type { EmergencyScenario } from './types';
 
 // Shown if the map code can't be downloaded, so a bad connection never leaves a blank page.
@@ -49,24 +54,63 @@ const HelpNearMeView = lazy(() =>
     .catch(() => ({ default: NearMeLoadFailed }))
 );
 
+const tabFromPath = (pathname: string) =>
+  Object.keys(TAB_PATHS).find((tab) =>
+    tab === 'home'
+      ? pathname === TAB_PATHS.home
+      : pathname === TAB_PATHS[tab] || pathname.startsWith(`${TAB_PATHS[tab]}/`)
+  ) ?? '';
+
+const ScenarioRoute = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const scenario = emergencyScenarios.find((sc) => sc.id === id);
+  if (!scenario) return <NotFoundView />;
+
+  return (
+    <ScenarioDetailView
+      key={scenario.id}
+      scenario={scenario}
+      // Someone who arrived from a shared link has no page to go back to
+      onBack={() => (location.key === 'default' ? navigate(TAB_PATHS.emergencies) : navigate(-1))}
+    />
+  );
+};
+
+const AwarenessGuideRoute = () => {
+  const { id } = useParams();
+  if (!awarenessGuides.some((guide) => guide.id === id)) return <NotFoundView />;
+  return <AwarenessView key={id} guideId={id} />;
+};
+
 export function App() {
-  const [currentTab, setCurrentTab] = useState<string>('home');
-  const [selectedScenario, setSelectedScenario] = useState<EmergencyScenario | null>(null);
+  const navigate = useNavigate();
+  const { pathname, hash } = useLocation();
+  const navigationType = useNavigationType();
+  const currentTab = tabFromPath(pathname);
   const [searchModalOpen, setSearchModalOpen] = useState<boolean>(false);
   const [quickHelpOpen, setQuickHelpOpen] = useState<boolean>(false);
 
-  // Scroll to top on view state change
+  // New pages start at the top. The browser restores the position on Back and Forward.
+  useLayoutEffect(() => {
+    if (hash) {
+      document.getElementById(hash.slice(1))?.scrollIntoView();
+    } else if (navigationType !== 'POP') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [pathname, hash, navigationType]);
+
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentTab, selectedScenario]);
+    document.title = getPageMeta(pathname).title;
+  }, [pathname]);
 
   const handleSelectScenario = (scenario: EmergencyScenario) => {
-    setSelectedScenario(scenario);
+    navigate(scenarioPath(scenario.id));
   };
 
   const handleNavigate = (tab: string) => {
-    setCurrentTab(tab);
-    setSelectedScenario(null);
+    navigate(TAB_PATHS[tab]);
   };
 
   return (
@@ -81,17 +125,10 @@ export function App() {
 
       {/* Main Content Area */}
       <main className="grow">
-        
-        {/* Scenario Detail View takes precedence when a scenario is selected */}
-        {selectedScenario ? (
-          <ScenarioDetailView
-            scenario={selectedScenario}
-            onBack={() => setSelectedScenario(null)}
-          />
-        ) : (
-          <>
-            {/* Home Tab */}
-            {currentTab === 'home' && (
+        <Routes>
+          <Route
+            path={TAB_PATHS.home}
+            element={
               <>
                 <Hero
                   onNavigate={handleNavigate}
@@ -101,22 +138,16 @@ export function App() {
                 <AIProtocolMatcher
                   onSelectScenario={handleSelectScenario}
                 />
-                <EmergenciesView
-                  onSelectScenario={handleSelectScenario}
-                />
+                <EmergenciesView />
                 <Philosophy />
               </>
-            )}
-
-            {/* Emergencies Tab */}
-            {currentTab === 'emergencies' && (
-              <EmergenciesView
-                onSelectScenario={handleSelectScenario}
-              />
-            )}
-
-            {/* Get Help Near Me Tab */}
-            {currentTab === 'nearme' && (
+            }
+          />
+          <Route path={TAB_PATHS.emergencies} element={<EmergenciesView />} />
+          <Route path={scenarioPath(':id')} element={<ScenarioRoute />} />
+          <Route
+            path={TAB_PATHS.nearme}
+            element={
               <Suspense
                 fallback={
                   <div className="py-24 flex justify-center" role="status" aria-label="Loading map">
@@ -126,24 +157,14 @@ export function App() {
               >
                 <HelpNearMeView />
               </Suspense>
-            )}
-
-            {/* Awareness Tab */}
-            {currentTab === 'awareness' && (
-              <AwarenessView />
-            )}
-
-            {/* Resources Tab */}
-            {currentTab === 'resources' && (
-              <ResourcesView />
-            )}
-
-            {/* About Tab */}
-            {currentTab === 'about' && (
-              <AboutView />
-            )}
-          </>
-        )}
+            }
+          />
+          <Route path={TAB_PATHS.awareness} element={<AwarenessView />} />
+          <Route path={awarenessPath(':id')} element={<AwarenessGuideRoute />} />
+          <Route path={TAB_PATHS.resources} element={<ResourcesView />} />
+          <Route path={TAB_PATHS.about} element={<AboutView />} />
+          <Route path="*" element={<NotFoundView />} />
+        </Routes>
       </main>
 
       {/* Persistent Floating Emergency Button & Quick Help Modal */}
@@ -170,6 +191,7 @@ export function App() {
         onClose={() => setSearchModalOpen(false)}
         onSelectScenario={handleSelectScenario}
         onSelectCategory={handleNavigate}
+        onSelectAwarenessGuide={(guideId) => navigate(awarenessPath(guideId))}
       />
 
       {/* Footer */}

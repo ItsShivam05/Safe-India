@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 import { translations } from '../data/locales';
 import { ShieldCheck } from 'lucide-react';
@@ -96,19 +97,19 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-sm text-ivory/80 font-semibold">
               <li>
-                <button onClick={() => onNavigate('about')} className="hover:text-lavender transition-colors">
+                <Link to="/about#sources" className="hover:text-lavender transition-colors">
                   {t.footer.sources}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => onNavigate('about')} className="hover:text-lavender transition-colors">
+                <Link to="/about#accessibility" className="hover:text-lavender transition-colors">
                   {t.footer.accessibility}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => onNavigate('about')} className="hover:text-lavender transition-colors">
+                <Link to="/about#privacy" className="hover:text-lavender transition-colors">
                   {t.footer.privacy}
-                </button>
+                </Link>
               </li>
             </ul>
           </div>

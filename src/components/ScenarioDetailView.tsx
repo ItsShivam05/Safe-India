@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { EmergencyScenario } from '../types';
 import { translations } from '../data/locales';
+import { absoluteUrl, scenarioPath } from '../data/site';
+import { buildScenarioShareMessage } from '../services/shareService';
+import { ShareButtons } from './ShareButtons';
 import {
   PhoneCall,
   CheckCircle,
   XCircle,
   Clock,
   ExternalLink,
-  Share2,
   ArrowLeft,
   ShieldCheck,
   AlertTriangle,
@@ -32,15 +34,11 @@ export const ScenarioDetailView: React.FC<ScenarioDetailViewProps> = ({
   scenario,
   onBack,
 }) => {
-  const [copied, setCopied] = useState(false);
   const t = translations.en;
-
-  const handleShare = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    }
+  const shareProps = {
+    title: scenario.title.en,
+    message: buildScenarioShareMessage(scenario),
+    url: absoluteUrl(scenarioPath(scenario.id)),
   };
 
   const renderIcon = (iconName: string) => {
@@ -63,7 +61,7 @@ export const ScenarioDetailView: React.FC<ScenarioDetailViewProps> = ({
     <article className="max-w-4xl mx-auto px-4 sm:px-6 py-6 md:py-10 animate-in fade-in duration-200 bg-ivory text-midnight">
 
       {/* Top Back & Share Navigation */}
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-lavender/40">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-6 pb-4 border-b border-lavender/40">
         <button
           onClick={onBack}
           className="inline-flex items-center space-x-2 text-sm font-bold text-midnight hover:text-plum bg-lavender/30 hover:bg-lavender/60 px-3.5 py-2 rounded-xl transition-colors"
@@ -72,13 +70,7 @@ export const ScenarioDetailView: React.FC<ScenarioDetailViewProps> = ({
           <span>{t.scenarioView.backToEmergencies}</span>
         </button>
 
-        <button
-          onClick={handleShare}
-          className="inline-flex items-center space-x-2 text-xs font-semibold text-midnight hover:text-plum bg-white border border-lavender hover:border-plum px-3 py-2 rounded-xl shadow-xs transition-all"
-        >
-          <Share2 className="w-3.5 h-3.5 text-plum" />
-          <span>{copied ? t.scenarioView.copied : t.scenarioView.shareProtocol}</span>
-        </button>
+        <ShareButtons {...shareProps} compact />
       </div>
 
       {/* Header Category & Title */}
@@ -213,6 +205,13 @@ export const ScenarioDetailView: React.FC<ScenarioDetailViewProps> = ({
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Share This Guide */}
+      <section className="bg-white border border-lavender/60 rounded-3xl p-6 sm:p-8 shadow-xs mb-8">
+        <h2 className="text-lg font-bold text-midnight">{t.scenarioView.shareSectionTitle}</h2>
+        <p className="mt-1 mb-4 text-sm text-midnight/80">{t.scenarioView.shareSectionBody}</p>
+        <ShareButtons {...shareProps} />
       </section>
 
       {/* Verified Official Source & Date Footer Badge */}

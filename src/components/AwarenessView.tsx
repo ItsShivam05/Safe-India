@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { awarenessGuides } from '../data/awareness';
 import { translations } from '../data/locales';
+import { absoluteUrl, awarenessPath } from '../data/site';
+import { buildAwarenessShareMessage } from '../services/shareService';
+import { ShareButtons } from './ShareButtons';
 import {
   BookOpen,
   CheckCircle2,
@@ -17,12 +20,21 @@ import {
   ChevronUp
 } from 'lucide-react';
 
-export const AwarenessView: React.FC = () => {
+interface AwarenessViewProps {
+  guideId?: string;
+}
+
+export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
-  const [expandedGuideId, setExpandedGuideId] = useState<string | null>(null);
+  const [expandedGuideId, setExpandedGuideId] = useState<string | null>(guideId ?? null);
 
   const t = translations.en;
+
+  // A link to one guide opens that guide and brings it into view
+  useEffect(() => {
+    if (guideId) document.getElementById(`guide-${guideId}`)?.scrollIntoView({ block: 'start' });
+  }, [guideId]);
 
   const categories = [
     { id: 'all', label: t.emergencySection.allCategories },
@@ -93,7 +105,8 @@ export const AwarenessView: React.FC = () => {
           return (
             <article
               key={guide.id}
-              className="bg-white rounded-3xl border border-lavender/60 shadow-xs overflow-hidden transition-all duration-200 hover:border-plum"
+              id={`guide-${guide.id}`}
+              className="scroll-mt-28 bg-white rounded-3xl border border-lavender/60 shadow-xs overflow-hidden transition-all duration-200 hover:border-plum"
             >
               {/* Card Title & Summary Bar */}
               <div
@@ -199,6 +212,15 @@ export const AwarenessView: React.FC = () => {
                       </div>
                     </div>
                   )}
+
+                  {/* Share This Guide */}
+                  <div className="md:col-span-2 pt-2">
+                    <ShareButtons
+                      title={guide.title.en}
+                      message={buildAwarenessShareMessage(guide)}
+                      url={absoluteUrl(awarenessPath(guide.id))}
+                    />
+                  </div>
 
                   {/* Footer Source */}
                   <div className="md:col-span-2 text-xs text-midnight/70 flex items-center space-x-2 pt-2">

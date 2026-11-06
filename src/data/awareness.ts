@@ -1,4 +1,4 @@
-import type { AwarenessGuide } from '../types';
+import type { AwarenessGuide } from '../types/index.ts';
 
 
 export const awarenessGuides: AwarenessGuide[] = [

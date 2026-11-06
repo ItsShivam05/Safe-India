@@ -14,6 +14,7 @@ interface SearchModalProps {
   onClose: () => void;
   onSelectScenario: (scenario: EmergencyScenario) => void;
   onSelectCategory: (tab: string) => void;
+  onSelectAwarenessGuide: (guideId: string) => void;
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
@@ -22,6 +23,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onClose,
   onSelectScenario,
   onSelectCategory,
+  onSelectAwarenessGuide,
 }) => {
   const [query, setQuery] = useState('');
   const t = translations.en;
@@ -224,7 +226,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                             type="button"
                             onClick={() => {
                               onClose();
-                              onSelectCategory('awareness');
+                              onSelectAwarenessGuide(ag.id);
                             }}
                             className="text-left font-bold after:absolute after:inset-0 after:rounded-2xl"
                           >

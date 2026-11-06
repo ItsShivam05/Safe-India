@@ -1,4 +1,4 @@
-import type { EmergencyScenario } from '../types';
+import type { EmergencyScenario } from '../types/index.ts';
 
 
 export const emergencyScenarios: EmergencyScenario[] = [

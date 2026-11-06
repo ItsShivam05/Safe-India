@@ -248,6 +248,7 @@ SafeIndia is powered by a fast, modern frontend stack designed for near-instant 
 | **Build & Tooling** | [Vite](https://vitejs.dev/) + [Oxlint](https://oxc.rs/) | Sub-second HMR, high-speed linting, and optimized production chunking |
 | **Styling & Theme** | [Tailwind CSS](https://tailwindcss.com/) | Midnight Plum, Soft Lavender, Sage, and Emergency-Red color system |
 | **Interactive Maps** | [Leaflet](https://leafletjs.com/) | Hardware-accelerated maps, custom category markers, and dynamic popups |
+| **Routing** | [React Router](https://reactrouter.com/) | A separate address for every guide, so guides can be shared and found |
 | **Spatial Services** | [Overpass API](https://overpass-api.de/) + [Nominatim](https://nominatim.org/) | Real-time queries for nearby amenities and Indian postal code search |
 | **Iconography** | [Lucide React](https://lucide.dev/) | Accessible SVG icons |
 
