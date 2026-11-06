@@ -28,6 +28,8 @@
   .text-sage { color: #C6D7C0; }
   .bg-emergency { background-color: #B42318; }
   .text-emergency { color: #B42318; }
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
 }
 
 /* Reduced motion preference */

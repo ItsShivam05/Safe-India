@@ -63,7 +63,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
     <div className="w-full relative">
       <form onSubmit={handleSearch} className="relative flex items-center">
         <div className="relative w-full">
-          <Search className="w-5 h-5 text-midnight/40 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-5 h-5 text-midnight/70 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={query}
@@ -79,7 +79,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
             <button
               type="button"
               onClick={handleClear}
-              className="absolute right-20 top-1/2 -translate-y-1/2 p-1 text-midnight/40 hover:text-midnight rounded-full"
+              className="absolute right-20 top-1/2 -translate-y-1/2 p-1 text-midnight/70 hover:text-midnight rounded-full"
               aria-label="Clear location search"
             >
               <X className="w-4 h-4" />
@@ -106,7 +106,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
       {/* Geocoding Results Dropdown */}
       {results.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-lavender/60 shadow-xl z-30 overflow-hidden divide-y divide-lavender/30 max-h-72 overflow-y-auto">
-          <div className="px-4 py-2 bg-ivory text-[11px] font-bold text-midnight/60 uppercase tracking-wider">
+          <div className="px-4 py-2 bg-ivory text-xs font-bold text-midnight/70 uppercase tracking-wider">
             Places in India
           </div>
           {results.map((loc, idx) => (
@@ -121,7 +121,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
                 <span className="font-semibold block text-midnight group-hover:text-plum">
                   {loc.displayName.split(',').slice(0, 2).join(',')}
                 </span>
-                <span className="text-midnight/60 text-[11px] line-clamp-1">
+                <span className="text-midnight/70 text-xs line-clamp-1">
                   {loc.displayName}
                 </span>
               </div>

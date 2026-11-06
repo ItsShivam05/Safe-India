@@ -87,7 +87,7 @@ export const ResourceFilters: React.FC<ResourceFiltersProps> = ({
               <Icon className="w-3.5 h-3.5" />
               <span>{tab.label}</span>
               <span
-                className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-1 ${
+                className={`text-xs px-1.5 py-0.5 rounded-full font-bold ml-1 ${
                   isActive ? 'bg-midnight text-lavender' : 'bg-lavender/40 text-midnight'
                 }`}
               >
@@ -100,7 +100,7 @@ export const ResourceFilters: React.FC<ResourceFiltersProps> = ({
 
       {/* Radius Selector */}
       <div className="flex items-center space-x-2 self-end sm:self-auto shrink-0 text-xs">
-        <span className="text-midnight/60 font-semibold hidden md:inline">
+        <span className="text-midnight/70 font-semibold hidden md:inline">
           {t.nearMe.radiusLabel}:
         </span>
         <select

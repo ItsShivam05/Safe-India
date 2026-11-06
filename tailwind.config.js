@@ -1,3 +1,5 @@
+import animate from 'tailwindcss-animate';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -96,6 +98,18 @@ export default {
         sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
         display: ['Plus Jakarta Sans', 'Outfit', 'sans-serif'],
       },
+      boxShadow: {
+        xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+      scale: {
+        102: '1.02',
+      },
+      spacing: {
+        18: '4.5rem',
+      },
       animation: {
         'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 6s ease-in-out infinite',
@@ -108,7 +122,7 @@ export default {
       }
     },
   },
-  plugins: [],
+  plugins: [animate],
 }
 
 

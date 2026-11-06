@@ -85,10 +85,10 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 
       {/* Address */}
       <div className="flex items-start space-x-2 text-xs text-midnight/70 mb-3">
-        <MapPin className="w-4 h-4 text-midnight/40 shrink-0 mt-0.5" />
+        <MapPin className="w-4 h-4 text-midnight/70 shrink-0 mt-0.5" />
         <span className="leading-relaxed">
           {facility.address || (
-            <span className="text-midnight/40 italic">
+            <span className="text-midnight/70 italic">
               {t.nearMe.addressUnavailable}
             </span>
           )}
@@ -99,19 +99,19 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       <div className="mb-4 text-xs">
         {phoneInfo.state === 'valid' ? (
           <div className="flex flex-wrap items-center gap-2 text-midnight/80">
-            <span className="text-midnight/50 font-semibold">Phone:</span>
+            <span className="text-midnight/70 font-semibold">Phone:</span>
             <span className="font-mono font-bold text-midnight">{phoneInfo.displayNumber}</span>
-            <span className="text-[10px] bg-lavender/30 text-plum font-medium px-2 py-0.5 rounded-full border border-lavender/40">
+            <span className="text-xs bg-lavender/30 text-plum font-medium px-2 py-0.5 rounded-full border border-lavender/40">
               {t.nearMe.unverifiedNotice}
             </span>
           </div>
         ) : phoneInfo.state === 'invalid' ? (
-          <p className="text-midnight/50 text-xs italic flex items-center space-x-1">
-            <Info className="w-3.5 h-3.5 text-midnight/40 shrink-0" />
+          <p className="text-midnight/70 text-xs italic flex items-center space-x-1">
+            <Info className="w-3.5 h-3.5 text-midnight/70 shrink-0" />
             <span>{t.nearMe.invalidPhone}: {phoneInfo.displayNumber}</span>
           </p>
         ) : (
-          <p className="text-midnight/40 text-xs italic flex items-center space-x-1">
+          <p className="text-midnight/70 text-xs italic flex items-center space-x-1">
             <Info className="w-3.5 h-3.5 shrink-0" />
             <span>{t.nearMe.noPhoneListed}</span>
           </p>
@@ -163,9 +163,9 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       </div>
 
       {/* Attribution footer */}
-      <div className="mt-3 pt-2 border-t border-lavender/25 flex items-center justify-between text-[10px] text-midnight/50">
+      <div className="mt-3 pt-2 border-t border-lavender/25 flex items-center justify-between text-xs text-midnight/70">
         <span>{t.nearMe.sourceAttribution}</span>
-        <span className="text-[10px] text-midnight/40">Map ID #{facility.osmId}</span>
+        <span className="text-xs text-midnight/70">Map ID #{facility.osmId}</span>
       </div>
 
     </div>

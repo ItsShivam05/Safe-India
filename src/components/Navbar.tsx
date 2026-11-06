@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Menu, X, PhoneCall, ShieldAlert, BookOpen, MapPin, Info, Search } from 'lucide-react';
 
 import { translations } from '../data/locales';
+import { SEARCH_SHORTCUT_LABEL } from '../utils/platform';
 
 interface NavbarProps {
   currentTab: string;
@@ -21,7 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'emergencies', label: t.nav.emergencies, icon: ShieldAlert },
     { id: 'nearme', label: t.nav.getHelpNearMe, icon: MapPin },
     { id: 'awareness', label: t.nav.awareness, icon: BookOpen },
-    { id: 'resources', label: t.nav.resources, icon: Info },
+    { id: 'resources', label: t.nav.resources, icon: PhoneCall },
     { id: 'about', label: t.nav.about, icon: Info },
   ];
 
@@ -38,7 +39,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           <div className="flex items-center space-x-2 min-w-0">
             <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse shrink-0"></span>
-            <span className="font-bold tracking-wide uppercase truncate">{t.emergencySection.criticalNotice}</span>
+            <span className="sm:hidden font-bold tracking-wide uppercase truncate">{t.emergencySection.criticalNoticeShort}</span>
+            <span className="hidden sm:inline font-bold tracking-wide uppercase truncate">{t.emergencySection.criticalNotice}</span>
           </div>
           <a
             href="tel:112"
@@ -46,7 +48,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Call 112 National Emergency"
           >
             <PhoneCall className="w-3.5 h-3.5 text-emergency shrink-0" />
-            <span>{t.nav.quickCall112}</span>
+            <span className="sm:hidden">{t.nav.quickCall112Short}</span>
+            <span className="hidden sm:inline">{t.nav.quickCall112}</span>
           </a>
         </div>
       </div>
@@ -72,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-sage-400 shrink-0"></span>
               </div>
-              <span className="hidden xl:block text-[10px] text-lavender/80 font-semibold tracking-wide uppercase -mt-0.5 whitespace-nowrap">
+              <span className="hidden xl:block text-xs text-lavender/80 font-semibold tracking-wide uppercase -mt-0.5 whitespace-nowrap">
                 {t.tagline}
               </span>
             </div>
@@ -106,12 +109,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onOpenSearch}
               className="px-2.5 py-1.5 text-ivory/80 hover:text-white hover:bg-midnight-800 rounded-xl transition-colors border border-lavender/20 flex items-center space-x-2 text-xs whitespace-nowrap"
-              title="Search guides & helplines (Ctrl+K)"
+              title={`Search guides & helplines (${SEARCH_SHORTCUT_LABEL})`}
               aria-label="Search emergency guides & helplines"
             >
               <Search className="w-3.5 h-3.5 text-lavender shrink-0" />
               <span className="hidden sm:inline text-ivory/70">Search...</span>
-              <kbd className="hidden md:inline bg-midnight-950 text-lavender px-1.5 py-0.5 text-[10px] rounded border border-lavender/20">⌘K</kbd>
+              <kbd className="hidden md:inline bg-midnight-950 text-lavender px-1.5 py-0.5 text-xs rounded border border-lavender/20">{SEARCH_SHORTCUT_LABEL}</kbd>
             </button>
 
             {/* Mobile / Tablet Menu Toggle */}

@@ -110,7 +110,7 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
-          <span className="text-[10px] font-extrabold uppercase tracking-widest text-lavender bg-midnight-800 border border-lavender/20 px-2.5 py-0.5 rounded-full">
+          <span className="text-xs font-extrabold uppercase tracking-widest text-lavender bg-midnight-800 border border-lavender/20 px-2.5 py-0.5 rounded-full">
             {t.aiHelper.badge}
           </span>
           <h2 className="text-xl sm:text-2xl font-extrabold text-white mt-1">
@@ -182,7 +182,7 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
                 Recommended Safety Guide
               </span>
             </div>
-            <span className="text-[10px] bg-midnight-950 text-ivory/70 px-2 py-0.5 rounded border border-lavender/20">
+            <span className="text-xs bg-midnight-950 text-ivory/70 px-2 py-0.5 rounded border border-lavender/20">
               Source: {matchedScenario.source.name}
             </span>
           </div>

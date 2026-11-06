@@ -71,7 +71,10 @@ export const AwarenessView: React.FC = () => {
         {categories.map((cat) => (
           <button
             key={cat.id}
-            onClick={() => setActiveCategory(cat.id)}
+            onClick={() => {
+              setActiveCategory(cat.id);
+              setExpandedGuideId(awarenessGuides.find((g) => g.category === cat.id)?.id ?? null);
+            }}
             className={`shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 ${
               activeCategory === cat.id
                 ? 'bg-plum text-white shadow-sm'
@@ -86,7 +89,7 @@ export const AwarenessView: React.FC = () => {
       {/* Awareness Guides Cards */}
       <div className="space-y-6">
         {filteredGuides.map((guide) => {
-          const isExpanded = expandedGuideId === guide.id || activeCategory !== 'all';
+          const isExpanded = expandedGuideId === guide.id;
           return (
             <article
               key={guide.id}
@@ -94,8 +97,7 @@ export const AwarenessView: React.FC = () => {
             >
               {/* Card Title & Summary Bar */}
               <div
-                onClick={() => setExpandedGuideId(isExpanded ? null : guide.id)}
-                className="p-6 sm:p-7 cursor-pointer bg-ivory-50 hover:bg-ivory-100 transition-colors flex items-start justify-between gap-4"
+                className="relative p-6 sm:p-7 cursor-pointer bg-ivory-50 hover:bg-ivory-100 transition-colors flex items-start justify-between gap-4"
               >
                 <div className="flex items-start space-x-4">
                   <div className="p-3 bg-plum text-white rounded-2xl shrink-0 shadow-xs">
@@ -114,7 +116,13 @@ export const AwarenessView: React.FC = () => {
                   </div>
                 </div>
 
-                <button className="p-2 text-midnight/50 hover:text-plum">
+                <button
+                  type="button"
+                  onClick={() => setExpandedGuideId(isExpanded ? null : guide.id)}
+                  aria-expanded={isExpanded}
+                  aria-label={`${isExpanded ? 'Hide' : 'Show'} guide: ${guide.title.en}`}
+                  className="p-2 text-midnight/70 hover:text-plum after:absolute after:inset-0"
+                >
                   {isExpanded ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
                 </button>
               </div>
@@ -167,10 +175,13 @@ export const AwarenessView: React.FC = () => {
                           const key = `${guide.id}-${idx}`;
                           const isChecked = !!checkedItems[key];
                           return (
-                            <label
+                            <button
                               key={idx}
+                              type="button"
+                              role="checkbox"
+                              aria-checked={isChecked}
                               onClick={() => toggleCheck(key)}
-                              className={`flex items-center space-x-3 p-3 rounded-xl cursor-pointer border transition-colors ${
+                              className={`w-full text-left flex items-center space-x-3 p-3 rounded-xl cursor-pointer border transition-colors ${
                                 isChecked
                                   ? 'bg-midnight-800 border-plum text-lavender line-through opacity-80'
                                   : 'bg-midnight-950/80 border-lavender/20 hover:border-lavender text-ivory'
@@ -182,7 +193,7 @@ export const AwarenessView: React.FC = () => {
                                 <Square className="w-5 h-5 text-lavender/40 shrink-0" />
                               )}
                               <span className="text-xs sm:text-sm font-medium">{item}</span>
-                            </label>
+                            </button>
                           );
                         })}
                       </div>
@@ -190,7 +201,7 @@ export const AwarenessView: React.FC = () => {
                   )}
 
                   {/* Footer Source */}
-                  <div className="md:col-span-2 text-xs text-midnight/60 flex items-center space-x-2 pt-2">
+                  <div className="md:col-span-2 text-xs text-midnight/70 flex items-center space-x-2 pt-2">
                     <ShieldCheck className="w-4 h-4 text-sage-600" />
                     <span>Official Source: <strong>{guide.source.name}</strong> (Reviewed {guide.source.lastReviewed})</span>
                   </div>

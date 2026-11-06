@@ -106,7 +106,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </button>
               </li>
               <li>
-                <span className="text-ivory/50 font-normal">{t.footer.privacy}</span>
+                <button onClick={() => onNavigate('about')} className="hover:text-lavender transition-colors">
+                  {t.footer.privacy}
+                </button>
               </li>
             </ul>
           </div>

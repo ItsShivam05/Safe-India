@@ -210,7 +210,7 @@ export const HelpNearMeView: React.FC = () => {
           </div>
 
           {/* Divider */}
-          <div className="md:col-span-2 text-center text-xs font-bold uppercase tracking-wider text-midnight/40">
+          <div className="md:col-span-2 text-center text-xs font-bold uppercase tracking-wider text-midnight/70">
             <span>— OR —</span>
           </div>
 
@@ -226,7 +226,7 @@ export const HelpNearMeView: React.FC = () => {
 
         {/* Location Error feedback */}
         {locationError && (
-          <div className="mt-4 p-3.5 bg-emergency-50 border border-emergency-200 rounded-2xl flex items-start space-x-3 text-xs sm:text-sm text-emergency animate-in fade-in">
+          <div role="alert" className="mt-4 p-3.5 bg-emergency-50 border border-emergency-200 rounded-2xl flex items-start space-x-3 text-xs sm:text-sm text-emergency animate-in fade-in">
             <AlertTriangle className="w-4 h-4 text-emergency shrink-0 mt-0.5" />
             <div className="grow">
               <span className="font-bold block">Notice</span>
@@ -249,7 +249,7 @@ export const HelpNearMeView: React.FC = () => {
               </span>
             </div>
 
-            <span className="text-[11px] text-midnight/50">
+            <span className="text-xs text-midnight/70">
               Area: Within {(radiusMeters / 1000)} km
             </span>
           </div>
@@ -258,7 +258,7 @@ export const HelpNearMeView: React.FC = () => {
 
       {/* 4. Loading Facilities State: Heading: Finding help near you… */}
       {isLoadingFacilities && (
-        <div className="bg-white rounded-3xl p-12 text-center border border-lavender/60 shadow-xs my-8">
+        <div role="status" className="bg-white rounded-3xl p-12 text-center border border-lavender/60 shadow-xs my-8">
           <Loader2 className="w-10 h-10 animate-spin text-plum mx-auto mb-4" />
           <h2 className="text-xl font-bold text-midnight">
             {t.nearMe.loadingTitle}
@@ -271,7 +271,7 @@ export const HelpNearMeView: React.FC = () => {
 
       {/* 5. API Error State */}
       {!isLoadingFacilities && facilitiesError && (
-        <div className="bg-emergency-50 border border-emergency-200 rounded-3xl p-6 sm:p-8 text-center my-8">
+        <div role="alert" className="bg-emergency-50 border border-emergency-200 rounded-3xl p-6 sm:p-8 text-center my-8">
           <AlertTriangle className="w-10 h-10 text-emergency mx-auto mb-3" />
           <h2 className="text-lg font-bold text-emergency">
             Unable to load nearby places
@@ -349,7 +349,7 @@ export const HelpNearMeView: React.FC = () => {
                   <p className="text-sm font-semibold text-midnight/80">
                     {t.nearMe.noResults}
                   </p>
-                  <p className="text-xs text-midnight/50 mt-1">
+                  <p className="text-xs text-midnight/70 mt-1">
                     Try switching categories or searching a wider area.
                   </p>
                   {radiusMeters < 20000 && (
@@ -390,7 +390,7 @@ export const HelpNearMeView: React.FC = () => {
                 selectedFacility={selectedFacility}
                 onSelectFacility={handleSelectFacility}
               />
-              <p className="mt-2 text-[11px] text-midnight/50 text-center">
+              <p className="mt-2 text-xs text-midnight/70 text-center">
                 Map data from OpenStreetMap. Approximate direct distance shown.
               </p>
             </div>
@@ -398,7 +398,7 @@ export const HelpNearMeView: React.FC = () => {
           </div>
 
           {/* Crowdsourced data disclaimer */}
-          <div className="mt-8 p-4 bg-white/70 border border-lavender/50 rounded-2xl text-[11px] text-midnight/60 leading-relaxed text-center">
+          <div className="mt-8 p-4 bg-white/70 border border-lavender/50 rounded-2xl text-xs text-midnight/70 leading-relaxed text-center">
             {t.nearMe.unverifiedPhoneDisclaimer}
           </div>
 
@@ -409,7 +409,7 @@ export const HelpNearMeView: React.FC = () => {
       {!userLocation && !isLoadingFacilities && !isLocating && (
         <div className="bg-white border border-lavender/60 rounded-3xl p-8 sm:p-12 text-center my-6 shadow-xs">
           <div className="w-16 h-16 rounded-3xl bg-plum text-white flex items-center justify-center mx-auto mb-5 shadow-sm">
-            <Navigation className="w-8 h-8 animate-pulse text-lavender" />
+            <Navigation className="w-8 h-8 text-lavender" />
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-midnight">
             Find Help Nearby in Seconds

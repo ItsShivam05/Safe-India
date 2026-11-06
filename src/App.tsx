@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Philosophy } from './components/Philosophy';
@@ -8,16 +9,51 @@ import { AwarenessView } from './components/AwarenessView';
 import { ResourcesView } from './components/ResourcesView';
 import { AIProtocolMatcher } from './components/AIProtocolMatcher';
 import { AboutView } from './components/AboutView';
-import { HelpNearMeView } from './components/nearme/HelpNearMeView';
 import { SearchModal } from './components/SearchModal';
 import { MobileQuickAccess } from './components/MobileQuickAccess';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
+import { translations } from './data/locales';
 import type { EmergencyScenario } from './types';
+
+// Shown if the map code can't be downloaded, so a bad connection never leaves a blank page.
+const NearMeLoadFailed = () => {
+  const t = translations.en;
+  return (
+    <div role="alert" className="max-w-xl my-12 mx-4 sm:mx-auto bg-emergency-50 border border-emergency-200 rounded-3xl p-6 sm:p-8 text-center">
+      <h1 className="text-lg font-bold text-emergency">{t.nearMe.mapLoadFailedTitle}</h1>
+      <p className="mt-1 text-sm text-emergency/90">{t.nearMe.osmError}</p>
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="bg-midnight hover:bg-midnight-800 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-xs"
+        >
+          {t.nearMe.retry}
+        </button>
+        <a
+          href="tel:112"
+          className="bg-emergency hover:bg-emergency-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-xs"
+        >
+          {t.nearMe.call112Button}
+        </a>
+      </div>
+    </div>
+  );
+};
+
+// The map library is large, so it only loads when someone opens Get Help Near Me.
+const HelpNearMeView = lazy(() =>
+  import('./components/nearme/HelpNearMeView')
+    .then((m) => ({ default: m.HelpNearMeView }))
+    .catch(() => ({ default: NearMeLoadFailed }))
+);
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [selectedScenario, setSelectedScenario] = useState<EmergencyScenario | null>(null);
   const [searchModalOpen, setSearchModalOpen] = useState<boolean>(false);
+  const [quickHelpOpen, setQuickHelpOpen] = useState<boolean>(false);
 
   // Scroll to top on view state change
   useEffect(() => {
@@ -34,8 +70,8 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-ivory text-midnight font-sans flex flex-col selection:bg-plum selection:text-white">
-      
+    <div className="min-h-screen bg-ivory text-midnight font-sans flex flex-col pb-16 lg:pb-0 selection:bg-plum selection:text-white">
+
       {/* Sticky Header / Navbar */}
       <Navbar
         currentTab={currentTab}
@@ -60,14 +96,15 @@ export function App() {
                 <Hero
                   onNavigate={handleNavigate}
                   onOpenSearch={() => setSearchModalOpen(true)}
+                  onSelectScenario={handleSelectScenario}
                 />
                 <AIProtocolMatcher
                   onSelectScenario={handleSelectScenario}
                 />
-                <Philosophy />
                 <EmergenciesView
                   onSelectScenario={handleSelectScenario}
                 />
+                <Philosophy />
               </>
             )}
 
@@ -80,7 +117,15 @@ export function App() {
 
             {/* Get Help Near Me Tab */}
             {currentTab === 'nearme' && (
-              <HelpNearMeView />
+              <Suspense
+                fallback={
+                  <div className="py-24 flex justify-center" role="status" aria-label="Loading map">
+                    <Loader2 className="w-10 h-10 animate-spin text-plum" />
+                  </div>
+                }
+              >
+                <HelpNearMeView />
+              </Suspense>
             )}
 
             {/* Awareness Tab */}
@@ -103,14 +148,25 @@ export function App() {
 
       {/* Persistent Floating Emergency Button & Quick Help Modal */}
       <MobileQuickAccess
-        showFloatingButton={currentTab !== 'nearme' && currentTab !== 'home'}
+        showFloatingButton={currentTab !== 'nearme'}
+        isOpen={quickHelpOpen}
+        onOpen={() => setQuickHelpOpen(true)}
+        onClose={() => setQuickHelpOpen(false)}
         onSelectScenario={handleSelectScenario}
         onNavigate={handleNavigate}
+      />
+
+      {/* Phone Bottom Navigation */}
+      <MobileBottomNav
+        currentTab={currentTab}
+        onNavigate={handleNavigate}
+        onOpenHelp={() => setQuickHelpOpen(true)}
       />
 
       {/* Global Search Modal */}
       <SearchModal
         isOpen={searchModalOpen}
+        onOpen={() => setSearchModalOpen(true)}
         onClose={() => setSearchModalOpen(false)}
         onSelectScenario={handleSelectScenario}
         onSelectCategory={handleNavigate}

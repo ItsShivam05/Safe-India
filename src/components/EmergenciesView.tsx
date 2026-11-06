@@ -74,7 +74,7 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
       {/* Header */}
       <div className="mb-8 text-center max-w-3xl mx-auto">
         <span className="inline-flex items-center space-x-2 bg-emergency-50 text-emergency text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border border-emergency-200 mb-3">
-          <ShieldAlert className="w-4 h-4 text-emergency animate-pulse" />
+          <ShieldAlert className="w-4 h-4 text-emergency" />
           <span>Immediate Action Guides</span>
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
@@ -88,7 +88,7 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
       {/* Quick Search & Category Filter Pills */}
       <div className="mb-8 space-y-4">
         <div className="max-w-xl mx-auto relative">
-          <Search className="w-5 h-5 text-midnight/40 absolute left-4 top-1/2 -translate-y-1/2" />
+          <Search className="w-5 h-5 text-midnight/70 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
@@ -123,8 +123,7 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
           return (
             <div
               key={sc.id}
-              onClick={() => onSelectScenario(sc)}
-              className={`group cursor-pointer bg-white rounded-3xl p-6 sm:p-7 border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between ${
+              className={`group relative cursor-pointer bg-white rounded-3xl p-6 sm:p-7 border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between ${
                 isCritical
                   ? 'border-emergency/40 hover:border-emergency'
                   : 'border-lavender/60 hover:border-plum'
@@ -144,9 +143,9 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
                   </div>
 
                   <span
-                    className={`text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full border ${
+                    className={`text-xs font-extrabold uppercase px-2.5 py-1 rounded-full border ${
                       isCritical
-                        ? 'bg-emergency text-white border-emergency-700 animate-pulse'
+                        ? 'bg-emergency text-white border-emergency-700'
                         : 'bg-lavender/40 text-midnight border-lavender'
                     }`}
                   >
@@ -156,7 +155,13 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
 
                 {/* Scenario Title */}
                 <h3 className="text-xl font-bold text-midnight group-hover:text-plum transition-colors leading-snug">
-                  {sc.title.en}
+                  <button
+                    type="button"
+                    onClick={() => onSelectScenario(sc)}
+                    className="text-left font-bold after:absolute after:inset-0 after:rounded-3xl"
+                  >
+                    {sc.title.en}
+                  </button>
                 </h3>
               </div>
 
@@ -165,8 +170,7 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
                 {sc.immediateCallNumber ? (
                   <a
                     href={`tel:${sc.immediateCallNumber}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center space-x-1 text-emergency font-extrabold hover:underline"
+                    className="relative z-10 inline-flex items-center space-x-1 text-emergency font-extrabold hover:underline"
                     aria-label={`Call ${sc.immediateCallNumber}`}
                   >
                     <PhoneCall className="w-3.5 h-3.5" />
@@ -176,7 +180,7 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
                   <span className="text-plum">View Action Steps</span>
                 )}
 
-                <span className="inline-flex items-center text-midnight/50 group-hover:text-plum group-hover:translate-x-1 transition-all">
+                <span className="inline-flex items-center text-midnight/70 group-hover:text-plum group-hover:translate-x-1 transition-all">
                   <span>View Steps</span>
                   <ChevronRight className="w-4 h-4 ml-0.5" />
                 </span>
@@ -189,7 +193,7 @@ export const EmergenciesView: React.FC<EmergenciesViewProps> = ({
       {filteredScenarios.length === 0 && (
         <div className="text-center py-12 bg-white rounded-3xl border border-lavender p-8 max-w-md mx-auto">
           <p className="text-midnight/80 font-bold mb-2">No matching emergency guides found.</p>
-          <p className="text-xs text-midnight/60 mb-4">Try searching for words like &quot;scam&quot;, &quot;fire&quot;, &quot;accident&quot;, or &quot;snake&quot;.</p>
+          <p className="text-xs text-midnight/70 mb-4">Try searching for words like &quot;scam&quot;, &quot;fire&quot;, &quot;accident&quot;, or &quot;snake&quot;.</p>
           <button
             onClick={() => {
               setSearchQuery('');

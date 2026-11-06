@@ -223,7 +223,7 @@ export const ScenarioDetailView: React.FC<ScenarioDetailViewProps> = ({
             <strong>{t.scenarioView.verifiedSource}:</strong> {scenario.source.name}
           </span>
         </div>
-        <div className="flex items-center space-x-3 text-midnight/60">
+        <div className="flex items-center space-x-3 text-midnight/70">
           <span>{t.scenarioView.lastReviewed}: <strong>{scenario.source.lastReviewed}</strong></span>
           {scenario.source.url && (
             <a

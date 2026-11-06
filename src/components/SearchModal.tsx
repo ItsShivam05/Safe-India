@@ -6,9 +6,11 @@ import { awarenessGuides } from '../data/awareness';
 import { officialResources } from '../data/resources';
 import { translations } from '../data/locales';
 import { Search, X, ShieldAlert, BookOpen, MapPin, ChevronRight } from 'lucide-react';
+import { useDialogFocus } from '../hooks/useDialogFocus';
 
 interface SearchModalProps {
   isOpen: boolean;
+  onOpen: () => void;
   onClose: () => void;
   onSelectScenario: (scenario: EmergencyScenario) => void;
   onSelectCategory: (tab: string) => void;
@@ -16,18 +18,21 @@ interface SearchModalProps {
 
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
+  onOpen,
   onClose,
   onSelectScenario,
   onSelectCategory,
 }) => {
   const [query, setQuery] = useState('');
   const t = translations.en;
+  const dialogRef = useDialogFocus<HTMLDivElement>(isOpen);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         if (isOpen) onClose();
+        else onOpen();
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -35,7 +40,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -91,11 +96,18 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       <div className="fixed inset-0" onClick={onClose} />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-lavender/60 z-10 flex flex-col max-h-[85vh]">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t.searchModal.placeholder}
+        tabIndex={-1}
+        className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-lavender/60 z-10 flex flex-col max-h-[85vh]"
+      >
         
         {/* Search Input Bar */}
         <div className="p-4 border-b border-lavender/40 flex items-center space-x-3 bg-ivory-50">
-          <Search className="w-5 h-5 text-midnight/40 shrink-0" />
+          <Search className="w-5 h-5 text-midnight/70 shrink-0" />
           <input
             type="text"
             autoFocus
@@ -106,7 +118,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           />
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-midnight/40 hover:text-midnight hover:bg-lavender/30"
+            className="p-1.5 rounded-lg text-midnight/70 hover:text-midnight hover:bg-lavender/30"
             aria-label="Close search"
           >
             <X className="w-5 h-5" />
@@ -116,7 +128,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         {/* Quick Filter Chips (When query is empty) */}
         {!query && (
           <div className="p-6 overflow-y-auto">
-            <span className="text-xs font-bold text-midnight/50 uppercase tracking-wider block mb-3">
+            <span className="text-xs font-bold text-midnight/70 uppercase tracking-wider block mb-3">
               {t.searchModal.quickFilter}
             </span>
             <div className="flex flex-wrap gap-2">
@@ -164,21 +176,26 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   {matchedScenarios.map((sc) => (
                     <div
                       key={sc.id}
-                      onClick={() => {
-                        onClose();
-                        onSelectScenario(sc);
-                      }}
-                      className="p-3.5 rounded-2xl bg-emergency-50/40 hover:bg-emergency-50 border border-emergency-200 cursor-pointer transition-colors flex items-center justify-between group"
+                      className="relative p-3.5 rounded-2xl bg-emergency-50/40 hover:bg-emergency-50 border border-emergency-200 cursor-pointer transition-colors flex items-center justify-between group"
                     >
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-emergency bg-white px-2 py-0.5 rounded border border-emergency-200">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emergency bg-white px-2 py-0.5 rounded border border-emergency-200">
                           Emergency → {sc.categoryLabel.en}
                         </span>
                         <h4 className="font-bold text-midnight text-sm sm:text-base mt-1">
-                          {sc.title.en}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onClose();
+                              onSelectScenario(sc);
+                            }}
+                            className="text-left font-bold after:absolute after:inset-0 after:rounded-2xl"
+                          >
+                            {sc.title.en}
+                          </button>
                         </h4>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-midnight/40 group-hover:text-emergency group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="w-5 h-5 text-midnight/70 group-hover:text-emergency group-hover:translate-x-1 transition-all" />
                     </div>
                   ))}
                 </div>
@@ -196,21 +213,26 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   {matchedAwareness.map((ag) => (
                     <div
                       key={ag.id}
-                      onClick={() => {
-                        onClose();
-                        onSelectCategory('awareness');
-                      }}
-                      className="p-3.5 rounded-2xl bg-lavender/25 hover:bg-lavender/40 border border-lavender/60 cursor-pointer transition-colors flex items-center justify-between group"
+                      className="relative p-3.5 rounded-2xl bg-lavender/25 hover:bg-lavender/40 border border-lavender/60 cursor-pointer transition-colors flex items-center justify-between group"
                     >
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-plum bg-white px-2 py-0.5 rounded border border-lavender">
+                        <span className="text-xs font-bold uppercase tracking-wider text-plum bg-white px-2 py-0.5 rounded border border-lavender">
                           Awareness → {ag.categoryLabel.en}
                         </span>
                         <h4 className="font-bold text-midnight text-sm mt-1">
-                          {ag.title.en}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onClose();
+                              onSelectCategory('awareness');
+                            }}
+                            className="text-left font-bold after:absolute after:inset-0 after:rounded-2xl"
+                          >
+                            {ag.title.en}
+                          </button>
                         </h4>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-midnight/40 group-hover:text-plum group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="w-5 h-5 text-midnight/70 group-hover:text-plum group-hover:translate-x-1 transition-all" />
                     </div>
                   ))}
                 </div>
@@ -228,21 +250,26 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   {matchedResources.map((res) => (
                     <div
                       key={res.id}
-                      onClick={() => {
-                        onClose();
-                        onSelectCategory('resources');
-                      }}
-                      className="p-3.5 rounded-2xl bg-sage/20 hover:bg-sage/35 border border-sage/50 cursor-pointer transition-colors flex items-center justify-between group"
+                      className="relative p-3.5 rounded-2xl bg-sage/20 hover:bg-sage/35 border border-sage/50 cursor-pointer transition-colors flex items-center justify-between group"
                     >
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-midnight bg-white px-2 py-0.5 rounded border border-sage">
+                        <span className="text-xs font-bold uppercase tracking-wider text-midnight bg-white px-2 py-0.5 rounded border border-sage">
                           Directory → {res.categoryLabel.en}
                         </span>
                         <h4 className="font-bold text-midnight text-sm mt-1">
-                          {res.name.en} ({res.phone})
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onClose();
+                              onSelectCategory('resources');
+                            }}
+                            className="text-left font-bold after:absolute after:inset-0 after:rounded-2xl"
+                          >
+                            {res.name.en} ({res.phone})
+                          </button>
                         </h4>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-midnight/40 group-hover:text-midnight group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="w-5 h-5 text-midnight/70 group-hover:text-midnight group-hover:translate-x-1 transition-all" />
                     </div>
                   ))}
                 </div>
@@ -251,7 +278,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
             {/* No Results state */}
             {!hasAnyResults && (
-              <div className="py-12 text-center text-midnight/60 text-sm">
+              <div className="py-12 text-center text-midnight/70 text-sm">
                 {t.searchModal.noResults}
               </div>
             )}
@@ -260,7 +287,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         )}
 
         {/* Footer info */}
-        <div className="p-3 bg-ivory border-t border-lavender/40 text-right text-[11px] text-midnight/50 font-medium">
+        <div className="p-3 bg-ivory border-t border-lavender/40 text-right text-xs text-midnight/70 font-medium">
           Press <kbd className="bg-white border border-lavender text-midnight px-1.5 py-0.5 rounded">ESC</kbd> to close
         </div>
       </div>

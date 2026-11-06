@@ -12,11 +12,11 @@ export const EmergencyBanner: React.FC = () => {
         {/* Left: Info */}
         <div className="flex items-start space-x-3.5">
           <div className="p-3 bg-white/10 rounded-2xl shrink-0 mt-0.5 border border-white/20">
-            <ShieldAlert className="w-6 h-6 text-white animate-pulse" />
+            <ShieldAlert className="w-6 h-6 text-white" />
           </div>
           <div>
             <div className="inline-flex items-center space-x-2 text-xs font-black uppercase tracking-wider text-white bg-white/20 px-2.5 py-0.5 rounded-full mb-1">
-              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-white" />
               <span>{t.nearMe.call112Title}</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -25,7 +25,7 @@ export const EmergencyBanner: React.FC = () => {
             <p className="mt-1 text-xs sm:text-sm text-white/90 max-w-xl font-medium leading-relaxed">
               {t.nearMe.call112Sub}
             </p>
-            <div className="mt-2 flex items-center space-x-2 text-[11px] text-white/80">
+            <div className="mt-2 flex items-center space-x-2 text-xs text-white/80">
               <span>{t.nearMe.call112Source}</span>
               <a
                 href="https://112.gov.in"

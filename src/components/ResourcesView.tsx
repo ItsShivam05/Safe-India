@@ -85,7 +85,7 @@ export const ResourcesView: React.FC = () => {
           >
             <span className="text-xs font-bold text-white/90 uppercase">National Emergency</span>
             <span className="text-2xl font-black text-white mt-0.5 group-hover:scale-105 transition-transform">112</span>
-            <span className="text-[10px] text-white/80">Police / Fire / Ambulance</span>
+            <span className="text-xs text-white/80">Police / Fire / Ambulance</span>
           </a>
 
           <a
@@ -94,7 +94,7 @@ export const ResourcesView: React.FC = () => {
           >
             <span className="text-xs font-bold text-lavender uppercase">Cyber Crime Fraud</span>
             <span className="text-2xl font-black text-white mt-0.5 group-hover:scale-105 transition-transform">1930</span>
-            <span className="text-[10px] text-ivory/70">Fund Freeze / Scams</span>
+            <span className="text-xs text-ivory/70">Fund Freeze / Scams</span>
           </a>
 
           <a
@@ -103,7 +103,7 @@ export const ResourcesView: React.FC = () => {
           >
             <span className="text-xs font-bold text-sage uppercase">Medical Ambulance</span>
             <span className="text-2xl font-black text-white mt-0.5 group-hover:scale-105 transition-transform">108</span>
-            <span className="text-[10px] text-ivory/70">Free Ambulance 24/7</span>
+            <span className="text-xs text-ivory/70">Free Ambulance 24/7</span>
           </a>
 
           <a
@@ -112,7 +112,7 @@ export const ResourcesView: React.FC = () => {
           >
             <span className="text-xs font-bold text-lavender uppercase">Women Helpline</span>
             <span className="text-2xl font-black text-white mt-0.5 group-hover:scale-105 transition-transform">1091</span>
-            <span className="text-[10px] text-ivory/70">24/7 Women Distress</span>
+            <span className="text-xs text-ivory/70">24/7 Women Distress</span>
           </a>
         </div>
       </div>
@@ -120,7 +120,7 @@ export const ResourcesView: React.FC = () => {
       {/* Search & Category Filter */}
       <div className="mb-8 space-y-4">
         <div className="max-w-xl mx-auto relative">
-          <Search className="w-5 h-5 text-midnight/40 absolute left-4 top-1/2 -translate-y-1/2" />
+          <Search className="w-5 h-5 text-midnight/70 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
@@ -175,7 +175,7 @@ export const ResourcesView: React.FC = () => {
 
               {/* Purpose */}
               <div className="mt-3 text-sm text-midnight/80 font-normal leading-relaxed">
-                <strong className="text-midnight block text-xs uppercase text-midnight/50 font-bold mb-0.5">
+                <strong className="text-midnight block text-xs uppercase text-midnight/70 font-bold mb-0.5">
                   {t.resourcesSection.forWhat}:
                 </strong>
                 <span>{res.purpose.en}</span>
@@ -232,7 +232,7 @@ export const ResourcesView: React.FC = () => {
               </div>
 
               {/* Source & Last Verified Date */}
-              <div className="flex items-center justify-between text-[11px] text-midnight/60 font-medium">
+              <div className="flex items-center justify-between text-xs text-midnight/70 font-medium">
                 <span className="flex items-center space-x-1 truncate">
                   <ShieldCheck className="w-3.5 h-3.5 text-sage-600 shrink-0" />
                   <span className="truncate">Source: {res.source}</span>

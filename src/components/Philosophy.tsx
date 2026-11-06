@@ -32,7 +32,7 @@ export const Philosophy: React.FC = () => {
               <div className="w-12 h-12 rounded-2xl bg-lavender/40 text-plum flex items-center justify-center font-bold text-xl mb-4 border border-lavender">
                 <ShieldCheck className="w-6 h-6 text-plum" />
               </div>
-              <span className="text-[11px] font-bold text-plum uppercase tracking-wider block mb-1">Phase 1</span>
+              <span className="text-xs font-bold text-plum uppercase tracking-wider block mb-1">Phase 1</span>
               <h3 className="text-xl font-bold text-midnight mb-2">
                 {t.philosophy.before} → Prepare
               </h3>
@@ -54,14 +54,14 @@ export const Philosophy: React.FC = () => {
 
           {/* Pillar 2: During */}
           <div className="bg-white border-2 border-emergency/40 rounded-3xl p-6 sm:p-7 shadow-xs hover:border-emergency transition-all duration-200 relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 right-0 bg-emergency text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-bl-xl">
+            <div className="absolute top-0 right-0 bg-emergency text-white text-xs font-extrabold uppercase px-3 py-1 rounded-bl-xl">
               Critical
             </div>
             <div>
               <div className="w-12 h-12 rounded-2xl bg-emergency-50 text-emergency flex items-center justify-center font-bold text-xl mb-4 border border-emergency-200">
                 <Zap className="w-6 h-6 text-emergency" />
               </div>
-              <span className="text-[11px] font-bold text-emergency uppercase tracking-wider block mb-1">Phase 2</span>
+              <span className="text-xs font-bold text-emergency uppercase tracking-wider block mb-1">Phase 2</span>
               <h3 className="text-xl font-bold text-midnight mb-2">
                 {t.philosophy.during} → Act
               </h3>
@@ -87,7 +87,7 @@ export const Philosophy: React.FC = () => {
               <div className="w-12 h-12 rounded-2xl bg-sage/30 text-midnight flex items-center justify-center font-bold text-xl mb-4 border border-sage">
                 <RefreshCw className="w-6 h-6 text-sage-700" />
               </div>
-              <span className="text-[11px] font-bold text-sage-700 uppercase tracking-wider block mb-1">Phase 3</span>
+              <span className="text-xs font-bold text-sage-700 uppercase tracking-wider block mb-1">Phase 3</span>
               <h3 className="text-xl font-bold text-midnight mb-2">
                 {t.philosophy.after} → Recover
               </h3>
@@ -131,7 +131,7 @@ export const Philosophy: React.FC = () => {
                 <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">Calling 112 for Others</span>
               </div>
             </div>
-            <div className="lg:col-span-7 order-1 lg:order-2 h-64 sm:h-80 lg:h-96 relative overflow-hidden bg-midnight">
+            <div className="lg:col-span-7 order-1 lg:order-2 h-44 sm:h-64 lg:h-80 relative overflow-hidden bg-midnight">
               <img
                 src="/illustrations/community_support.jpg"
                 alt="Cinematic 2D anime illustration of supportive Indian community members, students, and elders in an illuminated public park boulevard"
@@ -144,7 +144,7 @@ export const Philosophy: React.FC = () => {
 
           {/* Story 2: Emergency Preparedness & First-Aid Knowledge */}
           <div className="bg-white rounded-3xl border border-lavender/50 overflow-hidden shadow-xs grid grid-cols-1 lg:grid-cols-12 items-center">
-            <div className="lg:col-span-7 h-64 sm:h-80 lg:h-96 relative overflow-hidden bg-midnight">
+            <div className="lg:col-span-7 h-44 sm:h-64 lg:h-80 relative overflow-hidden bg-midnight">
               <img
                 src="/illustrations/safety_preparedness.jpg"
                 alt="Cinematic 2D anime illustration of an Indian woman safety instructor demonstrating emergency first-aid bandages and preparedness in a sunlit training hall"
@@ -191,7 +191,7 @@ export const Philosophy: React.FC = () => {
                 <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">108 Ambulance</span>
               </div>
             </div>
-            <div className="lg:col-span-7 order-1 lg:order-2 h-64 sm:h-80 lg:h-96 relative overflow-hidden bg-midnight">
+            <div className="lg:col-span-7 order-1 lg:order-2 h-44 sm:h-64 lg:h-80 relative overflow-hidden bg-midnight">
               <img
                 src="/illustrations/emergency_responders.jpg"
                 alt="Cinematic 2D anime illustration of Indian emergency responders including a woman doctor, police officer, and firefighter ready with rescue vehicles"

@@ -1,6 +1,21 @@
 import React from 'react';
 import { translations } from '../data/locales';
-import { Zap, Lock, HeartHandshake, Award } from 'lucide-react';
+import { emergencyScenarios } from '../data/emergencies';
+import { awarenessGuides } from '../data/awareness';
+import type { VerifiedSource } from '../types';
+import { Zap, Lock, HeartHandshake, Award, ExternalLink, ShieldCheck, Accessibility } from 'lucide-react';
+
+// One entry per authority, keeping a link if any guide provides one.
+const citedSources = [...emergencyScenarios, ...awarenessGuides]
+  .map((guide) => guide.source)
+  .reduce<VerifiedSource[]>((sources, source) => {
+    const existing = sources.find((s) => s.name === source.name);
+    if (!existing) return [...sources, source];
+    if (!existing.url && source.url) existing.url = source.url;
+    return sources;
+  }, [])
+  .map((source) => ({ name: source.name, url: source.url }))
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 export const AboutView: React.FC = () => {
   const t = translations.en;
@@ -84,6 +99,60 @@ export const AboutView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Official Sources */}
+      <section id="sources" className="bg-white rounded-3xl border border-lavender/60 p-6 sm:p-8 shadow-xs mb-6 scroll-mt-28">
+        <h2 className="text-xl font-black text-midnight mb-2 flex items-center space-x-2">
+          <ShieldCheck className="w-5 h-5 text-sage-700 shrink-0" />
+          <span>{t.aboutPage.sourcesTitle}</span>
+        </h2>
+        <p className="text-sm text-midnight/80 mb-4">{t.aboutPage.sourcesIntro}</p>
+        <ul className="space-y-2 text-sm text-midnight/90">
+          {citedSources.map((source) => (
+            <li key={source.name}>
+              {source.url ? (
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-1.5 text-plum font-semibold hover:underline"
+                >
+                  <span>{source.name}</span>
+                  <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                </a>
+              ) : (
+                <span>{source.name}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Privacy */}
+      <section id="privacy" className="bg-white rounded-3xl border border-lavender/60 p-6 sm:p-8 shadow-xs mb-6 scroll-mt-28">
+        <h2 className="text-xl font-black text-midnight mb-3 flex items-center space-x-2">
+          <Lock className="w-5 h-5 text-plum shrink-0" />
+          <span>{t.aboutPage.privacyTitle}</span>
+        </h2>
+        <ul className="list-disc pl-5 space-y-2 text-sm text-midnight/90">
+          {t.aboutPage.privacyPoints.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Accessibility */}
+      <section id="accessibility" className="bg-white rounded-3xl border border-lavender/60 p-6 sm:p-8 shadow-xs mb-10 scroll-mt-28">
+        <h2 className="text-xl font-black text-midnight mb-3 flex items-center space-x-2">
+          <Accessibility className="w-5 h-5 text-plum shrink-0" />
+          <span>{t.aboutPage.accessibilityTitle}</span>
+        </h2>
+        <ul className="list-disc pl-5 space-y-2 text-sm text-midnight/90">
+          {t.aboutPage.accessibilityPoints.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+      </section>
 
       {/* Disclaimer Box */}
       <div className="bg-lavender/25 border border-lavender rounded-3xl p-6 flex items-start space-x-4">
