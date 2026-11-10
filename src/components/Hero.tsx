@@ -41,7 +41,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch, onSelectSc
 
             {/* Editorial Headline */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-midnight leading-tight">
-              Clear steps, verified help, and calm guidance when minutes matter.
+              Clear steps and quick ways to get help when minutes matter.
             </h1>
 
             {/* Emergency Tiles: one tap to the right steps */}
@@ -126,7 +126,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenSearch, onSelectSc
             <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-midnight/70 pt-1">
               <span className="flex items-center space-x-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-sage-600" />
-                <span>Clear, official guidance</span>
+                <span>Guides cite official sources</span>
               </span>
               <span className="flex items-center space-x-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-sage-600" />

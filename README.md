@@ -35,7 +35,7 @@ During accidents, cyber scams, medical emergencies, or unsafe transit situations
 
 > **"Something has happened. What should I do right now?"**
 
-**SafeIndia** is an open-access public-safety companion built specifically for India. It operates entirely in your browser with **zero logins, zero background tracking, and zero data harvesting**. It pairs verified life-saving protocols with live spatial discovery of nearby police outposts, hospitals, and fire stations across the nation.
+**SafeIndia** is an open-access public-safety companion built specifically for India. It operates entirely in your browser with **zero logins, zero background tracking, and zero data harvesting**. It pairs step-by-step safety guides with live spatial discovery of nearby police outposts, hospitals, and fire stations across the nation.
 
 ---
 
@@ -235,6 +235,23 @@ npm run preview
 
 > [!TIP]
 > SafeIndia does not require any environment variables or API keys. All map tiles, geocoding queries, and spatial discovery endpoints work out of the box using public OpenStreetMap services.
+
+---
+
+## Testing
+
+Every build checks the guide and helpline data first (phone numbers, links, missing translations) and stops if anything is wrong, so a broken guide can't be deployed.
+
+The browser tests check the built site the way Vercel serves it, including its security settings:
+
+```bash
+npx playwright install chromium   # once, downloads a test browser
+npm test                           # builds the site, then runs every test
+```
+
+If Google Chrome is installed, you can skip the download and run `PW_CHANNEL=chrome npm test` instead (in PowerShell: `$env:PW_CHANNEL="chrome"; npm test`).
+
+The same checks run on GitHub for every push (see `.github/workflows/ci.yml`).
 
 ---
 

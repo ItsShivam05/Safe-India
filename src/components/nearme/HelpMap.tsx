@@ -75,7 +75,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
   const createUserLocationIcon = () => {
     const html = `
       <div class="relative flex items-center justify-center w-8 h-8">
-        <span class="absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-60 animate-ping"></span>
+        <span class="absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-60 animate-ping pointer-events-none"></span>
         <span class="relative inline-flex rounded-full h-5 w-5 bg-blue-600 border-2 border-white shadow-xl items-center justify-center">
           <span class="h-2 w-2 rounded-full bg-white"></span>
         </span>
@@ -170,7 +170,8 @@ export const HelpMap: React.FC<HelpMapProps> = ({
 
     const userMarker = L.marker([userLocation.lat, userLocation.lon], {
       icon: createUserLocationIcon(),
-      zIndexOffset: 1000,
+      // Below the facility markers, so a station right next to you can still be tapped
+      zIndexOffset: 50,
     }).addTo(map);
 
     const userLabel = userLocation.name || 'Your Location';

@@ -3,6 +3,7 @@ import { translations } from '../data/locales';
 import { emergencyScenarios } from '../data/emergencies';
 import { awarenessGuides } from '../data/awareness';
 import type { VerifiedSource } from '../types';
+import { reportMistakeUrl, TAB_PATHS } from '../data/site';
 import { Zap, Lock, HeartHandshake, Award, ExternalLink, ShieldCheck, Accessibility } from 'lucide-react';
 
 // One entry per authority, keeping a link if any guide provides one.
@@ -106,7 +107,18 @@ export const AboutView: React.FC = () => {
           <ShieldCheck className="w-5 h-5 text-sage-700 shrink-0" />
           <span>{t.aboutPage.sourcesTitle}</span>
         </h2>
-        <p className="text-sm text-midnight/80 mb-4">{t.aboutPage.sourcesIntro}</p>
+        <p className="text-sm text-midnight/80 mb-4">
+          {t.aboutPage.sourcesIntro}{' '}
+          <a
+            href={reportMistakeUrl('About page', TAB_PATHS.about)}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={t.scenarioView.reportMistakeNote}
+            className="text-plum font-semibold hover:underline"
+          >
+            {t.scenarioView.reportMistake}
+          </a>
+        </p>
         <ul className="space-y-2 text-sm text-midnight/90">
           {citedSources.map((source) => (
             <li key={source.name}>

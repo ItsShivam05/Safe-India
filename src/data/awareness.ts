@@ -79,7 +79,7 @@ export const awarenessGuides: AwarenessGuide[] = [
         "Remember: UPI PIN is required ONLY to SEND money, never to RECEIVE money.",
         "Enable Two-Factor Authentication (2FA) on WhatsApp, Gmail, and social media.",
         "Verify unknown calls offering work-from-home or part-time Telegram review jobs.",
-        "Report suspicious SMS or phishing links to 1906 / Chakshu portal (sancharsaathi.gov.in)."
+        "Report suspicious calls, SMS or WhatsApp messages on the Chakshu portal (sancharsaathi.gov.in). If you have already lost money, call 1930 immediately."
       ],
       hi: [
         "याद रखें: UPI PIN केवल पैसे भेजने के लिए चाहिए होता है, पैसे प्राप्त (Receive) करने के लिए नहीं!",
@@ -197,13 +197,13 @@ export const awarenessGuides: AwarenessGuide[] = [
       en: [
         "During Earthquake: Drop, Cover, and Hold On! Take cover under a sturdy desk or table.",
         "If outdoors during quake: Move away from buildings, streetlights, overhead power lines, and bridges.",
-        "During Flood: Move to higher ground immediately; turn off main gas line and electrical breaker.",
+        "During Flood: Move to higher ground immediately. Switch off the main electricity and gas only if you can reach them safely without touching water.",
         "Prepare a Go-Bag with 3 days of non-perishable food, water, ID copies, medicine, and torch."
       ],
       hi: [
         "भूकंप के दौरान: झुको, ढको और पकड़ो (Drop, Cover, Hold On)! मजबूत मेज़ के नीचे शरण लें।",
         "यदि भूकंप के समय बाहर हैं: इमारतों, बिजली के खंभों और ओवरब्रिज से दूर खुले मैदान में जाएं।",
-        "बाढ़ की स्थिति में: तुरंत ऊंचे स्थानों पर जाएं; घर का मेन बिजली बोर्ड और गैस बंद कर दें।",
+        "बाढ़ की स्थिति में: तुरंत ऊंचे स्थानों पर जाएं। मेन बिजली और गैस तभी बंद करें जब आप पानी को छुए बिना सुरक्षित रूप से वहां पहुंच सकें।",
         "एक 'गो-बैग' तैयार रखें जिसमें 3 दिन का सूखा राशन, पानी, टॉर्च, फर्स्ट एड और पहचान पत्र हों।"
       ]
     },

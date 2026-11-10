@@ -5,6 +5,14 @@ export const SITE_URL = 'https://safe-india.vercel.app';
 export const SITE_NAME = 'SafeIndia';
 export const OG_IMAGE_PATH = '/og-image.jpg';
 
+// Where readers report mistakes. Swap for a Google Form link to let people report without a GitHub account.
+const REPORT_MISTAKE_BASE = 'https://github.com/ItsShivam05/Safe-India/issues/new';
+
+export const reportMistakeUrl = (pageTitle: string, path: string) =>
+  `${REPORT_MISTAKE_BASE}?title=${encodeURIComponent(`Mistake in: ${pageTitle}`)}&body=${encodeURIComponent(
+    `Page: ${SITE_URL}${path}\n\nWhat is wrong:\n\nWhat it should say (and a source, if you have one):\n`
+  )}`;
+
 const DEFAULT_TITLE = 'SafeIndia — Know what to do when it matters.';
 const DEFAULT_DESCRIPTION =
   'Practical emergency guidance, safety awareness and official helplines for everyone in India. Step-by-step help when it matters.';

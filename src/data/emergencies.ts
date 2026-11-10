@@ -349,7 +349,7 @@ export const emergencyScenarios: EmergencyScenario[] = [
     },
     doNow: {
       en: [
-        "Close the LPG cylinder main regulator valve immediately (turn knob clockwise).",
+        "Turn the LPG regulator knob to the OFF position immediately.",
         "Open all windows and doors fully to disperse gas concentration.",
         "Call LPG Emergency Helpline 1906 from OUTSIDE your home.",
         "Evacuate all members and pets outside to open air."
@@ -406,8 +406,8 @@ export const emergencyScenarios: EmergencyScenario[] = [
     urgency: "critical",
     immediateCallNumber: "112",
     immediateActionText: {
-      en: "Protection under Good Samaritan Law! Call 112 & 108 immediately.",
-      hi: "गुड सेमारेटन कानून के तहत मदद करने वाले को सुरक्षा! 112 और 108 पर कॉल करें।"
+      en: "Call 112 or 108 immediately. The law protects you when you help (Good Samaritan law).",
+      hi: "तुरंत 112 या 108 पर कॉल करें। मदद करने वाले को कानून (गुड सेमारेटन कानून) सुरक्षा देता है।"
     },
     doNow: {
       en: [
@@ -421,6 +421,7 @@ export const emergencyScenarios: EmergencyScenario[] = [
         "अपनी गाड़ी सुरक्षित खड़ी करके हैज़र्ड लाइट (इंडिकेटर) चालू करें ताकि पीछे से गाड़ियां न टकराएं।",
         "112 (पुलिस) और 108 (एम्बुलेंस) पर तुरंत कॉल करके सही सड़क या हाईवे का लैंडमार्क दें।",
         "जांचें कि घायल होश में हैं या नहीं। रीढ़ या गर्दन की चोट वाले व्यक्ति को बिना एम्बुलेंस के न हिलाएं (जब तक आग का खतरा न हो)।",
+        "हल्का खून बह रहा हो तो साफ़ कपड़े से दबाकर रखें। एम्बुलेंस आने तक घायल को शांत रखें।",
         "सुप्रीम कोर्ट के 'गुड सेमारेटन' नियम के अनुसार मदद करने वाले नागरिक से पुलिस कोई बेवजह पूछताछ नहीं कर सकती।"
       ]
     },

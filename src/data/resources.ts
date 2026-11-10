@@ -1,4 +1,4 @@
-import type { OfficialResource } from '../types';
+import type { OfficialResource } from '../types/index.ts';
 
 
 export const officialResources: OfficialResource[] = [

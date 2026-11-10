@@ -1,7 +1,7 @@
 import React from 'react';
 import type { EmergencyScenario } from '../types';
 import { translations } from '../data/locales';
-import { absoluteUrl, scenarioPath } from '../data/site';
+import { absoluteUrl, reportMistakeUrl, scenarioPath } from '../data/site';
 import { buildScenarioShareMessage } from '../services/shareService';
 import { ShareButtons } from './ShareButtons';
 import {
@@ -222,8 +222,17 @@ export const ScenarioDetailView: React.FC<ScenarioDetailViewProps> = ({
             <strong>{t.scenarioView.verifiedSource}:</strong> {scenario.source.name}
           </span>
         </div>
-        <div className="flex items-center space-x-3 text-midnight/70">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-midnight/70">
           <span>{t.scenarioView.lastReviewed}: <strong>{scenario.source.lastReviewed}</strong></span>
+          <a
+            href={reportMistakeUrl(scenario.title.en, scenarioPath(scenario.id))}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={t.scenarioView.reportMistakeNote}
+            className="inline-flex items-center space-x-1 text-plum hover:underline font-semibold"
+          >
+            <span>{t.scenarioView.reportMistake}</span>
+          </a>
           {scenario.source.url && (
             <a
               href={scenario.source.url}

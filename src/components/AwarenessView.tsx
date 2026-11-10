@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { awarenessGuides } from '../data/awareness';
 import { translations } from '../data/locales';
-import { absoluteUrl, awarenessPath } from '../data/site';
+import { absoluteUrl, awarenessPath, reportMistakeUrl } from '../data/site';
 import { buildAwarenessShareMessage } from '../services/shareService';
 import { ShareButtons } from './ShareButtons';
 import {
@@ -223,9 +223,18 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
                   </div>
 
                   {/* Footer Source */}
-                  <div className="md:col-span-2 text-xs text-midnight/70 flex items-center space-x-2 pt-2">
+                  <div className="md:col-span-2 text-xs text-midnight/70 flex flex-wrap items-center gap-2 pt-2">
                     <ShieldCheck className="w-4 h-4 text-sage-600" />
-                    <span>Official Source: <strong>{guide.source.name}</strong> (Reviewed {guide.source.lastReviewed})</span>
+                    <span>{t.scenarioView.verifiedSource}: <strong>{guide.source.name}</strong> ({t.scenarioView.lastReviewed} {guide.source.lastReviewed})</span>
+                    <a
+                      href={reportMistakeUrl(guide.title.en, awarenessPath(guide.id))}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={t.scenarioView.reportMistakeNote}
+                      className="text-plum hover:underline font-semibold"
+                    >
+                      {t.scenarioView.reportMistake}
+                    </a>
                   </div>
 
                 </div>
