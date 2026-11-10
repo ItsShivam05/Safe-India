@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, Cross, Flame, Layers } from 'lucide-react';
 import type { FacilityCategory } from '../../types';
-import { translations } from '../../data/locales';
+import { useLanguage } from '../../i18n/language';
 
 interface ResourceFiltersProps {
   activeCategory: FacilityCategory | 'all';
@@ -25,7 +25,7 @@ export const ResourceFilters: React.FC<ResourceFiltersProps> = ({
   onRadiusChange,
   disabled = false,
 }) => {
-  const t = translations.en;
+  const { t } = useLanguage();
 
   const filterTabs: Array<{
     id: FacilityCategory | 'all';

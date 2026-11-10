@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { ShieldCheck } from 'lucide-react';
 
 interface FooterProps {
@@ -11,7 +11,7 @@ interface FooterProps {
 const CURRENT_YEAR = new Date().getFullYear();
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-  const t = translations.en;
+  const { t } = useLanguage();
 
   return (
     <footer className="bg-midnight text-ivory border-t border-lavender/25 pt-12 pb-8 mt-auto">
@@ -35,11 +35,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <button
               onClick={() => onNavigate('home')}
               className="flex items-center space-x-3.5 mb-3 focus:outline-none group text-left"
-              aria-label="SafeIndia — Know what to do when it matters"
+              aria-label={t.nav.logoLabel}
             >
               <img
                 src="/images/safeindia-emblem.png"
-                alt="SafeIndia — Know what to do when it matters"
+                alt=""
                 className="h-12 w-12 object-contain shrink-0 group-hover:scale-105 transition-transform duration-200"
               />
               <div>
@@ -59,7 +59,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Core Links */}
           <div>
             <h3 className="text-xs font-black uppercase tracking-wider text-lavender mb-4">
-              Core Platform
+              {t.footer.corePlatform}
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-sm font-semibold text-ivory/80">
               <li>
@@ -93,7 +93,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Information Links */}
           <div>
             <h3 className="text-xs font-black uppercase tracking-wider text-lavender mb-4">
-              Information & Trust
+              {t.footer.infoTrust}
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-sm text-ivory/80 font-semibold">
               <li>
@@ -120,7 +120,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-ivory/60 gap-2">
           <p>© {CURRENT_YEAR} SafeIndia. {t.footer.rights}</p>
           <div className="flex items-center space-x-4 text-ivory/60">
-            <span>No Login Needed • No Tracking • Free & Open to All</span>
+            <span>{t.footer.bottomLine}</span>
           </div>
         </div>
 

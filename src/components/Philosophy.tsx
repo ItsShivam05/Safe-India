@@ -1,9 +1,9 @@
 import React from 'react';
 import { ShieldCheck, Zap, RefreshCw, CheckCircle2, HeartHandshake, BookOpenCheck, ShieldAlert } from 'lucide-react';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 
 export const Philosophy: React.FC = () => {
-  const t = translations.en;
+  const { t } = useLanguage();
 
   return (
     <section className="py-12 md:py-16 bg-ivory text-midnight border-b border-lavender/30">
@@ -12,14 +12,14 @@ export const Philosophy: React.FC = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
           <span className="text-xs font-black uppercase tracking-widest text-plum bg-lavender/30 px-3.5 py-1 rounded-full border border-lavender">
-            Our Safety Approach
+            {t.philosophy.badge}
           </span>
           <h2 className="mt-3 text-2xl sm:text-4xl font-black text-midnight tracking-tight">
             {t.philosophy.title}
           </h2>
           <p className="mt-2 text-midnight/70 text-sm sm:text-base">
-            Structured around one question:{' '}
-            <strong className="text-midnight">&quot;Something has happened. What should I do now?&quot;</strong>
+            {t.philosophy.structuredAround}{' '}
+            <strong className="text-midnight">{t.philosophy.question}</strong>
           </p>
         </div>
 
@@ -32,9 +32,9 @@ export const Philosophy: React.FC = () => {
               <div className="w-12 h-12 rounded-2xl bg-lavender/40 text-plum flex items-center justify-center font-bold text-xl mb-4 border border-lavender">
                 <ShieldCheck className="w-6 h-6 text-plum" />
               </div>
-              <span className="text-xs font-bold text-plum uppercase tracking-wider block mb-1">Phase 1</span>
+              <span className="text-xs font-bold text-plum uppercase tracking-wider block mb-1">{t.philosophy.phase1}</span>
               <h3 className="text-xl font-bold text-midnight mb-2">
-                {t.philosophy.before} → Prepare
+                {t.philosophy.before} → {t.philosophy.prepare}
               </h3>
               <p className="text-sm text-midnight/75 leading-relaxed">
                 {t.philosophy.beforeDesc}
@@ -43,11 +43,11 @@ export const Philosophy: React.FC = () => {
             <ul className="mt-5 pt-4 border-t border-lavender/30 space-y-2 text-xs text-midnight/80 font-medium">
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-sage-600 shrink-0" />
-                <span>Emergency preparedness checklists</span>
+                <span>{t.philosophy.phase1Points[0]}</span>
               </li>
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-sage-600 shrink-0" />
-                <span>Digital scam awareness guides</span>
+                <span>{t.philosophy.phase1Points[1]}</span>
               </li>
             </ul>
           </div>
@@ -55,15 +55,15 @@ export const Philosophy: React.FC = () => {
           {/* Pillar 2: During */}
           <div className="bg-white border-2 border-emergency/40 rounded-3xl p-6 sm:p-7 shadow-xs hover:border-emergency transition-all duration-200 relative overflow-hidden flex flex-col justify-between">
             <div className="absolute top-0 right-0 bg-emergency text-white text-xs font-extrabold uppercase px-3 py-1 rounded-bl-xl">
-              Critical
+              {t.philosophy.critical}
             </div>
             <div>
               <div className="w-12 h-12 rounded-2xl bg-emergency-50 text-emergency flex items-center justify-center font-bold text-xl mb-4 border border-emergency-200">
                 <Zap className="w-6 h-6 text-emergency" />
               </div>
-              <span className="text-xs font-bold text-emergency uppercase tracking-wider block mb-1">Phase 2</span>
+              <span className="text-xs font-bold text-emergency uppercase tracking-wider block mb-1">{t.philosophy.phase2}</span>
               <h3 className="text-xl font-bold text-midnight mb-2">
-                {t.philosophy.during} → Act
+                {t.philosophy.during} → {t.philosophy.act}
               </h3>
               <p className="text-sm text-midnight/75 leading-relaxed">
                 {t.philosophy.duringDesc}
@@ -72,11 +72,11 @@ export const Philosophy: React.FC = () => {
             <ul className="mt-5 pt-4 border-t border-emergency-100 space-y-2 text-xs text-midnight/80 font-medium">
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-emergency shrink-0" />
-                <span>Numbered immediate DO THIS NOW steps</span>
+                <span>{t.philosophy.phase2Points[0]}</span>
               </li>
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-emergency shrink-0" />
-                <span>High-contrast DON&apos;T warnings</span>
+                <span>{t.philosophy.phase2Points[1]}</span>
               </li>
             </ul>
           </div>
@@ -87,9 +87,9 @@ export const Philosophy: React.FC = () => {
               <div className="w-12 h-12 rounded-2xl bg-sage/30 text-midnight flex items-center justify-center font-bold text-xl mb-4 border border-sage">
                 <RefreshCw className="w-6 h-6 text-sage-700" />
               </div>
-              <span className="text-xs font-bold text-sage-700 uppercase tracking-wider block mb-1">Phase 3</span>
+              <span className="text-xs font-bold text-sage-700 uppercase tracking-wider block mb-1">{t.philosophy.phase3}</span>
               <h3 className="text-xl font-bold text-midnight mb-2">
-                {t.philosophy.after} → Recover
+                {t.philosophy.after} → {t.philosophy.recover}
               </h3>
               <p className="text-sm text-midnight/75 leading-relaxed">
                 {t.philosophy.afterDesc}
@@ -98,11 +98,11 @@ export const Philosophy: React.FC = () => {
             <ul className="mt-5 pt-4 border-t border-sage/40 space-y-2 text-xs text-midnight/80 font-medium">
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-sage-600 shrink-0" />
-                <span>Official government emergency helplines</span>
+                <span>{t.philosophy.phase3Points[0]}</span>
               </li>
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-sage-600 shrink-0" />
-                <span>Legal rights & RBI Zero Liability protection</span>
+                <span>{t.philosophy.phase3Points[1]}</span>
               </li>
             </ul>
           </div>
@@ -117,24 +117,24 @@ export const Philosophy: React.FC = () => {
             <div className="lg:col-span-5 order-2 lg:order-1 p-6 sm:p-8 lg:p-10 space-y-4">
               <div className="inline-flex items-center space-x-2 bg-lavender/30 text-plum px-3 py-1 rounded-full text-xs font-bold">
                 <HeartHandshake className="w-3.5 h-3.5 text-plum" />
-                <span>Bystander Support & Solidarity</span>
+                <span>{t.philosophy.story1Badge}</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-black text-midnight tracking-tight leading-snug">
-                Strong communities keep each other safe before help arrives.
+                {t.philosophy.story1Title}
               </h3>
               <p className="text-sm text-midnight/80 leading-relaxed font-normal">
-                In busy public spaces, markets, and colleges, bystander awareness creates an immediate safety net. Under Indian law (Good Samaritan Protection), bystanders who assist victims in emergencies are legally protected from police detention or civil liability.
+                {t.philosophy.story1Body}
               </p>
               <div className="pt-2 flex flex-wrap gap-2 text-xs font-semibold text-midnight/70">
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">Good Samaritan Guidelines</span>
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">Calm Intervention</span>
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">Calling 112 for Others</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story1Tags[0]}</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story1Tags[1]}</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story1Tags[2]}</span>
               </div>
             </div>
             <div className="lg:col-span-7 order-1 lg:order-2 h-44 sm:h-64 lg:h-80 relative overflow-hidden bg-midnight">
               <img
                 src="/illustrations/community_support.jpg"
-                alt="Cinematic 2D anime illustration of supportive Indian community members, students, and elders in an illuminated public park boulevard"
+                alt={t.philosophy.story1Alt}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -147,7 +147,7 @@ export const Philosophy: React.FC = () => {
             <div className="lg:col-span-7 h-44 sm:h-64 lg:h-80 relative overflow-hidden bg-midnight">
               <img
                 src="/illustrations/safety_preparedness.jpg"
-                alt="Cinematic 2D anime illustration of an Indian woman safety instructor demonstrating emergency first-aid bandages and preparedness in a sunlit training hall"
+                alt={t.philosophy.story2Alt}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -156,18 +156,18 @@ export const Philosophy: React.FC = () => {
             <div className="lg:col-span-5 p-6 sm:p-8 lg:p-10 space-y-4">
               <div className="inline-flex items-center space-x-2 bg-sage/30 text-midnight px-3 py-1 rounded-full text-xs font-bold border border-sage">
                 <BookOpenCheck className="w-3.5 h-3.5 text-sage-700" />
-                <span>First Aid & Preparedness</span>
+                <span>{t.philosophy.story2Badge}</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-black text-midnight tracking-tight leading-snug">
-                Knowledge turns emergency panic into focused, calm action.
+                {t.philosophy.story2Title}
               </h3>
               <p className="text-sm text-midnight/80 leading-relaxed font-normal">
-                From stopping severe bleeding to recognizing cyber fraud and gas leaks, practical preparation gives you the confidence to protect your home, workplace, and family without hesitation.
+                {t.philosophy.story2Body}
               </p>
               <div className="pt-2 flex flex-wrap gap-2 text-xs font-semibold text-midnight/70">
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">CPR & Bleeding Control</span>
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">Fire Evacuation</span>
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">Household Kits</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story2Tags[0]}</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story2Tags[1]}</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story2Tags[2]}</span>
               </div>
             </div>
           </div>
@@ -177,24 +177,24 @@ export const Philosophy: React.FC = () => {
             <div className="lg:col-span-5 order-2 lg:order-1 p-6 sm:p-8 lg:p-10 space-y-4">
               <div className="inline-flex items-center space-x-2 bg-emergency-50 text-emergency px-3 py-1 rounded-full text-xs font-bold border border-emergency-200">
                 <ShieldAlert className="w-3.5 h-3.5 text-emergency" />
-                <span>Civic Emergency Response</span>
+                <span>{t.philosophy.story3Badge}</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-black text-midnight tracking-tight leading-snug">
-                Direct connections to India’s dedicated public emergency services.
+                {t.philosophy.story3Title}
               </h3>
               <p className="text-sm text-midnight/80 leading-relaxed font-normal">
-                SafeIndia connects you directly to 112 National Emergency (Police, Fire, Ambulance), 1930 Cyber Helpline, 108 Medical Ambulance, and 1091 Women Helpline. Knowing who to call and what details to give helps responders reach you quickly.
+                {t.philosophy.story3Body}
               </p>
               <div className="pt-2 flex flex-wrap gap-2 text-xs font-semibold text-midnight/70">
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">112 Single Emergency</span>
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">1930 Cyber Fraud</span>
-                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">108 Ambulance</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story3Tags[0]}</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story3Tags[1]}</span>
+                <span className="bg-ivory px-2.5 py-1 rounded-lg border border-lavender">{t.philosophy.story3Tags[2]}</span>
               </div>
             </div>
             <div className="lg:col-span-7 order-1 lg:order-2 h-44 sm:h-64 lg:h-80 relative overflow-hidden bg-midnight">
               <img
                 src="/illustrations/emergency_responders.jpg"
-                alt="Cinematic 2D anime illustration of Indian emergency responders including a woman doctor, police officer, and firefighter ready with rescue vehicles"
+                alt={t.philosophy.story3Alt}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />

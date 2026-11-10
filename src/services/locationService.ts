@@ -11,9 +11,19 @@ export class GeolocationError extends Error {
 
 /**
  * Requests the user's current GPS location strictly on demand.
- * Never tracks continuously or stores coordinates.
+ * Never tracks continuously or stores coordinates. If a precise fix takes too long
+ * (common indoors), it tries once more with a quicker, less precise reading.
  */
-export function getCurrentLocation(): Promise<LocationCoordinates> {
+export async function getCurrentLocation(): Promise<LocationCoordinates> {
+  try {
+    return await requestPosition(true);
+  } catch (err) {
+    if (err instanceof GeolocationError && err.code === 'TIMEOUT') return requestPosition(false);
+    throw err;
+  }
+}
+
+function requestPosition(highAccuracy: boolean): Promise<LocationCoordinates> {
   return new Promise((resolve, reject) => {
     if (typeof window === 'undefined' || !navigator.geolocation) {
       reject(new GeolocationError('NOT_SUPPORTED', 'Geolocation is not supported by your browser.'));
@@ -26,6 +36,7 @@ export function getCurrentLocation(): Promise<LocationCoordinates> {
           lat: position.coords.latitude,
           lon: position.coords.longitude,
           sourceType: 'gps',
+          accuracyMeters: Math.round(position.coords.accuracy),
         });
       },
       (error) => {
@@ -64,13 +75,23 @@ export function getCurrentLocation(): Promise<LocationCoordinates> {
             break;
         }
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 12000,
-        maximumAge: 0,
-      }
+      highAccuracy
+        ? { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+        : { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
     );
   });
+}
+
+/**
+ * Looks up the nearest street address for a coordinate, so people can read it out to 112.
+ * Returns null if no address is found.
+ */
+export async function reverseGeocode(lat: number, lon: number, language: string): Promise<string | null> {
+  const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1&accept-language=${language}`;
+  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  if (!response.ok) throw new Error(`Address lookup failed with status: ${response.status}`);
+  const data: { display_name?: string } = await response.json();
+  return data.display_name ?? null;
 }
 
 /**

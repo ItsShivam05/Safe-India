@@ -12,6 +12,7 @@ const guides: Array<[string, string]> = [
   ['phone-stolen', 'Phone'],
   ['snake-bite', 'Snake'],
   ['dog-attack', 'Dog'],
+  ['digital-arrest-scam', 'Digital arrest'],
 ];
 const awareness = ['personal-situational-awareness', 'digital-scam-prevention', 'home-fire-gas-safety', 'disaster-kit-earthquake-flood'];
 
@@ -150,7 +151,7 @@ test('search opens the exact awareness guide', async ({ page }) => {
 test('every helpline can be shared on WhatsApp', async ({ page }) => {
   await open(page, '/resources');
   const share = page.getByRole('link', { name: /^Share on WhatsApp:/ });
-  await expect(share).toHaveCount(11);
+  await expect(share).toHaveCount(12);
   expect(decodeURIComponent((await share.first().getAttribute('href')) ?? '')).toContain('112');
 });
 
@@ -172,6 +173,7 @@ test.describe('desktop', () => {
     for (const [name, path] of [
       ['Emergencies', '/emergencies'],
       ['Get Help Near Me', '/near-me'],
+      ['Safety Tools', '/tools'],
       ['Awareness', '/awareness'],
       ['Resources', '/resources'],
       ['About', '/about'],

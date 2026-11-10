@@ -294,6 +294,7 @@ async function findFacilitiesViaNominatim(
           phone,
           dataSource: 'OpenStreetMap contributors',
           isClinic: item.class === 'amenity' && item.type === 'clinic',
+          hasEmergency: tags.emergency === 'yes',
           osmType: item.osm_type,
           osmId: item.osm_id,
         });
@@ -373,6 +374,7 @@ function parseOverpassElements(
       phone,
       dataSource: 'OpenStreetMap contributors',
       isClinic: tags.amenity === 'clinic',
+      hasEmergency: tags.emergency === 'yes',
       osmType: el.type,
       osmId: el.id,
     });

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { awarenessGuides } from '../data/awareness';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { absoluteUrl, awarenessPath, reportMistakeUrl } from '../data/site';
 import { buildAwarenessShareMessage } from '../services/shareService';
 import { ShareButtons } from './ShareButtons';
@@ -29,7 +29,7 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   const [expandedGuideId, setExpandedGuideId] = useState<string | null>(guideId ?? null);
 
-  const t = translations.en;
+  const { t, pick, lang } = useLanguage();
 
   // A link to one guide opens that guide and brings it into view
   useEffect(() => {
@@ -38,10 +38,10 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
 
   const categories = [
     { id: 'all', label: t.emergencySection.allCategories },
-    { id: 'personal', label: 'Personal Safety' },
-    { id: 'digital', label: 'Digital Safety' },
-    { id: 'home', label: 'Home Safety' },
-    { id: 'disaster', label: 'Disaster Preparedness' },
+    { id: 'personal', label: t.awarenessCategories.personal },
+    { id: 'digital', label: t.awarenessCategories.digital },
+    { id: 'home', label: t.awarenessCategories.home },
+    { id: 'disaster', label: t.awarenessCategories.disaster },
   ];
 
   const filteredGuides = awarenessGuides.filter(
@@ -68,7 +68,7 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
       <div className="mb-8 text-center max-w-3xl mx-auto">
         <span className="inline-flex items-center space-x-2 bg-lavender/30 text-plum text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border border-lavender mb-3">
           <BookOpen className="w-4 h-4 text-plum" />
-          <span>Prevention & Awareness</span>
+          <span>{t.awarenessSection.badge}</span>
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
           {t.awarenessSection.title}
@@ -118,13 +118,13 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
                   </div>
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-midnight bg-lavender/40 px-2.5 py-0.5 rounded-full border border-lavender">
-                      {guide.categoryLabel.en}
+                      {pick(guide.categoryLabel)}
                     </span>
                     <h2 className="text-xl sm:text-2xl font-bold text-midnight mt-1">
-                      {guide.title.en}
+                      {pick(guide.title)}
                     </h2>
                     <p className="mt-1 text-sm text-midnight/75 font-normal">
-                      {guide.summary.en}
+                      {pick(guide.summary)}
                     </p>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
                   type="button"
                   onClick={() => setExpandedGuideId(isExpanded ? null : guide.id)}
                   aria-expanded={isExpanded}
-                  aria-label={`${isExpanded ? 'Hide' : 'Show'} guide: ${guide.title.en}`}
+                  aria-label={`${isExpanded ? t.awarenessSection.hideGuide : t.awarenessSection.showGuide}: ${guide.title.en}`}
                   className="p-2 text-midnight/70 hover:text-plum after:absolute after:inset-0"
                 >
                   {isExpanded ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
@@ -151,7 +151,7 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
                       <span>{t.awarenessSection.do}</span>
                     </h3>
                     <ul className="space-y-2.5 text-xs sm:text-sm text-midnight/90 font-medium">
-                      {guide.doList.en.map((item, idx) => (
+                      {pick(guide.doList).map((item, idx) => (
                         <li key={idx} className="flex items-start space-x-2">
                           <CheckCircle2 className="w-4 h-4 text-sage-600 shrink-0 mt-0.5" />
                           <span>{item}</span>
@@ -167,7 +167,7 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
                       <span>{t.awarenessSection.dont}</span>
                     </h3>
                     <ul className="space-y-2.5 text-xs sm:text-sm text-midnight/90 font-medium">
-                      {guide.dontList.en.map((item, idx) => (
+                      {pick(guide.dontList).map((item, idx) => (
                         <li key={idx} className="flex items-start space-x-2">
                           <XCircle className="w-4 h-4 text-emergency shrink-0 mt-0.5" />
                           <span>{item}</span>
@@ -184,7 +184,7 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
                         <span>{t.awarenessSection.checklist}</span>
                       </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {guide.checklist.en.map((item, idx) => {
+                        {pick(guide.checklist).map((item, idx) => {
                           const key = `${guide.id}-${idx}`;
                           const isChecked = !!checkedItems[key];
                           return (
@@ -216,8 +216,8 @@ export const AwarenessView: React.FC<AwarenessViewProps> = ({ guideId }) => {
                   {/* Share This Guide */}
                   <div className="md:col-span-2 pt-2">
                     <ShareButtons
-                      title={guide.title.en}
-                      message={buildAwarenessShareMessage(guide)}
+                      title={pick(guide.title)}
+                      message={buildAwarenessShareMessage(guide, lang)}
                       url={absoluteUrl(awarenessPath(guide.id))}
                     />
                   </div>

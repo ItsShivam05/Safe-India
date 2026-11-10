@@ -1,7 +1,13 @@
 import type { AwarenessGuide, EmergencyScenario, OfficialResource } from '../types';
 import { absoluteUrl, awarenessPath, scenarioPath, TAB_PATHS } from '../data/site';
+import { pickText, type Lang } from '../i18n/language';
 
 const SHARED_STEP_COUNT = 3;
+
+const LABELS = {
+  en: { whatToDo: 'what to do', call: 'Call', fullGuide: 'Full guide', moreHelplines: 'More helplines' },
+  hi: { whatToDo: 'क्या करें', call: 'कॉल करें', fullGuide: 'पूरी गाइड', moreHelplines: 'और हेल्पलाइन' },
+};
 
 const numberedSteps = (steps: string[]) =>
   steps.slice(0, SHARED_STEP_COUNT).map((step, idx) => `${idx + 1}. ${step}`);
@@ -10,40 +16,40 @@ const numberedSteps = (steps: string[]) =>
  * Includes the key steps as well as the link, so the message still helps
  * someone with a weak signal. Never add the user's location or personal details here.
  */
-export function buildScenarioShareMessage(scenario: EmergencyScenario): string {
-  const lines = [`🚨 *${scenario.title.en}: what to do*`, ''];
+export function buildScenarioShareMessage(scenario: EmergencyScenario, lang: Lang = 'en'): string {
+  const label = LABELS[lang];
+  const lines = [`🚨 *${pickText(scenario.title, lang)}: ${label.whatToDo}*`, ''];
 
   if (scenario.immediateCallNumber) {
-    lines.push(`📞 Call ${scenario.immediateCallNumber}`, '');
+    lines.push(`📞 ${label.call} ${scenario.immediateCallNumber}`, '');
   }
 
-  lines.push(...numberedSteps(scenario.doNow.en));
+  const doNow = pickText(scenario.doNow, lang);
+  const dont = pickText(scenario.dont, lang);
+  lines.push(...numberedSteps(doNow));
+  if (dont[0]) lines.push('', `⚠️ ${dont[0]}`);
 
-  if (scenario.dont.en[0]) {
-    lines.push('', `⚠️ ${scenario.dont.en[0]}`);
-  }
-
-  lines.push('', `Full guide: ${absoluteUrl(scenarioPath(scenario.id))}`);
+  lines.push('', `${label.fullGuide}: ${absoluteUrl(scenarioPath(scenario.id))}`);
   return lines.join('\n');
 }
 
-export function buildAwarenessShareMessage(guide: AwarenessGuide): string {
+export function buildAwarenessShareMessage(guide: AwarenessGuide, lang: Lang = 'en'): string {
   return [
-    `🛡️ *${guide.title.en}*`,
-    guide.summary.en,
+    `🛡️ *${pickText(guide.title, lang)}*`,
+    pickText(guide.summary, lang),
     '',
-    ...numberedSteps(guide.doList.en),
+    ...numberedSteps(pickText(guide.doList, lang)),
     '',
-    `Full guide: ${absoluteUrl(awarenessPath(guide.id))}`,
+    `${LABELS[lang].fullGuide}: ${absoluteUrl(awarenessPath(guide.id))}`,
   ].join('\n');
 }
 
-export function buildHelplineShareMessage(resource: OfficialResource): string {
+export function buildHelplineShareMessage(resource: OfficialResource, lang: Lang = 'en'): string {
   return [
-    `📞 *${resource.name.en}: ${resource.phone}*`,
-    resource.purpose.en,
+    `📞 *${pickText(resource.name, lang)}: ${resource.phone}*`,
+    pickText(resource.purpose, lang),
     '',
-    `More helplines: ${absoluteUrl(TAB_PATHS.resources)}`,
+    `${LABELS[lang].moreHelplines}: ${absoluteUrl(TAB_PATHS.resources)}`,
   ].join('\n');
 }
 

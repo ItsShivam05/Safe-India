@@ -67,6 +67,7 @@ export interface LocationCoordinates {
   lon: number;
   name?: string;
   sourceType: 'gps' | 'manual';
+  accuracyMeters?: number;
 }
 
 export interface NearbyFacility {
@@ -80,6 +81,7 @@ export interface NearbyFacility {
   phone?: string;
   dataSource: string; // e.g. "OpenStreetMap contributors"
   isClinic?: boolean; // Clinics are grouped with hospitals but labelled separately
+  hasEmergency?: boolean; // OpenStreetMap says the hospital has an emergency department
   osmType: 'node' | 'way' | 'relation';
   osmId: number;
 }

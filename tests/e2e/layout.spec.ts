@@ -49,9 +49,20 @@ test.describe('phone', () => {
     }
   });
 
-  test('help sheet keeps focus inside, closes with Esc, and returns focus', async ({ page }) => {
+  test('bottom bar SOS opens the SOS page', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('navigation', { name: 'Quick Navigation' }).getByRole('button', { name: 'Emergency Help' }).click();
+    await page.getByRole('navigation', { name: 'Quick Navigation' }).getByRole('button', { name: 'SOS' }).click();
+    await expect(page).toHaveURL(/\/sos$/);
+    await expect(page.locator('h1')).toHaveText('SOS to your contacts');
+  });
+});
+
+test.describe('help sheet', () => {
+  test.use({ viewport: { width: 1280, height: 900 } });
+
+  test('keeps focus inside, closes with Esc, and returns focus', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Emergency Help Dial Modal' }).click();
     const sheet = page.getByRole('dialog', { name: 'Emergency Assistance' });
     await expect(sheet).toBeVisible();
     await expect(sheet.locator('a[href="tel:112"]')).not.toHaveCount(0);
@@ -60,9 +71,18 @@ test.describe('phone', () => {
     expect(await page.evaluate(() => !!document.activeElement?.closest('[role=dialog]'))).toBe(true);
     await page.keyboard.press('Escape');
     await expect(sheet).toBeHidden();
-    expect(await page.evaluate(() => document.activeElement?.getAttribute('aria-label'))).toBe('Emergency Help');
+    expect(await page.evaluate(() => document.activeElement?.getAttribute('aria-label'))).toBe('Emergency Help Dial Modal');
   });
 
+  test('help sheet links to SOS and Where am I', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Emergency Help Dial Modal' }).click();
+    await page.getByRole('dialog').getByRole('button', { name: /Where am I/ }).click();
+    await expect(page).toHaveURL(/\/where-am-i$/);
+  });
+});
+
+test.describe('phone, continued', () => {
   test('a failed map download shows Call 112 instead of a blank page', async ({ page }) => {
     await page.route(/HelpNearMeView.*\.js/, (route) => route.abort());
     await page.goto('/');
@@ -72,10 +92,10 @@ test.describe('phone', () => {
   });
 });
 
-for (const width of [360, 1280]) {
+for (const width of [360, 1024, 1280]) {
   test(`no sideways scrolling at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
-    for (const path of ['/', '/emergencies', '/emergencies/upi-bank-fraud', '/near-me', '/awareness', '/resources', '/about']) {
+    for (const path of ['/', '/emergencies', '/emergencies/upi-bank-fraud', '/near-me', '/awareness', '/resources', '/about', '/tools', '/sos', '/where-am-i', '/tools/alarm', '/tools/medical-id', '/tools/complaint']) {
       await open(page, path);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow, path).toBeLessThanOrEqual(0);

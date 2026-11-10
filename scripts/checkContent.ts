@@ -12,7 +12,7 @@ const DIALABLE = /^\d{3,15}$/;
 const DIALABLE_WITH_SPACES = /^\d[\d ]{1,18}\d$/;
 
 // Numbers a guide may tell people to call, besides the ones in our helpline lists.
-const EXTRA_KNOWN_NUMBERS = ['100', '14422'];
+const EXTRA_KNOWN_NUMBERS = ['100'];
 
 /**
  * Checks the guide and helpline data for mistakes that would break the site or mislead

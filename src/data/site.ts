@@ -24,6 +24,12 @@ export const TAB_PATHS: Record<string, string> = {
   awareness: '/awareness',
   resources: '/resources',
   about: '/about',
+  tools: '/tools',
+  sos: '/sos',
+  whereami: '/where-am-i',
+  alarm: '/tools/alarm',
+  medicalid: '/tools/medical-id',
+  complaint: '/tools/complaint',
 };
 
 export const scenarioPath = (id: string) => `/emergencies/${id}`;
@@ -63,6 +69,36 @@ export const allPages: PageMeta[] = [
     path: TAB_PATHS.about,
     title: 'About SafeIndia',
     description: 'What SafeIndia is, the sources it refers to, and how it handles privacy and accessibility.',
+  },
+  {
+    path: TAB_PATHS.tools,
+    title: 'Safety Tools | SafeIndia',
+    description: 'SOS to your contacts, your exact location for 112, a loud alarm, a medical ID and complaint drafts. Works without internet.',
+  },
+  {
+    path: TAB_PATHS.sos,
+    title: 'SOS to your contacts | SafeIndia',
+    description: 'Send your location to two trusted people on WhatsApp or SMS in an emergency.',
+  },
+  {
+    path: TAB_PATHS.whereami,
+    title: 'Where am I? Your location for 112 | SafeIndia',
+    description: 'See your nearest address and coordinates so you can tell the 112 operator exactly where you are.',
+  },
+  {
+    path: TAB_PATHS.alarm,
+    title: 'Loud alarm | SafeIndia',
+    description: 'Play a loud siren from your phone to draw attention.',
+  },
+  {
+    path: TAB_PATHS.medicalid,
+    title: 'Medical ID | SafeIndia',
+    description: 'Keep your blood group, allergies and emergency contact ready to show responders. Saved only on your phone.',
+  },
+  {
+    path: TAB_PATHS.complaint,
+    title: 'Complaint drafts for fraud or a lost phone | SafeIndia',
+    description: 'Ready-to-copy complaint text for online fraud or a lost or stolen phone.',
   },
   ...emergencyScenarios.map((sc) => ({
     path: scenarioPath(sc.id),

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { NearbyFacility, LocationCoordinates } from '../../types';
-import { translations } from '../../data/locales';
+import { useLanguage } from '../../i18n/language';
 import { formatDistance, getDirectionsUrl, parseFacilityPhone } from '../../services/locationService';
 
 // Popups are built as HTML strings, and place names and addresses come from public
@@ -34,7 +34,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
   const userMarkerRef = useRef<L.Marker | null>(null);
   const facilityMarkersRef = useRef<Map<string, L.Marker>>(new Map());
 
-  const t = translations.en;
+  const { t } = useLanguage();
 
   // Helper to create category icons
   const createCategoryIcon = (category: string, isSelected: boolean) => {
@@ -174,18 +174,18 @@ export const HelpMap: React.FC<HelpMapProps> = ({
       zIndexOffset: 50,
     }).addTo(map);
 
-    const userLabel = userLocation.name || 'Your Location';
+    const userLabel = userLocation.name || t.nearMe.yourLocationLabel;
     userMarker.bindPopup(`
       <div style="font-family: inherit; font-size: 13px; font-weight: bold; padding: 4px 2px;">
         <span style="color: #2563EB;">📍 ${escapeHtml(userLabel)}</span>
         <div style="font-size: 11px; font-weight: normal; color: #64748B; margin-top: 2px;">
-          ${userLocation.sourceType === 'gps' ? 'Your current location' : 'Selected search area'}
+          ${userLocation.sourceType === 'gps' ? t.nearMe.userPopupGps : t.nearMe.userPopupManual}
         </div>
       </div>
     `);
 
     userMarkerRef.current = userMarker;
-  }, [userLocation]);
+  }, [userLocation, t]);
 
   // 4. Update Facility Markers (only on facility list or userLocation change)
   useEffect(() => {
@@ -236,7 +236,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
       if (phoneInfo.state === 'valid') {
         phoneSectionHtml = `
           <div style="font-size: 11px; color: #433760; margin-bottom: 6px;">
-            📞 <strong>${escapeHtml(phoneInfo.displayNumber ?? '')}</strong> <span style="font-size: 11px; color: #65558F; font-weight: 600;">(unverified)</span>
+            📞 <strong>${escapeHtml(phoneInfo.displayNumber ?? '')}</strong> <span style="font-size: 11px; color: #65558F; font-weight: 600;">${t.nearMe.unverifiedShort}</span>
           </div>
         `;
       } else if (phoneInfo.state === 'invalid') {
@@ -262,7 +262,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
             ${escapeHtml(facility.name)}
           </div>
           <div style="font-size: 11px; font-weight: 700; color: #65558F; margin-bottom: 6px;">
-            Approx. ${formatDistance(facility.distanceKm)} away
+            ${t.nearMe.approx} ${formatDistance(facility.distanceKm)} ${t.nearMe.away}
           </div>
           ${
             facility.address
@@ -307,7 +307,7 @@ export const HelpMap: React.FC<HelpMapProps> = ({
       map.setView([userLocation.lat, userLocation.lon], 13);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [facilities, userLocation]);
+  }, [facilities, userLocation, t]);
 
   // 5. React to selected facility change ("View on Map" & card selection)
   useEffect(() => {
@@ -360,15 +360,15 @@ export const HelpMap: React.FC<HelpMapProps> = ({
       <div className="absolute top-3 right-3 z-20 bg-white/95 backdrop-blur-xs px-3.5 py-2 rounded-2xl shadow-sm border border-lavender/60 text-xs font-bold text-midnight flex items-center space-x-3 pointer-events-none">
         <span className="flex items-center space-x-1">
           <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-          <span>Police</span>
+          <span>{t.nearMe.legendPolice}</span>
         </span>
         <span className="flex items-center space-x-1">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-          <span>Hospital</span>
+          <span>{t.nearMe.legendHospital}</span>
         </span>
         <span className="flex items-center space-x-1">
           <span className="w-2.5 h-2.5 rounded-full bg-orange-600"></span>
-          <span>Fire</span>
+          <span>{t.nearMe.legendFire}</span>
         </span>
       </div>
     </div>

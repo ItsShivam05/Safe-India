@@ -1,19 +1,14 @@
 import React from 'react';
-import { Home, ShieldAlert, MapPin, PhoneCall, LifeBuoy } from 'lucide-react';
-import { translations } from '../data/locales';
+import { Home, ShieldAlert, MapPin, PhoneCall, Siren } from 'lucide-react';
+import { useLanguage } from '../i18n/language';
 
 interface MobileBottomNavProps {
   currentTab: string;
   onNavigate: (tab: string) => void;
-  onOpenHelp: () => void;
 }
 
-export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
-  currentTab,
-  onNavigate,
-  onOpenHelp,
-}) => {
-  const t = translations.en;
+export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ currentTab, onNavigate }) => {
+  const { t } = useLanguage();
 
   const items = [
     { id: 'home', label: t.nav.bottomHome, icon: Home },
@@ -25,7 +20,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   return (
     <nav
       className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-midnight border-t border-lavender/20 pb-[env(safe-area-inset-bottom)]"
-      aria-label="Quick Navigation"
+      aria-label={t.nav.quickNav}
     >
       <div className="grid grid-cols-5 h-16">
         {items.map((item) => {
@@ -49,12 +44,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 
         <button
           type="button"
-          onClick={onOpenHelp}
+          onClick={() => onNavigate('sos')}
+          aria-current={currentTab === 'sos' ? 'page' : undefined}
           className="flex flex-col items-center justify-center gap-1 text-xs font-extrabold text-white bg-emergency hover:bg-emergency-600 transition-colors"
-          aria-label={t.nav.emergencyHelp}
         >
-          <LifeBuoy className="w-5 h-5 shrink-0" />
-          <span>{t.nav.bottomHelp}</span>
+          <Siren className="w-5 h-5 shrink-0" />
+          <span>{t.nav.bottomSos}</span>
         </button>
       </div>
     </nav>

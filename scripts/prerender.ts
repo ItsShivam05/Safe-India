@@ -89,7 +89,7 @@ export function prerenderPages(): Plugin {
     configResolved(config) {
       outDir = path.resolve(config.root, config.build.outDir);
     },
-    closeBundle() {
+    writeBundle() {
       const template = fs.readFileSync(path.join(outDir, 'index.html'), 'utf8');
 
       for (const page of allPages) {

@@ -525,6 +525,74 @@ export const emergencyScenarios: EmergencyScenario[] = [
     searchKeywords: ["upi", "fraud", "bank", "scam", "otp", "1930", "money deducted", "cybercrime", "phishing"]
   },
   {
+    id: "digital-arrest-scam",
+    category: "digital-emergency",
+    categoryLabel: { en: "Digital Emergency", hi: "डिजिटल एवं साइबर आपात स्थिति" },
+    iconName: "ShieldAlert",
+    title: {
+      en: "Digital arrest scam: fake police, CBI or customs call",
+      hi: "डिजिटल अरेस्ट धोखाधड़ी: नकली पुलिस, CBI या कस्टम का कॉल"
+    },
+    urgency: "high",
+    immediateCallNumber: "1930",
+    immediateActionText: {
+      en: "Hang up. Police, CBI, customs, ED and judges do not arrest anyone on a video call. Call 1930 if you have paid.",
+      hi: "कॉल काट दें। पुलिस, CBI, कस्टम, ED या जज किसी को वीडियो कॉल पर गिरफ़्तार नहीं करते। पैसे दे दिए हैं तो 1930 पर कॉल करें।"
+    },
+    doNow: {
+      en: [
+        "Hang up the call or leave the video call now. There is no such thing as a \"digital arrest\", and you are not under arrest.",
+        "Do not send any money or share bank, Aadhaar, OTP or card details, whatever they threaten.",
+        "Tell a family member or friend straight away. Scammers try to keep you alone, scared and on the call.",
+        "If you have already sent money, call 1930 immediately and report it at cybercrime.gov.in.",
+        "Report the caller's number on the Chakshu portal (sancharsaathi.gov.in)."
+      ],
+      hi: [
+        "अभी कॉल काटें या वीडियो कॉल से बाहर निकलें। \"डिजिटल अरेस्ट\" जैसी कोई चीज़ नहीं होती, और आप गिरफ़्तार नहीं हैं।",
+        "वे कितना भी डराएँ, कोई पैसा न भेजें और बैंक, आधार, OTP या कार्ड की जानकारी न दें।",
+        "तुरंत परिवार के किसी सदस्य या दोस्त को बताएँ। ठग आपको अकेला, डरा हुआ और कॉल पर बनाए रखना चाहते हैं।",
+        "अगर आपने पैसे भेज दिए हैं, तो तुरंत 1930 पर कॉल करें और cybercrime.gov.in पर शिकायत करें।",
+        "कॉल करने वाले का नंबर चक्षु पोर्टल (sancharsaathi.gov.in) पर रिपोर्ट करें।"
+      ]
+    },
+    dont: {
+      en: [
+        "Don't stay on the call to \"prove your innocence\". Real officers send written notices, not video calls.",
+        "Don't install apps, share your screen or move money to a \"safe account\" because a caller tells you to.",
+        "Don't trust uniforms, police-station backgrounds or official-looking documents on video. They are easy to fake."
+      ],
+      hi: [
+        "\"बेगुनाही साबित करने\" के लिए कॉल पर न रहें। असली अधिकारी लिखित नोटिस भेजते हैं, वीडियो कॉल नहीं करते।",
+        "कॉल करने वाले के कहने पर कोई ऐप इंस्टॉल न करें, स्क्रीन शेयर न करें और \"सुरक्षित खाते\" में पैसे न भेजें।",
+        "वीडियो पर वर्दी, थाने जैसा बैकग्राउंड या सरकारी दिखने वाले कागज़ों पर भरोसा न करें। इन्हें आसानी से नकली बनाया जा सकता है।"
+      ]
+    },
+    afterDanger: {
+      en: [
+        "Save screenshots, phone numbers, video call IDs and any transaction IDs.",
+        "File a complaint at cybercrime.gov.in, even if you did not lose money.",
+        "If anyone threatens you in person, call 112."
+      ],
+      hi: [
+        "स्क्रीनशॉट, फ़ोन नंबर, वीडियो कॉल ID और ट्रांज़ैक्शन ID सेव करें।",
+        "पैसे न गए हों तब भी cybercrime.gov.in पर शिकायत दर्ज करें।",
+        "अगर कोई आपको सामने आकर धमकाए, तो 112 पर कॉल करें।"
+      ]
+    },
+    resources: [
+      { name: "National Cyber Crime Helpline", phone: "1930", purpose: "Report the scam and freeze money you have sent" },
+      { name: "Official Cyber Crime Portal", url: "https://cybercrime.gov.in", purpose: "File an online complaint" },
+      { name: "National Emergency Response", phone: "112", purpose: "If you are threatened in person" }
+    ],
+    source: {
+      name: "Indian Cyber Crime Coordination Centre (I4C), MHA",
+      url: "https://cybercrime.gov.in",
+      lastReviewed: "November 2026",
+      authorityType: "Government"
+    },
+    searchKeywords: ["digital arrest", "fake police", "cbi", "customs", "ed", "narcotics", "parcel", "video call", "arrest", "skype", "डिजिटल अरेस्ट"]
+  },
+  {
     id: "phone-stolen",
     category: "digital-emergency",
     categoryLabel: { en: "Digital Emergency", hi: "डिजिटल एवं साइबर आपात स्थिति" },
@@ -534,7 +602,6 @@ export const emergencyScenarios: EmergencyScenario[] = [
       hi: "मोबाइल फोन चोरी होना या खो जाना"
     },
     urgency: "high",
-    immediateCallNumber: "14422",
     immediateActionText: {
       en: "Block your SIM immediately & use CEIR Portal (ceir.gov.in) to render phone useless.",
       hi: "तुरंत सिम ब्लॉक करें और CEIR पोर्टल (ceir.gov.in) से फोन का IMEI ब्लॉक करें।"

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Check, Link2, Share2 } from 'lucide-react';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { getWhatsAppShareUrl } from '../services/shareService';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
@@ -17,7 +17,7 @@ const usesPhoneShareMenu = () =>
 
 export const ShareButtons: React.FC<ShareButtonsProps> = ({ title, message, url, compact = false }) => {
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
-  const t = translations.en.scenarioView;
+  const t = useLanguage().t.scenarioView;
   const phoneShare = usesPhoneShareMenu();
 
   const handleShare = async () => {

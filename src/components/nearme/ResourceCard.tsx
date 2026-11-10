@@ -10,7 +10,7 @@ import {
   Info,
 } from 'lucide-react';
 import type { NearbyFacility } from '../../types';
-import { translations } from '../../data/locales';
+import { useLanguage } from '../../i18n/language';
 import { formatDistance, getDirectionsUrl, parseFacilityPhone } from '../../services/locationService';
 
 interface ResourceCardProps {
@@ -24,7 +24,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
   isSelected = false,
   onSelect,
 }) => {
-  const t = translations.en;
+  const { t } = useLanguage();
 
   const categoryMeta = {
     police: {
@@ -74,9 +74,15 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
           className="text-xs font-extrabold text-midnight bg-ivory px-2.5 py-0.5 rounded-lg border border-lavender/60"
           title={t.nearMe.straightLineNote}
         >
-          Approx. {formatDistance(facility.distanceKm)}
+          {t.nearMe.approx} {formatDistance(facility.distanceKm)}
         </span>
       </div>
+
+      {facility.hasEmergency && (
+        <span className="inline-block mb-2 text-xs font-bold text-emergency bg-emergency-50 border border-emergency-200 px-2.5 py-0.5 rounded-full">
+          {t.nearMe.emergencyDept}
+        </span>
+      )}
 
       {/* Facility Name */}
       <h3 className="text-base sm:text-lg font-bold text-midnight leading-snug mb-2">
@@ -99,7 +105,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       <div className="mb-4 text-xs">
         {phoneInfo.state === 'valid' ? (
           <div className="flex flex-wrap items-center gap-2 text-midnight/80">
-            <span className="text-midnight/70 font-semibold">Phone:</span>
+            <span className="text-midnight/70 font-semibold">{t.nearMe.phone}</span>
             <span className="font-mono font-bold text-midnight">{phoneInfo.displayNumber}</span>
             <span className="text-xs bg-lavender/30 text-plum font-medium px-2 py-0.5 rounded-full border border-lavender/40">
               {t.nearMe.unverifiedNotice}
@@ -165,7 +171,6 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       {/* Attribution footer */}
       <div className="mt-3 pt-2 border-t border-lavender/25 flex items-center justify-between text-xs text-midnight/70">
         <span>{t.nearMe.sourceAttribution}</span>
-        <span className="text-xs text-midnight/70">Map ID #{facility.osmId}</span>
       </div>
 
     </div>

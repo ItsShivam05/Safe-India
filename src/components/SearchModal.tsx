@@ -4,7 +4,7 @@ import type { EmergencyScenario } from '../types';
 import { emergencyScenarios } from '../data/emergencies';
 import { awarenessGuides } from '../data/awareness';
 import { officialResources } from '../data/resources';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { Search, X, ShieldAlert, BookOpen, MapPin, ChevronRight } from 'lucide-react';
 import { useDialogFocus } from '../hooks/useDialogFocus';
 
@@ -26,7 +26,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onSelectAwarenessGuide,
 }) => {
   const [query, setQuery] = useState('');
-  const t = translations.en;
+  const { t, pick } = useLanguage();
   const dialogRef = useDialogFocus<HTMLDivElement>(isOpen);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   // Search results prioritizing Emergency Scenarios first!
   const matchedScenarios = emergencyScenarios.filter((sc) => {
     if (!q) return false;
-    const titleText = sc.title.en || '';
+    const titleText = `${pick(sc.title)} ${sc.title.hi ?? ''}`;
     return (
       titleText.toLowerCase().includes(q) ||
       sc.searchKeywords.some((k) => k.toLowerCase().includes(q))
@@ -60,8 +60,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   const matchedAwareness = awarenessGuides.filter((ag) => {
     if (!q) return false;
-    const titleText = ag.title.en || '';
-    const summaryText = ag.summary.en || '';
+    const titleText = `${pick(ag.title)} ${ag.title.hi ?? ''}`;
+    const summaryText = `${pick(ag.summary)} ${ag.summary.hi ?? ''}`;
     return (
       titleText.toLowerCase().includes(q) ||
       summaryText.toLowerCase().includes(q)
@@ -70,8 +70,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   const matchedResources = officialResources.filter((res) => {
     if (!q) return false;
-    const nameText = res.name.en || '';
-    const purposeText = res.purpose.en || '';
+    const nameText = `${pick(res.name)} ${res.name.hi ?? ''}`;
+    const purposeText = `${pick(res.purpose)} ${res.purpose.hi ?? ''}`;
     return (
       nameText.toLowerCase().includes(q) ||
       res.phone.includes(q) ||
@@ -82,14 +82,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   const hasAnyResults =
     matchedScenarios.length > 0 || matchedAwareness.length > 0 || matchedResources.length > 0;
 
-  const quickChips = [
-    { label: 'Someone following me', q: 'following' },
-    { label: 'UPI / Bank Scam', q: 'upi' },
-    { label: 'Someone fainted / CPR', q: 'unconscious' },
-    { label: 'Road Accident', q: 'accident' },
-    { label: 'Fire', q: 'fire' },
-    { label: 'Dog Bite / Rabies', q: 'dog' },
-  ];
+  const quickChips = ['following', 'upi', 'unconscious', 'accident', 'fire', 'dog'].map((q, idx) => ({ label: t.searchModal.chips[idx], q }));
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-midnight-950/80 backdrop-blur-xs animate-in fade-in duration-150">
@@ -121,7 +114,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg text-midnight/70 hover:text-midnight hover:bg-lavender/30"
-            aria-label="Close search"
+            aria-label={t.searchModal.close}
           >
             <X className="w-5 h-5" />
           </button>
@@ -156,9 +149,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             >
               <span className="flex items-center space-x-2.5">
                 <MapPin className="w-4 h-4 text-lavender" />
-                <span>{t.nav.getHelpNearMe} — Police, Hospitals, Fire Stations</span>
+                <span>{t.nav.getHelpNearMe} — {t.searchModal.nearMeButton}</span>
               </span>
-              <span className="text-lavender font-extrabold text-xs">Open Map →</span>
+              <span className="text-lavender font-extrabold text-xs">{t.searchModal.openMap}</span>
             </button>
           </div>
         )}
@@ -172,7 +165,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               <div>
                 <div className="flex items-center space-x-2 text-xs font-extrabold text-emergency uppercase tracking-wider mb-2">
                   <ShieldAlert className="w-4 h-4" />
-                  <span>Emergency Guides ({matchedScenarios.length})</span>
+                  <span>{t.searchModal.emergencyGroup} ({matchedScenarios.length})</span>
                 </div>
                 <div className="space-y-2">
                   {matchedScenarios.map((sc) => (
@@ -182,7 +175,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     >
                       <div>
                         <span className="text-xs font-bold uppercase tracking-wider text-emergency bg-white px-2 py-0.5 rounded border border-emergency-200">
-                          Emergency → {sc.categoryLabel.en}
+                          {t.searchModal.emergencyPrefix} → {pick(sc.categoryLabel)}
                         </span>
                         <h4 className="font-bold text-midnight text-sm sm:text-base mt-1">
                           <button
@@ -193,7 +186,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                             }}
                             className="text-left font-bold after:absolute after:inset-0 after:rounded-2xl"
                           >
-                            {sc.title.en}
+                            {pick(sc.title)}
                           </button>
                         </h4>
                       </div>
@@ -209,7 +202,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               <div>
                 <div className="flex items-center space-x-2 text-xs font-extrabold text-plum uppercase tracking-wider mb-2">
                   <BookOpen className="w-4 h-4" />
-                  <span>Awareness Guides ({matchedAwareness.length})</span>
+                  <span>{t.searchModal.awarenessGroup} ({matchedAwareness.length})</span>
                 </div>
                 <div className="space-y-2">
                   {matchedAwareness.map((ag) => (
@@ -219,7 +212,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     >
                       <div>
                         <span className="text-xs font-bold uppercase tracking-wider text-plum bg-white px-2 py-0.5 rounded border border-lavender">
-                          Awareness → {ag.categoryLabel.en}
+                          {t.searchModal.awarenessPrefix} → {pick(ag.categoryLabel)}
                         </span>
                         <h4 className="font-bold text-midnight text-sm mt-1">
                           <button
@@ -230,7 +223,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                             }}
                             className="text-left font-bold after:absolute after:inset-0 after:rounded-2xl"
                           >
-                            {ag.title.en}
+                            {pick(ag.title)}
                           </button>
                         </h4>
                       </div>
@@ -246,7 +239,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               <div>
                 <div className="flex items-center space-x-2 text-xs font-extrabold text-sage-700 uppercase tracking-wider mb-2">
                   <MapPin className="w-4 h-4" />
-                  <span>Emergency Numbers ({matchedResources.length})</span>
+                  <span>{t.searchModal.numbersGroup} ({matchedResources.length})</span>
                 </div>
                 <div className="space-y-2">
                   {matchedResources.map((res) => (
@@ -256,7 +249,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     >
                       <div>
                         <span className="text-xs font-bold uppercase tracking-wider text-midnight bg-white px-2 py-0.5 rounded border border-sage">
-                          Directory → {res.categoryLabel.en}
+                          {t.searchModal.directoryPrefix} → {pick(res.categoryLabel)}
                         </span>
                         <h4 className="font-bold text-midnight text-sm mt-1">
                           <button
@@ -267,7 +260,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                             }}
                             className="text-left font-bold after:absolute after:inset-0 after:rounded-2xl"
                           >
-                            {res.name.en} ({res.phone})
+                            {pick(res.name)} ({res.phone})
                           </button>
                         </h4>
                       </div>
@@ -290,7 +283,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         {/* Footer info */}
         <div className="p-3 bg-ivory border-t border-lavender/40 text-right text-xs text-midnight/70 font-medium">
-          Press <kbd className="bg-white border border-lavender text-midnight px-1.5 py-0.5 rounded">ESC</kbd> to close
+          {t.searchModal.press} <kbd className="bg-white border border-lavender text-midnight px-1.5 py-0.5 rounded">ESC</kbd> {t.searchModal.toClose}
         </div>
       </div>
     </div>

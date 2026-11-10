@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { EmergencyScenario } from '../types';
 import { emergencyScenarios } from '../data/emergencies';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { Sparkles, ArrowRight, ShieldCheck, PhoneCall, AlertTriangle } from 'lucide-react';
 
 interface AIProtocolMatcherProps {
@@ -41,7 +41,8 @@ const findMatchingScenario = (searchStr: string): EmergencyScenario | null => {
 
   emergencyScenarios.forEach((sc) => {
     let score = 0;
-    const keywords = [...sc.searchKeywords, sc.title.en].map((kw) => kw.toLowerCase());
+    // Hindi titles too, so a description typed in Hindi can match
+    const keywords = [...sc.searchKeywords, sc.title.en, sc.title.hi ?? ''].filter(Boolean).map((kw) => kw.toLowerCase());
     const keywordWords = keywords.flatMap((kw) => kw.split(/[^\p{L}\p{N}\p{M}]+/u)).filter(Boolean);
 
     keywords.forEach((kw) => {
@@ -79,14 +80,9 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const t = translations.en;
+  const { t, pick } = useLanguage();
 
-  const sampleQueries = [
-    'A stranger keeps following me near metro',
-    'Someone deducted money via UPI OTP',
-    'Someone has fainted and is unconscious',
-    'Kitchen cylinder gas smell is leaking',
-  ];
+  const sampleQueries = t.aiHelper.samples;
 
   const handleMatch = (searchStr: string) => {
     const q = searchStr.toLowerCase().trim();
@@ -144,7 +140,7 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
           className="absolute right-2 top-1/2 -translate-y-1/2 bg-plum hover:bg-plum-600 disabled:opacity-50 text-white font-extrabold text-xs sm:text-sm px-4 py-2 rounded-xl transition-all shadow-sm flex items-center space-x-1.5"
         >
           {isSearching ? (
-            <span>Finding steps...</span>
+            <span>{t.aiHelper.finding}</span>
           ) : (
             <>
               <span>{t.aiHelper.button}</span>
@@ -179,27 +175,27 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
             <div className="flex items-center space-x-2">
               <ShieldCheck className="w-5 h-5 text-sage" />
               <span className="text-xs font-bold text-lavender uppercase tracking-wider">
-                Recommended Safety Guide
+                {t.aiHelper.recommended}
               </span>
             </div>
             <span className="text-xs bg-midnight-950 text-ivory/70 px-2 py-0.5 rounded border border-lavender/20">
-              Source: {matchedScenario.source.name}
+              {t.aiHelper.sourceLabel}: {matchedScenario.source.name}
             </span>
           </div>
 
           <h3 className="text-xl font-bold text-white mb-2">
-            {matchedScenario.title.en}
+            {pick(matchedScenario.title)}
           </h3>
 
           <p className="text-xs sm:text-sm text-ivory/80 line-clamp-2 mb-4">
-            {matchedScenario.immediateActionText?.en}
+            {matchedScenario.immediateActionText && pick(matchedScenario.immediateActionText)}
           </p>
 
           <button
             onClick={() => onSelectScenario(matchedScenario)}
             className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-emergency hover:bg-emergency-600 text-white font-extrabold px-6 py-3 rounded-xl text-sm shadow-md transition-all active:scale-95"
           >
-            <span>Open Full Guide ({matchedScenario.title.en})</span>
+            <span>{t.aiHelper.openFullGuide} ({pick(matchedScenario.title)})</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -236,7 +232,7 @@ export const AIProtocolMatcher: React.FC<AIProtocolMatcherProps> = ({
                 onClick={() => onSelectScenario(sc)}
                 className="text-xs bg-midnight-800 hover:bg-midnight-700 text-ivory/90 border border-lavender/20 px-3 py-1.5 rounded-xl transition-colors text-left"
               >
-                {sc.title.en}
+                {pick(sc.title)}
               </button>
             ))}
           </div>

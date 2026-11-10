@@ -126,6 +126,19 @@ Actionable, distraction-free steps designed for high-stress moments:
   - **101**: Fire Emergency Services
   - **1906**: LPG Gas Leakage Helpline
   - **14416**: Tele-MANAS Mental Health Support
+  - **1033**: National Highway Helpline
+
+### 5. Safety Tools (`/tools`)
+- **SOS to your contacts**: Save two trusted contacts on your phone, then send them your location on WhatsApp or SMS in two taps. It does not alert the police.
+- **Where am I?**: Your nearest address and coordinates in large text, to read out to the 112 operator.
+- **Loud alarm**: A siren to draw attention. No flashing screen.
+- **Medical ID**: Blood group, allergies and an emergency contact, ready to show responders. Saved only on the phone.
+- **Complaint drafts**: Ready-to-copy text for online fraud or a lost or stolen phone.
+
+### 6. Hindi, Offline Use and Reading Help
+- **English and Hindi**: One tap in the header switches every screen and guide. The choice is remembered on the phone.
+- **Works offline**: After the first visit, guides, helplines and safety tools open with no signal. Near Me still needs the internet.
+- **Read aloud and one step at a time**: Guides can be spoken, or shown one large step at a time, for when your hands are busy.
 
 ---
 
@@ -190,7 +203,8 @@ graph LR
 ```
 
 - **No User Accounts**: No registration, email collection, or passwords required.
-- **On-Demand GPS Only**: Geolocation is requested strictly after an explicit user tap. SafeIndia never runs continuous background location watchers.
+- **On-Demand GPS Only**: Location is requested only when you open Get Help Near Me, SOS or Where am I, or tap a location button. SafeIndia never tracks your location in the background.
+- **On This Phone Only**: SOS contacts, the medical ID and your language choice are saved only in your browser. Complaint drafts are not saved at all.
 - **Zero Coordinate Storage**: Coordinates exist only in browser memory for the active session and are not stored in cookies. To find nearby places they are sent to public OpenStreetMap services (Overpass and Nominatim); SafeIndia runs no server of its own that receives them.
 - **No Third-Party Trackers**: No advertising trackers, behavior analytics, or invasive profiling scripts.
 - **Explicit Call Confirmation**: Every emergency call button uses standard `tel:` links that require manual confirmation on your phone. No unauthorized auto-dialing.

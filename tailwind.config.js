@@ -95,8 +95,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
-        display: ['Plus Jakarta Sans', 'Outfit', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans Variable"', '"Noto Sans Devanagari Variable"', 'system-ui', 'sans-serif'],
+        display: ['"Plus Jakarta Sans Variable"', '"Noto Sans Devanagari Variable"', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',

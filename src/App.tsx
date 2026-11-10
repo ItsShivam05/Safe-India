@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, useNavigate, useNavigationType, useParams } from 'react-router';
-import { Loader2 } from 'lucide-react';
+import { Loader2, WifiOff } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Philosophy } from './components/Philosophy';
@@ -15,7 +15,14 @@ import { MobileQuickAccess } from './components/MobileQuickAccess';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
 import { NotFoundView } from './components/NotFoundView';
-import { translations } from './data/locales';
+import { ToolsView } from './components/tools/ToolsView';
+import { SosView } from './components/tools/SosView';
+import { WhereAmIView } from './components/tools/WhereAmIView';
+import { AlarmView } from './components/tools/AlarmView';
+import { MedicalIdView } from './components/tools/MedicalIdView';
+import { ComplaintView } from './components/tools/ComplaintView';
+import { useLanguage } from './i18n/language';
+import { useOnlineStatus } from './hooks/useOnlineStatus';
 import { emergencyScenarios } from './data/emergencies';
 import { awarenessGuides } from './data/awareness';
 import { awarenessPath, getPageMeta, scenarioPath, TAB_PATHS } from './data/site';
@@ -23,7 +30,7 @@ import type { EmergencyScenario } from './types';
 
 // Shown if the map code can't be downloaded, so a bad connection never leaves a blank page.
 const NearMeLoadFailed = () => {
-  const t = translations.en;
+  const { t } = useLanguage();
   return (
     <div role="alert" className="max-w-xl my-12 mx-4 sm:mx-auto bg-emergency-50 border border-emergency-200 rounded-3xl p-6 sm:p-8 text-center">
       <h1 className="text-lg font-bold text-emergency">{t.nearMe.mapLoadFailedTitle}</h1>
@@ -88,6 +95,8 @@ export function App() {
   const navigate = useNavigate();
   const { pathname, hash } = useLocation();
   const navigationType = useNavigationType();
+  const { t } = useLanguage();
+  const online = useOnlineStatus();
   const currentTab = tabFromPath(pathname);
   const [searchModalOpen, setSearchModalOpen] = useState<boolean>(false);
   const [quickHelpOpen, setQuickHelpOpen] = useState<boolean>(false);
@@ -116,14 +125,19 @@ export function App() {
   return (
     <div className="min-h-screen bg-ivory text-midnight font-sans flex flex-col pb-16 lg:pb-0 selection:bg-plum selection:text-white">
 
-      {/* Sticky Header / Navbar */}
       <Navbar
         currentTab={currentTab}
         setCurrentTab={handleNavigate}
         onOpenSearch={() => setSearchModalOpen(true)}
       />
 
-      {/* Main Content Area */}
+      {!online && (
+        <div role="status" className="bg-midnight-950 text-ivory text-sm px-4 py-2.5 flex items-center justify-center gap-2 text-center">
+          <WifiOff className="w-4 h-4 text-lavender shrink-0" />
+          <span>{t.offline.banner}</span>
+        </div>
+      )}
+
       <main className="grow">
         <Routes>
           <Route
@@ -135,10 +149,8 @@ export function App() {
                   onOpenSearch={() => setSearchModalOpen(true)}
                   onSelectScenario={handleSelectScenario}
                 />
-                <AIProtocolMatcher
-                  onSelectScenario={handleSelectScenario}
-                />
-                <EmergenciesView />
+                <AIProtocolMatcher onSelectScenario={handleSelectScenario} />
+                <EmergenciesView embedded />
                 <Philosophy />
               </>
             }
@@ -150,7 +162,7 @@ export function App() {
             element={
               <Suspense
                 fallback={
-                  <div className="py-24 flex justify-center" role="status" aria-label="Loading map">
+                  <div className="py-24 flex justify-center" role="status" aria-label={t.nearMe.loadingTitle}>
                     <Loader2 className="w-10 h-10 animate-spin text-plum" />
                   </div>
                 }
@@ -163,11 +175,17 @@ export function App() {
           <Route path={awarenessPath(':id')} element={<AwarenessGuideRoute />} />
           <Route path={TAB_PATHS.resources} element={<ResourcesView />} />
           <Route path={TAB_PATHS.about} element={<AboutView />} />
+          <Route path={TAB_PATHS.tools} element={<ToolsView />} />
+          <Route path={TAB_PATHS.sos} element={<SosView />} />
+          <Route path={TAB_PATHS.whereami} element={<WhereAmIView />} />
+          <Route path={TAB_PATHS.alarm} element={<AlarmView />} />
+          <Route path={TAB_PATHS.medicalid} element={<MedicalIdView />} />
+          <Route path={TAB_PATHS.complaint} element={<ComplaintView />} />
           <Route path="*" element={<NotFoundView />} />
         </Routes>
       </main>
 
-      {/* Persistent Floating Emergency Button & Quick Help Modal */}
+      {/* Desktop floating help button and the help sheet */}
       <MobileQuickAccess
         showFloatingButton={currentTab !== 'nearme'}
         isOpen={quickHelpOpen}
@@ -177,14 +195,8 @@ export function App() {
         onNavigate={handleNavigate}
       />
 
-      {/* Phone Bottom Navigation */}
-      <MobileBottomNav
-        currentTab={currentTab}
-        onNavigate={handleNavigate}
-        onOpenHelp={() => setQuickHelpOpen(true)}
-      />
+      <MobileBottomNav currentTab={currentTab} onNavigate={handleNavigate} />
 
-      {/* Global Search Modal */}
       <SearchModal
         isOpen={searchModalOpen}
         onOpen={() => setSearchModalOpen(true)}
@@ -194,9 +206,7 @@ export function App() {
         onSelectAwarenessGuide={(guideId) => navigate(awarenessPath(guideId))}
       />
 
-      {/* Footer */}
       <Footer onNavigate={handleNavigate} />
-
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Loader2, X } from 'lucide-react';
 import type { GeocodedLocation } from '../../types';
-import { translations } from '../../data/locales';
+import { useLanguage } from '../../i18n/language';
 import { searchLocation } from '../../services/locationService';
 
 interface LocationSearchProps {
@@ -19,7 +19,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
   const [hasSearched, setHasSearched] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const t = translations.en;
+  const { t } = useLanguage();
 
   const handleSearch = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -80,7 +80,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
               type="button"
               onClick={handleClear}
               className="absolute right-20 top-1/2 -translate-y-1/2 p-1 text-midnight/70 hover:text-midnight rounded-full"
-              aria-label="Clear location search"
+              aria-label={t.nearMe.clearSearch}
             >
               <X className="w-4 h-4" />
             </button>
@@ -107,7 +107,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
       {results.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-lavender/60 shadow-xl z-30 overflow-hidden divide-y divide-lavender/30 max-h-72 overflow-y-auto">
           <div className="px-4 py-2 bg-ivory text-xs font-bold text-midnight/70 uppercase tracking-wider">
-            Places in India
+            {t.nearMe.placesInIndia}
           </div>
           {results.map((loc, idx) => (
             <button

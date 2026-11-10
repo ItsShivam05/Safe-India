@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 
 import { emergencyScenarios } from '../data/emergencies';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { scenarioPath } from '../data/site';
 import {
   ShieldAlert,
@@ -21,25 +21,32 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
-export const EmergenciesView: React.FC = () => {
+interface EmergenciesViewProps {
+  /** True when shown inside another page (the homepage), so it doesn't add a second main heading. */
+  embedded?: boolean;
+}
+
+export const EmergenciesView: React.FC<EmergenciesViewProps> = ({ embedded = false }) => {
+  const Heading = embedded ? 'h2' : 'h1';
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const t = translations.en;
+  const { t, pick } = useLanguage();
 
   const categories = [
     { id: 'all', label: t.emergencySection.allCategories },
-    { id: 'personal-safety', label: 'Personal Safety' },
-    { id: 'medical', label: 'Medical Emergency' },
-    { id: 'fire-disaster', label: 'Fire & Disaster' },
-    { id: 'road-transport', label: 'Road & Transport' },
-    { id: 'digital-emergency', label: 'Digital Emergency' },
-    { id: 'animal', label: 'Animal Emergency' },
+    { id: 'personal-safety', label: t.categories.personalSafety },
+    { id: 'medical', label: t.categories.medical },
+    { id: 'fire-disaster', label: t.categories.fireDisaster },
+    { id: 'road-transport', label: t.categories.roadTransport },
+    { id: 'digital-emergency', label: t.categories.digital },
+    { id: 'animal', label: t.categories.animal },
   ];
 
   const filteredScenarios = emergencyScenarios.filter((sc) => {
     const matchesCategory = activeCategory === 'all' || sc.category === activeCategory;
     const q = searchQuery.toLowerCase().trim();
-    const titleText = sc.title.en || '';
+    // Search English and Hindi, whichever language the person types in
+    const titleText = `${pick(sc.title)} ${sc.title.hi ?? ''}`;
     const matchesSearch =
       !q ||
       titleText.toLowerCase().includes(q) ||
@@ -70,11 +77,11 @@ export const EmergenciesView: React.FC = () => {
       <div className="mb-8 text-center max-w-3xl mx-auto">
         <span className="inline-flex items-center space-x-2 bg-emergency-50 text-emergency text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border border-emergency-200 mb-3">
           <ShieldAlert className="w-4 h-4 text-emergency" />
-          <span>Immediate Action Guides</span>
+          <span>{t.emergencySection.badge}</span>
         </span>
-        <h1 className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
+        <Heading className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
           {t.emergencySection.title}
-        </h1>
+        </Heading>
         <p className="mt-2 text-midnight/75 text-base sm:text-lg">
           {t.emergencySection.subheading}
         </p>
@@ -144,7 +151,7 @@ export const EmergenciesView: React.FC = () => {
                         : 'bg-lavender/40 text-midnight border-lavender'
                     }`}
                   >
-                    {isCritical ? 'Critical Action' : 'High Priority'}
+                    {isCritical ? t.emergencySection.criticalAction : t.emergencySection.highPriority}
                   </span>
                 </div>
 
@@ -154,7 +161,7 @@ export const EmergenciesView: React.FC = () => {
                     to={scenarioPath(sc.id)}
                     className="font-bold after:absolute after:inset-0 after:rounded-3xl"
                   >
-                    {sc.title.en}
+                    {pick(sc.title)}
                   </Link>
                 </h3>
               </div>
@@ -165,17 +172,17 @@ export const EmergenciesView: React.FC = () => {
                   <a
                     href={`tel:${sc.immediateCallNumber}`}
                     className="relative z-10 inline-flex items-center space-x-1 text-emergency font-extrabold hover:underline"
-                    aria-label={`Call ${sc.immediateCallNumber}`}
+                    aria-label={`${t.scenarioView.callNow} ${sc.immediateCallNumber}`}
                   >
                     <PhoneCall className="w-3.5 h-3.5" />
-                    <span>Call {sc.immediateCallNumber}</span>
+                    <span>{t.scenarioView.callNow} {sc.immediateCallNumber}</span>
                   </a>
                 ) : (
-                  <span className="text-plum">View Action Steps</span>
+                  <span className="text-plum">{t.emergencySection.viewActionSteps}</span>
                 )}
 
                 <span className="inline-flex items-center text-midnight/70 group-hover:text-plum group-hover:translate-x-1 transition-all">
-                  <span>View Steps</span>
+                  <span>{t.emergencySection.viewSteps}</span>
                   <ChevronRight className="w-4 h-4 ml-0.5" />
                 </span>
               </div>
@@ -186,8 +193,8 @@ export const EmergenciesView: React.FC = () => {
 
       {filteredScenarios.length === 0 && (
         <div className="text-center py-12 bg-white rounded-3xl border border-lavender p-8 max-w-md mx-auto">
-          <p className="text-midnight/80 font-bold mb-2">No matching emergency guides found.</p>
-          <p className="text-xs text-midnight/70 mb-4">Try searching for words like &quot;scam&quot;, &quot;fire&quot;, &quot;accident&quot;, or &quot;snake&quot;.</p>
+          <p className="text-midnight/80 font-bold mb-2">{t.emergencySection.noMatches}</p>
+          <p className="text-xs text-midnight/70 mb-4">{t.emergencySection.noMatchesHint}</p>
           <button
             onClick={() => {
               setSearchQuery('');
@@ -195,7 +202,7 @@ export const EmergenciesView: React.FC = () => {
             }}
             className="px-4 py-2 bg-plum text-white text-xs font-bold rounded-xl hover:bg-plum-600 transition-colors"
           >
-            Clear Filters
+            {t.emergencySection.clearFilters}
           </button>
         </div>
       )}

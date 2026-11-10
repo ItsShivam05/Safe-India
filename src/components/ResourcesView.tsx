@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { officialResources } from '../data/resources';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { buildHelplineShareMessage, getWhatsAppShareUrl } from '../services/shareService';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import {
@@ -21,17 +21,17 @@ export const ResourcesView: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const t = translations.en;
+  const { t, pick, lang } = useLanguage();
 
   const categories = [
     { id: 'all', label: t.emergencySection.allCategories },
-    { id: 'emergency', label: 'National Emergency' },
-    { id: 'women-child', label: 'Women & Child' },
-    { id: 'cyber', label: 'Cyber Crime' },
-    { id: 'medical', label: 'Medical Emergency' },
-    { id: 'disaster', label: 'Disaster & Fire' },
-    { id: 'mental-health', label: 'Mental Health' },
-    { id: 'transport', label: 'Transport & Rail' },
+    { id: 'emergency', label: t.resourceCategories.emergency },
+    { id: 'women-child', label: t.resourceCategories.womenChild },
+    { id: 'cyber', label: t.resourceCategories.cyber },
+    { id: 'medical', label: t.resourceCategories.medical },
+    { id: 'disaster', label: t.resourceCategories.disaster },
+    { id: 'mental-health', label: t.resourceCategories.mentalHealth },
+    { id: 'transport', label: t.resourceCategories.transport },
   ];
 
   const handleCopy = (id: string, text: string) => {
@@ -45,8 +45,8 @@ export const ResourcesView: React.FC = () => {
   const filteredResources = officialResources.filter((res) => {
     const matchesCat = activeCategory === 'all' || res.category === activeCategory;
     const q = searchQuery.toLowerCase().trim();
-    const nameText = res.name.en || '';
-    const purposeText = res.purpose.en || '';
+    const nameText = `${pick(res.name)} ${res.name.hi ?? ''}`;
+    const purposeText = `${pick(res.purpose)} ${res.purpose.hi ?? ''}`;
     const matchesSearch =
       !q ||
       nameText.toLowerCase().includes(q) ||
@@ -62,7 +62,7 @@ export const ResourcesView: React.FC = () => {
       <div className="mb-8 text-center max-w-3xl mx-auto">
         <span className="inline-flex items-center space-x-2 bg-sage/30 text-midnight text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border border-sage mb-3">
           <MapPin className="w-4 h-4 text-sage-700" />
-          <span>Official Helplines & Numbers</span>
+          <span>{t.resourcesSection.badge}</span>
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-midnight tracking-tight">
           {t.resourcesSection.title}
@@ -77,7 +77,7 @@ export const ResourcesView: React.FC = () => {
         <div className="flex items-center space-x-2 mb-4">
           <Sparkles className="w-5 h-5 text-lavender" />
           <h2 className="text-base font-extrabold tracking-wide uppercase text-lavender">
-            Priority Emergency Helplines
+            {t.resourcesSection.priorityTitle}
           </h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -85,36 +85,36 @@ export const ResourcesView: React.FC = () => {
             href="tel:112"
             className="bg-emergency hover:bg-emergency-600 p-3.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all hover:scale-102 shadow-sm group"
           >
-            <span className="text-xs font-bold text-white/90 uppercase">National Emergency</span>
+            <span className="text-xs font-bold text-white/90 uppercase">{t.resourcesSection.national}</span>
             <span className="text-2xl font-black text-white mt-0.5 group-hover:scale-105 transition-transform">112</span>
-            <span className="text-xs text-white/80">Police / Fire / Ambulance</span>
+            <span className="text-xs text-white/80">{t.resourcesSection.policeFireAmbulance}</span>
           </a>
 
           <a
             href="tel:1930"
             className="bg-midnight-800 border border-lavender/20 hover:bg-midnight-700 p-3.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all hover:scale-102 shadow-xs group"
           >
-            <span className="text-xs font-bold text-lavender uppercase">Cyber Crime Fraud</span>
+            <span className="text-xs font-bold text-lavender uppercase">{t.resourcesSection.cyber}</span>
             <span className="text-2xl font-black text-white mt-0.5 group-hover:scale-105 transition-transform">1930</span>
-            <span className="text-xs text-ivory/70">Fund Freeze / Scams</span>
+            <span className="text-xs text-ivory/70">{t.resourcesSection.fundFreeze}</span>
           </a>
 
           <a
             href="tel:108"
             className="bg-midnight-800 border border-lavender/20 hover:bg-midnight-700 p-3.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all hover:scale-102 shadow-xs group"
           >
-            <span className="text-xs font-bold text-sage uppercase">Medical Ambulance</span>
+            <span className="text-xs font-bold text-sage uppercase">{t.resourcesSection.medical}</span>
             <span className="text-2xl font-black text-white mt-0.5 group-hover:scale-105 transition-transform">108</span>
-            <span className="text-xs text-ivory/70">Free Ambulance 24/7</span>
+            <span className="text-xs text-ivory/70">{t.resourcesSection.freeAmbulance}</span>
           </a>
 
           <a
             href="tel:1091"
             className="bg-midnight-800 border border-lavender/20 hover:bg-midnight-700 p-3.5 rounded-2xl flex flex-col items-center justify-center text-center transition-all hover:scale-102 shadow-xs group"
           >
-            <span className="text-xs font-bold text-lavender uppercase">Women Helpline</span>
+            <span className="text-xs font-bold text-lavender uppercase">{t.resourcesSection.women}</span>
             <span className="text-2xl font-black text-white mt-0.5 group-hover:scale-105 transition-transform">1091</span>
-            <span className="text-xs text-ivory/70">24/7 Women Distress</span>
+            <span className="text-xs text-ivory/70">{t.resourcesSection.womenDistress}</span>
           </a>
         </div>
       </div>
@@ -127,7 +127,7 @@ export const ResourcesView: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search service name or helpline number (e.g. 112, Cyber, Mental Health)..."
+            placeholder={t.resourcesSection.searchPlaceholder}
             className="w-full bg-white border border-lavender focus:border-plum rounded-2xl pl-11 pr-4 py-3.5 text-sm sm:text-base shadow-xs focus:outline-none focus:ring-2 focus:ring-plum text-midnight placeholder-midnight/40 font-medium"
           />
         </div>
@@ -162,7 +162,7 @@ export const ResourcesView: React.FC = () => {
               {/* Header Badges */}
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-bold uppercase tracking-wider text-midnight bg-lavender/40 px-2.5 py-0.5 rounded-full border border-lavender">
-                  {res.categoryLabel.en}
+                  {pick(res.categoryLabel)}
                 </span>
                 <span className="inline-flex items-center space-x-1 text-xs text-midnight bg-sage/30 px-2.5 py-0.5 rounded-full border border-sage font-semibold">
                   <Clock className="w-3 h-3 text-sage-700" />
@@ -172,7 +172,7 @@ export const ResourcesView: React.FC = () => {
 
               {/* Service Name */}
               <h2 className="text-xl sm:text-2xl font-bold text-midnight leading-snug">
-                {res.name.en}
+                {pick(res.name)}
               </h2>
 
               {/* Purpose */}
@@ -180,14 +180,14 @@ export const ResourcesView: React.FC = () => {
                 <strong className="text-midnight block text-xs uppercase text-midnight/70 font-bold mb-0.5">
                   {t.resourcesSection.forWhat}:
                 </strong>
-                <span>{res.purpose.en}</span>
+                <span>{pick(res.purpose)}</span>
               </div>
 
               {/* Who can use */}
               <div className="mt-3 text-xs text-midnight/70 flex items-start space-x-2">
                 <UserCheck className="w-4 h-4 text-plum shrink-0 mt-0.5" />
                 <span>
-                  <strong>{t.resourcesSection.whoCanUse}:</strong> {res.whoCanUse.en}
+                  <strong>{t.resourcesSection.whoCanUse}:</strong> {pick(res.whoCanUse)}
                 </span>
               </div>
             </div>
@@ -209,8 +209,8 @@ export const ResourcesView: React.FC = () => {
                 <button
                   onClick={() => handleCopy(res.id, res.phone)}
                   className="p-3 bg-ivory hover:bg-ivory-100 text-midnight rounded-xl transition-colors border border-lavender text-xs font-bold"
-                  title="Copy Phone Number"
-                  aria-label="Copy Phone Number"
+                  title={t.resourcesSection.copyNumber}
+                  aria-label={t.resourcesSection.copyNumber}
                 >
                   {copiedId === res.id ? (
                     <Check className="w-5 h-5 text-sage-700" />
@@ -221,12 +221,12 @@ export const ResourcesView: React.FC = () => {
 
                 {/* Share on WhatsApp */}
                 <a
-                  href={getWhatsAppShareUrl(buildHelplineShareMessage(res))}
+                  href={getWhatsAppShareUrl(buildHelplineShareMessage(res, lang))}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-ivory hover:bg-ivory-100 text-[#0F7A6C] rounded-xl transition-colors border border-lavender"
                   title={t.scenarioView.shareWhatsApp}
-                  aria-label={`${t.scenarioView.shareWhatsApp}: ${res.name.en}`}
+                  aria-label={`${t.scenarioView.shareWhatsApp}: ${pick(res.name)}`}
                 >
                   <WhatsAppIcon className="w-5 h-5" />
                 </a>
@@ -238,7 +238,7 @@ export const ResourcesView: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 bg-ivory hover:bg-ivory-100 text-midnight rounded-xl transition-colors border border-lavender text-xs font-bold flex items-center space-x-1"
-                    title="Visit Official Website"
+                    title={t.resourcesSection.visitWebsite}
                   >
                     <ExternalLink className="w-5 h-5 text-plum" />
                   </a>
@@ -249,9 +249,9 @@ export const ResourcesView: React.FC = () => {
               <div className="flex items-center justify-between text-xs text-midnight/70 font-medium">
                 <span className="flex items-center space-x-1 truncate">
                   <ShieldCheck className="w-3.5 h-3.5 text-sage-600 shrink-0" />
-                  <span className="truncate">Source: {res.source}</span>
+                  <span className="truncate">{t.resourcesSection.sourceLabel}: {res.source}</span>
                 </span>
-                <span className="shrink-0">Updated: {res.verifiedDate}</span>
+                <span className="shrink-0">{t.resourcesSection.updated}: {res.verifiedDate}</span>
               </div>
             </div>
 

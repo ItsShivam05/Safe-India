@@ -1,5 +1,5 @@
 import React from 'react';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { emergencyScenarios } from '../data/emergencies';
 import { awarenessGuides } from '../data/awareness';
 import type { VerifiedSource } from '../types';
@@ -19,7 +19,7 @@ const citedSources = [...emergencyScenarios, ...awarenessGuides]
   .sort((a, b) => a.name.localeCompare(b.name));
 
 export const AboutView: React.FC = () => {
-  const t = translations.en;
+  const { t } = useLanguage();
 
   return (
     <article className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 bg-ivory text-midnight">
@@ -29,7 +29,7 @@ export const AboutView: React.FC = () => {
         <div className="inline-block mb-6">
           <img
             src="/images/safeindia-emblem.png"
-            alt="SafeIndia — Know what to do when it matters"
+            alt={t.aboutPage.logoAlt}
             className="h-24 sm:h-32 w-auto object-contain mx-auto drop-shadow-md"
           />
         </div>

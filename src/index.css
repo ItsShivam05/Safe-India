@@ -6,7 +6,7 @@
   body {
     background-color: #F7F2EA;
     color: #211D35;
-    font-family: 'Plus Jakarta Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Plus Jakarta Sans Variable', 'Noto Sans Devanagari Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;

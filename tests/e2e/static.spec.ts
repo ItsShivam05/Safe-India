@@ -3,7 +3,7 @@ import { test, expect, SITE } from './fixtures';
 // What WhatsApp, Google and very slow phones receive before any JavaScript runs.
 const guideIds = [
   'someone-following', 'unsafe-cab', 'unconscious-person', 'severe-bleeding', 'building-fire', 'lpg-gas-leak',
-  'road-accident', 'upi-bank-fraud', 'phone-stolen', 'snake-bite', 'dog-attack',
+  'road-accident', 'upi-bank-fraud', 'phone-stolen', 'snake-bite', 'dog-attack', 'digital-arrest-scam',
 ];
 
 test('each guide has its own title, preview tags and steps in plain HTML', async ({ request }) => {
@@ -30,7 +30,7 @@ test('homepage keeps an empty body, because it is also the fallback page', async
 
 test('sitemap, robots.txt and preview image are in place', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
-  expect(sitemap.match(/<loc>/g)).toHaveLength(21);
+  expect(sitemap.match(/<loc>/g)).toHaveLength(28);
   expect(await (await request.get('/robots.txt')).text()).toContain(`Sitemap: ${SITE}/sitemap.xml`);
   const image = await request.get('/og-image.jpg');
   expect(image.ok()).toBe(true);

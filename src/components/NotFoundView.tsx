@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { PhoneCall } from 'lucide-react';
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { TAB_PATHS } from '../data/site';
 
 export const NotFoundView: React.FC = () => {
-  const t = translations.en.notFound;
+  const { t: all } = useLanguage();
+  const t = all.notFound;
 
   return (
     <section className="max-w-xl mx-auto px-4 py-16 text-center">
@@ -18,7 +19,7 @@ export const NotFoundView: React.FC = () => {
           className="inline-flex items-center space-x-2 bg-emergency hover:bg-emergency-600 text-white font-extrabold px-5 py-3 rounded-xl text-sm shadow-xs"
         >
           <PhoneCall className="w-4 h-4" />
-          <span>{translations.en.nearMe.call112Button}</span>
+          <span>{all.nearMe.call112Button}</span>
         </a>
         <Link
           to={TAB_PATHS.emergencies}

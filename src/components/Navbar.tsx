@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Menu, X, PhoneCall, ShieldAlert, BookOpen, MapPin, Info, Search } from 'lucide-react';
+import { Menu, X, PhoneCall, ShieldAlert, BookOpen, MapPin, Info, Search, Wrench, Languages } from 'lucide-react';
 
-import { translations } from '../data/locales';
+import { useLanguage } from '../i18n/language';
 import { SEARCH_SHORTCUT_LABEL } from '../utils/platform';
 
 interface NavbarProps {
@@ -16,11 +16,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSearch,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const t = translations.en;
+  const { t, lang, setLang } = useLanguage();
 
   const navLinks = [
     { id: 'emergencies', label: t.nav.emergencies, icon: ShieldAlert },
     { id: 'nearme', label: t.nav.getHelpNearMe, icon: MapPin },
+    { id: 'tools', label: t.nav.tools, icon: Wrench },
     { id: 'awareness', label: t.nav.awareness, icon: BookOpen },
     { id: 'resources', label: t.nav.resources, icon: PhoneCall },
     { id: 'about', label: t.nav.about, icon: Info },
@@ -34,7 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full bg-midnight text-ivory shadow-md transition-all duration-200">
-      {/* Top Urgent Alert Bar: High-contrast red #B42318 */}
+      {/* Top Urgent Alert Bar */}
       <div className="bg-emergency text-white text-xs py-1.5 px-4 font-medium">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           <div className="flex items-center space-x-2 min-w-0">
@@ -45,7 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <a
             href="tel:112"
             className="inline-flex items-center space-x-1.5 bg-white text-emergency hover:bg-ivory px-3 py-0.5 rounded-full font-extrabold transition-all active:scale-95 shadow-sm text-xs shrink-0 whitespace-nowrap"
-            aria-label="Call 112 National Emergency"
+            aria-label={t.nav.quickCall112}
           >
             <PhoneCall className="w-3.5 h-3.5 text-emergency shrink-0" />
             <span className="sm:hidden">{t.nav.quickCall112Short}</span>
@@ -55,34 +56,31 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18 gap-4">
+        <div className="flex items-center justify-between h-16 sm:h-18 gap-3">
 
           {/* Logo & Brand Identity */}
           <button
             onClick={() => handleNavClick('home')}
             className="flex items-center space-x-2.5 sm:space-x-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-lavender focus-visible:ring-offset-2 focus-visible:ring-offset-midnight rounded-xl p-1 text-left shrink-0"
-            aria-label="SafeIndia — Know what to do when it matters"
+            aria-label={t.nav.logoLabel}
           >
             <img
               src="/images/safeindia-emblem.png"
-              alt="SafeIndia — Know what to do when it matters"
+              alt=""
               className="h-10 sm:h-11 w-10 sm:w-11 object-contain shrink-0 group-hover:scale-105 transition-transform duration-200"
             />
-            <div>
+            <div className="hidden min-[400px]:block">
               <div className="flex items-center space-x-1.5">
                 <span className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-lavender transition-colors whitespace-nowrap">
                   SafeIndia
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-sage-400 shrink-0"></span>
               </div>
-              <span className="hidden xl:block text-xs text-lavender/80 font-semibold tracking-wide uppercase -mt-0.5 whitespace-nowrap">
-                {t.tagline}
-              </span>
             </div>
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2 shrink-0" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center space-x-1 shrink min-w-0" aria-label={t.nav.mainNav}>
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = currentTab === link.id;
@@ -90,39 +88,48 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`flex items-center space-x-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold whitespace-nowrap shrink-0 transition-all duration-200 ${
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`flex items-center space-x-1.5 px-2 xl:px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold whitespace-nowrap shrink-0 transition-all duration-200 ${
                     isActive
                       ? 'bg-plum text-white shadow-sm'
                       : 'text-ivory/85 hover:text-white hover:bg-midnight-800'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-lavender'}`} />
+                  <Icon className={`hidden xl:block w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-lavender'}`} />
                   <span className="whitespace-nowrap">{link.label}</span>
                 </button>
               );
             })}
           </nav>
 
-          {/* Right Action Controls: Search & Mobile Menu Toggle */}
+          {/* Right Action Controls: Language, Search & Mobile Menu Toggle */}
           <div className="flex items-center space-x-2 shrink-0">
-            {/* Search Trigger */}
+            <button
+              type="button"
+              onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}
+              className="px-2.5 py-1.5 text-white hover:bg-midnight-800 rounded-xl transition-colors border border-lavender/40 flex items-center space-x-1.5 text-sm font-bold whitespace-nowrap"
+              aria-label={t.nav.switchLanguageLabel}
+              lang={lang === 'en' ? 'hi' : 'en'}
+            >
+              <Languages className="w-4 h-4 text-lavender shrink-0" />
+              <span>{t.nav.switchLanguage}</span>
+            </button>
+
             <button
               onClick={onOpenSearch}
               className="px-2.5 py-1.5 text-ivory/80 hover:text-white hover:bg-midnight-800 rounded-xl transition-colors border border-lavender/20 flex items-center space-x-2 text-xs whitespace-nowrap"
-              title={`Search guides & helplines (${SEARCH_SHORTCUT_LABEL})`}
-              aria-label="Search emergency guides & helplines"
+              title={`${t.nav.searchTitle} (${SEARCH_SHORTCUT_LABEL})`}
+              aria-label={t.nav.searchLabel}
             >
-              <Search className="w-3.5 h-3.5 text-lavender shrink-0" />
-              <span className="hidden sm:inline text-ivory/70">Search...</span>
-              <kbd className="hidden md:inline bg-midnight-950 text-lavender px-1.5 py-0.5 text-xs rounded border border-lavender/20">{SEARCH_SHORTCUT_LABEL}</kbd>
+              <Search className="w-4 h-4 text-lavender shrink-0" />
+              <kbd className="hidden xl:inline bg-midnight-950 text-lavender px-1.5 py-0.5 text-xs rounded border border-lavender/20">{SEARCH_SHORTCUT_LABEL}</kbd>
             </button>
 
-            {/* Mobile / Tablet Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 rounded-lg text-ivory hover:bg-midnight-800 focus:outline-none focus:ring-2 focus:ring-lavender shrink-0"
               aria-expanded={mobileMenuOpen}
-              aria-label="Toggle Navigation Menu"
+              aria-label={t.nav.toggleMenu}
             >
               {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
             </button>
@@ -143,9 +150,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <span className="flex items-center space-x-2">
                 <Search className="w-4 h-4 text-lavender shrink-0" />
-                <span>Search emergency guides & helplines...</span>
+                <span>{t.nav.searchLong}</span>
               </span>
-              <kbd className="bg-midnight-950 text-lavender text-xs px-2 py-0.5 rounded border border-lavender/20">Search</kbd>
+              <kbd className="bg-midnight-950 text-lavender text-xs px-2 py-0.5 rounded border border-lavender/20">{t.nav.searchShort}</kbd>
             </button>
           </div>
 
@@ -157,6 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
+                  aria-current={isActive ? 'page' : undefined}
                   className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                     isActive
                       ? 'bg-plum text-white shadow-sm'

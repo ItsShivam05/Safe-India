@@ -1,9 +1,9 @@
 import React from 'react';
 import { PhoneCall, ShieldAlert, ExternalLink } from 'lucide-react';
-import { translations } from '../../data/locales';
+import { useLanguage } from '../../i18n/language';
 
 export const EmergencyBanner: React.FC = () => {
-  const t = translations.en;
+  const { t } = useLanguage();
 
   return (
     <div className="bg-emergency text-white rounded-3xl p-5 sm:p-6 shadow-md border border-emergency-800 mb-6 transition-all duration-200">
@@ -20,7 +20,7 @@ export const EmergencyBanner: React.FC = () => {
               <span>{t.nearMe.call112Title}</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              Emergency? Dial 112 Immediately
+              {t.nearMe.call112Heading}
             </h2>
             <p className="mt-1 text-xs sm:text-sm text-white/90 max-w-xl font-medium leading-relaxed">
               {t.nearMe.call112Sub}
@@ -45,7 +45,7 @@ export const EmergencyBanner: React.FC = () => {
           <a
             href="tel:112"
             className="w-full md:w-auto inline-flex items-center justify-center space-x-2.5 bg-white hover:bg-ivory text-emergency font-black px-6 py-3.5 rounded-2xl text-base sm:text-lg shadow-md transition-all duration-200 active:scale-95"
-            aria-label="Call 112 National Emergency Helpline"
+            aria-label={t.nearMe.call112Label}
           >
             <PhoneCall className="w-5 h-5 text-emergency" />
             <span>{t.nearMe.call112Button}</span>

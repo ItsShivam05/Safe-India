@@ -256,5 +256,21 @@ export const officialResources: OfficialResource[] = [
     verifiedDate: "October 2026",
     source: "Indian Oil, Bharat Petroleum & HPCL Emergency Network",
     isNationalEmergency: false
+  },
+  {
+    id: "res-highway-1033",
+    name: { en: "National Highway Helpline (1033)", hi: "राष्ट्रीय राजमार्ग हेल्पलाइन (1033)" },
+    category: "transport",
+    categoryLabel: { en: "Transport & Rail", hi: "यातायात और रेल" },
+    purpose: {
+      en: "Accidents, breakdowns and emergencies on National Highways, including ambulance and towing.",
+      hi: "राष्ट्रीय राजमार्गों पर दुर्घटना, गाड़ी खराब होने और आपात स्थिति में मदद, एम्बुलेंस और टोइंग सहित।"
+    },
+    whoCanUse: { en: "Anyone travelling on a National Highway", hi: "राष्ट्रीय राजमार्ग पर यात्रा करने वाला कोई भी व्यक्ति" },
+    phone: "1033",
+    website: "https://ihmcl.co.in",
+    availability: "24/7 Toll-Free",
+    verifiedDate: "November 2026",
+    source: "National Highways Authority of India (NHAI) / IHMCL"
   }
 ];

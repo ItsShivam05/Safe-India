@@ -15,6 +15,7 @@ const cases: Array<[string, string | null]> = [
   ['cab driver is scaring me', 'cab'],
   ['car hit a man on the road', 'Accident'],
   ['मेरा पीछा कर रहा है', 'Someone is following me'],
+  ['someone on a video call says I am under digital arrest by CBI', 'Digital arrest'],
   ['my father is having chest pain', null],
   ['my child swallowed poison', null],
   ['someone stole my bike', null],
@@ -47,7 +48,7 @@ test('no-match panel offers 112 and every guide', async ({ page }) => {
 
   const panel = page.getByRole('status').filter({ hasText: 'No exact guide found' });
   await expect(panel.locator('a[href="tel:112"]')).toHaveCount(1);
-  await expect(panel.getByRole('button')).toHaveCount(11);
+  await expect(panel.getByRole('button')).toHaveCount(12);
   await panel.getByRole('button').first().click();
   await expect(page.locator('h1').first()).toContainText('following');
 });
